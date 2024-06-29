@@ -54,31 +54,4 @@ public class LoginController {
         return ResponseEntity.status(HttpStatus.OK).body(response);
     }
 
-    @PostMapping("/mail-send")
-    @Operation(summary = "이메일 인증 보내기", description = "<strong>입력한 이메일로 인증메일을 보냅니다.</strong>",
-               responses = {@ApiResponse(
-                    responseCode = "200",
-                    description = "성공에 대한 반환 값 입니다.",
-                    content = @Content(
-                            mediaType = "application/json",
-                            schema = @Schema(implementation = PostMailSendResponseDto.class)
-                    ))})
-    public ResponseEntity<? super PostMailSendResponseDto> mailSend() {
-        ResponseEntity<? super PostMailSendResponseDto> response = service.mailSend();
-        return ResponseEntity.status(HttpStatus.OK).body(response);
-    }
-
-    @PostMapping("/mail-check")
-    @Operation(summary = "이메일 인증확인", description = "<strong>이메일 인증에 대해 인증번호를 확인합니다.</strong>",
-                responses = {@ApiResponse(
-                    responseCode = "200",
-                    description = "성공에 대한 반환 값 입니다.",
-                    content = @Content(
-                            mediaType = "application/json",
-                            schema = @Schema(implementation = PostMailCheckResponseDto.class)
-                    ))})
-    public ResponseEntity<? super PostMailCheckResponseDto> mailCheck() {
-        ResponseEntity<? super PostMailCheckResponseDto> response = service.mailCheck();
-        return ResponseEntity.status(HttpStatus.OK).body(response);
-    }
 }

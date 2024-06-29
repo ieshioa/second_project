@@ -8,6 +8,8 @@ public interface ResponseCode {
     // HTTP Status 400
     String VALIDATION_FAILED = "VF";
     String NOT_EMPTY_EMAIL = "NE";
+    String EXPIRED_CODE = "EF";
+    String INVALID_CODE = "IC";
     String DUPLICATE_EMAIL = "DE";
     String DUPLICATE_TEL_NUMBER = "DT";
     String DUPLICATE_NICK_NAME = "DN";

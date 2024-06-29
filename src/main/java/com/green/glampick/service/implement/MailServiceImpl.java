@@ -1,6 +1,7 @@
 package com.green.glampick.service.implement;
 
 import com.green.glampick.dto.ResponseDto;
+import com.green.glampick.dto.response.login.mail.PostMailCheckResponseDto;
 import com.green.glampick.dto.response.login.mail.PostMailSendResponseDto;
 import com.green.glampick.service.MailService;
 import lombok.RequiredArgsConstructor;
@@ -86,18 +87,29 @@ public class MailServiceImpl implements MailService {
 
     //  인증 코드를 확인하고, 해당 인증코드가 만료되었는지 체크하는 메소드  //
     @Override
-    public void checkCode(String userEmail, String key) {
-        if (authCodeMap.containsKey(userEmail) && authCodeMap.get(userEmail).equals(key)) {
-            if (System.currentTimeMillis() > authCodeExpiryMap.get(userEmail)) {
+    public ResponseEntity<? super PostMailCheckResponseDto> checkCode(String userEmail, String authKey) {
+
+        try {
+            // 이메일과 인증코드가 Map 에 저장되어 있는 인증코드와 같다면
+            if (authCodeMap.containsKey(userEmail) && authCodeMap.get(userEmail).equals(authKey)) {
+                // Map 에 저장되어 있는 인증코드의 유효시간이 지났다면
+                if (System.currentTimeMillis() > authCodeExpiryMap.get(userEmail)) {
+                    authCodeMap.remove(userEmail);
+                    authCodeExpiryMap.remove(userEmail);
+                    PostMailCheckResponseDto.expiredCode();
+                }
+                // 인증 성공 시, Map 에 저장되어 있는 코드와 유효시간을 삭제한다.
                 authCodeMap.remove(userEmail);
                 authCodeExpiryMap.remove(userEmail);
-                throw new RuntimeException("Authentication code expired");
+                return PostMailCheckResponseDto.success();
+            } else {
+                // 인증코드가 틀리다면 아래 코드를 실행한다.
+                return PostMailCheckResponseDto.invalidCode();
             }
-            // 인증 성공
-            authCodeMap.remove(userEmail);
-            authCodeExpiryMap.remove(userEmail);
-        } else {
-            throw new RuntimeException("Invalid authentication code");
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseDto.databaseError();
         }
     }
 
