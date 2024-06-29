@@ -3,18 +3,34 @@ package com.green.glampick.dto.response.login.mail;
 import com.green.glampick.common.response.ResponseCode;
 import com.green.glampick.common.response.ResponseMessage;
 import com.green.glampick.dto.ResponseDto;
+import lombok.Getter;
+import lombok.Setter;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
+@Getter
+@Setter
 public class PostMailSendResponseDto extends ResponseDto {
+
+    private String authKey;
 
     private PostMailSendResponseDto() {
         super(ResponseCode.SUCCESS, ResponseMessage.SUCCESS);
     }
 
-    public static ResponseEntity<ResponseDto> success() {
-        ResponseDto result = new ResponseDto(ResponseCode.SUCCESS, ResponseMessage.SUCCESS);
+    private PostMailSendResponseDto(String authKey) {
+        super(ResponseCode.SUCCESS, ResponseMessage.SUCCESS);
+        this.authKey = authKey;
+    }
+
+    public static ResponseEntity<ResponseDto> success(String authKey) {
+        PostMailSendResponseDto result = new PostMailSendResponseDto(authKey);
         return ResponseEntity.status(HttpStatus.OK).body(result);
+    }
+
+    public static ResponseEntity<ResponseDto> nullEmptyEmail() {
+        ResponseDto result = new ResponseDto(ResponseCode.NOT_EMPTY_EMAIL, ResponseMessage.NOT_EMPTY_EMAIL);
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(result);
     }
 
     public static ResponseEntity<ResponseDto> validationError() {

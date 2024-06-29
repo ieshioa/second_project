@@ -1,12 +1,12 @@
 spring:
+
   config:
-    # optional: .env 파일이 없어도 컴파일 에러가 발생 X
-    # file: 파일을 import 하겠다.
-    # .env: 파일명
     import: optional:file:.env
+
   jackson:
     deserialization:
       fail-on-unknown-properties: false
+
   datasource:
     driver-class-name: net.sf.log4jdbc.sql.jdbcapi.DriverSpy
     url: ${DEFAULT.DB_URL}
@@ -22,6 +22,9 @@ spring:
     user:
       name: root
       password: 1111
+
+  profiles:
+    active: dev
 
 mybatis:
   mapper-locations: mappers/**/*.xml

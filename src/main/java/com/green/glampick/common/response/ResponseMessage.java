@@ -7,6 +7,7 @@ public interface ResponseMessage {
 
     // HTTP Status 400
     String VALIDATION_FAILED = "모든 정보를 입력해주세요.";
+    String NOT_EMPTY_EMAIL = "이메일이 비어 있습니다.";
     String DUPLICATE_EMAIL = "중복된 이메일 입니다.";
     String DUPLICATE_TEL_NUMBER = "중복된 전화번호 입니다.";
     String DUPLICATE_NICK_NAME = "중복된 닉네임 입니다.";
