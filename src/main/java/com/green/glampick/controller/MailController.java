@@ -9,7 +9,6 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -48,7 +47,8 @@ public class MailController {
     {
         // Response 값에 대하여 true, false 값이 유동적으로 받아올려면, ResponseEntity 를 서비스에서 처리해야함으로
         // Controller 에서 ResponseEntity 로 반환하지 않게 처리.
-        return service.checkCode(userEmail, authKey);
+        ResponseEntity<? super PostMailCheckResponseDto> response = service.checkCode(userEmail, authKey);
+        return response;
     }
 
 }

@@ -1,19 +1,18 @@
 package com.green.glampick.controller;
 
+import com.green.glampick.dto.request.login.SignInRequestDto;
+import com.green.glampick.dto.request.login.SignUpRequestDto;
 import com.green.glampick.dto.response.login.PostSignInResponseDto;
 import com.green.glampick.dto.response.login.PostSignUpResponseDto;
-import com.green.glampick.dto.response.login.mail.PostMailCheckResponseDto;
-import com.green.glampick.dto.response.login.mail.PostMailSendResponseDto;
 import com.green.glampick.service.LoginService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
-import io.swagger.v3.oas.annotations.media.ExampleObject;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -35,9 +34,9 @@ public class LoginController {
                             mediaType = "application/json",
                             schema = @Schema(implementation = PostSignUpResponseDto.class)
                     ))})
-    public ResponseEntity<? super PostSignUpResponseDto> signUpUser() {
-        ResponseEntity<? super PostSignUpResponseDto> response = service.signUpUser();
-        return ResponseEntity.status(HttpStatus.OK).body(response);
+    public ResponseEntity<? super PostSignUpResponseDto> signUpUser(@RequestBody @Valid SignUpRequestDto dto) {
+        ResponseEntity<? super PostSignUpResponseDto> response = service.signUpUser(dto);
+        return response;
     }
 
     @PostMapping("/sign-in")
@@ -49,9 +48,9 @@ public class LoginController {
                            mediaType = "application/json",
                            schema = @Schema(implementation = PostSignInResponseDto.class)
                    ))})
-    public ResponseEntity<? super PostSignInResponseDto> signInUser() {
-        ResponseEntity<? super PostSignInResponseDto> response = service.signInUser();
-        return ResponseEntity.status(HttpStatus.OK).body(response);
+    public ResponseEntity<? super PostSignInResponseDto> signInUser(@RequestBody @Valid SignInRequestDto dto) {
+        ResponseEntity<? super PostSignInResponseDto> response = service.signInUser(dto);
+        return response;
     }
 
 }

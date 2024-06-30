@@ -3,6 +3,7 @@ package com.green.glampick.service.implement;
 import com.green.glampick.dto.ResponseDto;
 import com.green.glampick.dto.response.login.mail.PostMailCheckResponseDto;
 import com.green.glampick.dto.response.login.mail.PostMailSendResponseDto;
+import com.green.glampick.repository.UserRepository;
 import com.green.glampick.service.MailService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -25,6 +26,8 @@ import java.util.concurrent.ConcurrentHashMap;
 @Service
 @RequiredArgsConstructor
 public class MailServiceImpl implements MailService {
+    private final UserRepository userRepository;
+
 
     @Autowired
     private JavaMailSender mailSender;
@@ -55,14 +58,16 @@ public class MailServiceImpl implements MailService {
     @Override
     public ResponseEntity<? super PostMailSendResponseDto> sendAuthCode(String userEmail) {
 
-//        UserEntity userEntity = null;
-
         try {
 
+            //  입력받은 이메일이 비어있는 값이면, 빈 값에 대한 응답을 보낸다.  //
             if (userEmail == null || userEmail.isEmpty()) {
                 return PostMailSendResponseDto.nullEmptyEmail();
             }
-//            if (userEntity == null) { return PostMailSendResponseDto.duplicatedEmail(); }
+
+            //  입력받은 이메일이 유저 테이블에 이미 있는 이메일 이라면, 중복 이메일에 대한 응답을 보낸다.  //
+            boolean existedEmail = userRepository.existsByUserEmail(userEmail);
+            if (existedEmail) { return PostMailSendResponseDto.duplicatedEmail(); }
 
             String authCode = createKey();
             authCodeMap.put(userEmail, authCode);
@@ -96,7 +101,7 @@ public class MailServiceImpl implements MailService {
                 if (System.currentTimeMillis() > authCodeExpiryMap.get(userEmail)) {
                     authCodeMap.remove(userEmail);
                     authCodeExpiryMap.remove(userEmail);
-                    PostMailCheckResponseDto.expiredCode();
+                    return PostMailCheckResponseDto.expiredCode();
                 }
                 // 인증 성공 시, Map 에 저장되어 있는 코드와 유효시간을 삭제한다.
                 authCodeMap.remove(userEmail);

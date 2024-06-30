@@ -19,6 +19,11 @@ public class PostMailCheckResponseDto extends ResponseDto {
         this.authCheck = authCheck;
     }
 
+    private PostMailCheckResponseDto(String code, String message, boolean authCheck) {
+        super(code, message);
+        this.authCheck = authCheck;
+    }
+
     public static ResponseEntity<PostMailCheckResponseDto> success() {
         PostMailCheckResponseDto result = new PostMailCheckResponseDto(true);
         return ResponseEntity.status(HttpStatus.OK).body(result);
@@ -29,8 +34,8 @@ public class PostMailCheckResponseDto extends ResponseDto {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(result);
     }
 
-    public static ResponseEntity<ResponseDto> invalidCode() {
-        ResponseDto result = new ResponseDto(ResponseCode.INVALID_CODE, ResponseMessage.INVALID_CODE);
+    public static ResponseEntity<PostMailCheckResponseDto> invalidCode() {
+        PostMailCheckResponseDto result = new PostMailCheckResponseDto(ResponseCode.INVALID_CODE, ResponseMessage.INVALID_CODE, false);
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(result);
     }
 

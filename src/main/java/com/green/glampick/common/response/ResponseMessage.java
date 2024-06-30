@@ -19,6 +19,7 @@ public interface ResponseMessage {
     String NOT_EXISTED_GLAMP = "존재하지 않는 글랭핑 입니다.";
 
     // HTTP Status 401
+    String SIGN_IN_FAILED = "로그인에 실패하였습니다.";
     String AUTHORIZATION_FAILED = "인증에 실패하였습니다.";
 
     // HTTP Status 403
