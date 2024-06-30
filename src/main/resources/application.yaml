@@ -47,13 +47,8 @@ file:
 # custom 속성 지정
 app:
   jwt:
-    # JWT 만들 때 사용하는 열쇠(암호화) > 나중에 복호화 할때도 사용
     secret: ${JWT_SECRET}
-
-    #front-back 간 JWT받는 헤더 키 이름
     header-schema-name: authorization
-
-    #토큰의 종류: Bearer 는 JWT or OAuth(소셜로그인 때 사용)를 의미
     token-type: Bearer
 
     #AT - 만료시간(ms) - 30분
@@ -66,7 +61,7 @@ management:
   endpoints:
     web:
       exposure:
-        include: "*" # actuator 의 모든 EndPoint 를 웹에 노출
+        include: "*"
   info:
     java:
       enabled: true
@@ -75,4 +70,4 @@ management:
     env:
       enabled: true
   server:
-    port: 8080  # localhost:8080 에서 접근할 때만 볼 수 있도록 한다 -> Docker 에 올리면 접근이 불가능하다.
+    port: 8080

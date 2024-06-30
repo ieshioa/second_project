@@ -10,6 +10,7 @@ import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -48,8 +49,8 @@ public class LoginController {
                            mediaType = "application/json",
                            schema = @Schema(implementation = PostSignInResponseDto.class)
                    ))})
-    public ResponseEntity<? super PostSignInResponseDto> signInUser(@RequestBody @Valid SignInRequestDto dto) {
-        ResponseEntity<? super PostSignInResponseDto> response = service.signInUser(dto);
+    public ResponseEntity<? super PostSignInResponseDto> signInUser(HttpServletResponse res, @RequestBody @Valid SignInRequestDto dto) {
+        ResponseEntity<? super PostSignInResponseDto> response = service.signInUser(res, dto);
         return response;
     }
 
