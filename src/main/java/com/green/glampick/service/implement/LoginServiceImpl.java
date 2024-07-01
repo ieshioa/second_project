@@ -1,5 +1,6 @@
 package com.green.glampick.service.implement;
 
+import com.green.glampick.common.coolsms.SmsUtils;
 import com.green.glampick.common.security.AppProperties;
 import com.green.glampick.common.security.CookieUtils;
 import com.green.glampick.dto.ResponseDto;
@@ -7,6 +8,10 @@ import com.green.glampick.dto.request.login.SignInRequestDto;
 import com.green.glampick.dto.request.login.SignUpRequestDto;
 import com.green.glampick.dto.response.login.PostSignInResponseDto;
 import com.green.glampick.dto.response.login.PostSignUpResponseDto;
+import com.green.glampick.dto.response.login.mail.PostMailCheckResponseDto;
+import com.green.glampick.dto.response.login.sms.PostSmsCheckResponseDto;
+import com.green.glampick.dto.response.login.sms.PostSmsSendResponseDto;
+import com.green.glampick.dto.response.login.token.GetAccessTokenResponseDto;
 import com.green.glampick.entity.UserEntity;
 import com.green.glampick.jwt.JwtTokenProvider;
 import com.green.glampick.repository.UserRepository;
@@ -14,6 +19,7 @@ import com.green.glampick.security.AuthenticationFacade;
 import com.green.glampick.security.MyUser;
 import com.green.glampick.security.MyUserDetail;
 import com.green.glampick.service.LoginService;
+import jakarta.annotation.PostConstruct;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -26,6 +32,8 @@ import org.springframework.stereotype.Service;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Random;
+import java.util.concurrent.ConcurrentHashMap;
 
 @Slf4j
 @Service
@@ -37,6 +45,17 @@ public class LoginServiceImpl implements LoginService {
     private final CookieUtils cookieUtils;
     private final AuthenticationFacade authenticationFacade;
     private final AppProperties appProperties;
+    private final SmsUtils smsUtils;
+
+    private Map<String, String> phoneCodeMap;
+    private Map<String, Long> phoneCodeExpiryMap;
+
+    @PostConstruct
+    @Override
+    public void init() {
+        phoneCodeMap = new ConcurrentHashMap<>();
+        phoneCodeExpiryMap = new ConcurrentHashMap<>();
+    }
 
     @Override
     public ResponseEntity<? super PostSignUpResponseDto> signUpUser(SignUpRequestDto dto) {
@@ -117,7 +136,7 @@ public class LoginServiceImpl implements LoginService {
     }
 
     @Override
-    public Map getAccessToken(HttpServletRequest req) {
+    public ResponseEntity<? super GetAccessTokenResponseDto> getAccessToken(HttpServletRequest req) {
 
         Cookie cookie = cookieUtils.getCookie(req, "refresh-token");
         if(cookie == null) { throw new RuntimeException(); }
@@ -132,7 +151,68 @@ public class LoginServiceImpl implements LoginService {
 
         Map map = new HashMap();
         map.put("accessToken", accessToken);
-        return map;
+        return GetAccessTokenResponseDto.success(map);
+    }
+
+    @Override
+    public ResponseEntity<? super PostSmsSendResponseDto> sendOne(String userPhone) {
+
+        String verificationCode = null;
+
+        try {
+
+            userPhone.replaceAll("-","");
+            verificationCode = createKey();
+            phoneCodeMap.put(userPhone, verificationCode);
+            phoneCodeExpiryMap.put(userPhone, System.currentTimeMillis() + 300000); // 5분 후 만료
+
+            smsUtils.sendOne(userPhone, verificationCode);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseDto.databaseError();
+        }
+
+        return PostSmsSendResponseDto.success(verificationCode);
+
+    }
+
+    @Override
+    public ResponseEntity<? super PostSmsCheckResponseDto> checkPhone(String userPhone, String phoneKey) {
+
+        try {
+            // 이메일과 인증코드가 Map 에 저장되어 있는 인증코드와 같다면
+            if (phoneCodeMap.containsKey(userPhone) && phoneCodeMap.get(userPhone).equals(phoneKey)) {
+                // Map 에 저장되어 있는 인증코드의 유효시간이 지났다면
+                if (System.currentTimeMillis() > phoneCodeExpiryMap.get(userPhone)) {
+                    phoneCodeMap.remove(userPhone);
+                    phoneCodeExpiryMap.remove(userPhone);
+                    return PostSmsCheckResponseDto.expiredCode();
+                }
+                // 인증 성공 시, Map 에 저장되어 있는 코드와 유효시간을 삭제한다.
+                phoneCodeMap.remove(userPhone);
+                phoneCodeExpiryMap.remove(userPhone);
+                return PostSmsCheckResponseDto.success();
+            } else {
+                // 인증코드가 틀리다면 아래 코드를 실행한다.
+                return PostSmsCheckResponseDto.invalidCode();
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseDto.databaseError();
+        }
+
+    }
+
+    @Override
+    public String createKey() {
+        Random random = new Random();
+        StringBuilder key = new StringBuilder();
+        for (int i = 0; i < 6; i++) {
+            key.append(random.nextInt(10));
+        }
+        return key.toString();
     }
 
 }

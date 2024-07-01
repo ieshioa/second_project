@@ -71,3 +71,8 @@ management:
       enabled: true
   server:
     port: 8080
+
+coolsms:
+  api:
+    key: ${COOLSMS.API_KEY}
+    secret: ${COOLSMS.API_SECRET}

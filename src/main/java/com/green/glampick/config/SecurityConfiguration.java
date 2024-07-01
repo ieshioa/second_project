@@ -30,8 +30,12 @@ public class SecurityConfiguration {
                         auth -> auth.requestMatchers(
                                         //회원가입, 로그인 인증이 안 되어 있더라도 사용 가능하게 세팅
                                         "/api/auth/sign-up"
-                                        ,"/api/auth/sign-in"
-                                        ,"/api/auth/access-token"
+                                        , "/api/auth/sign-in"
+                                        , "/api/auth/access-token"
+                                        , "/api/auth/mail-send"
+                                        , "/api/auth/mail-check"
+                                        , "/api/auth/send-sms"
+                                        , "/api/auth/check-sms"
 
                                         //swagger 사용할 수 있게 세팅
                                         , "/swagger"

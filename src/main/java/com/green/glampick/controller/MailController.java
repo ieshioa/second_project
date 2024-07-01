@@ -29,8 +29,7 @@ public class MailController {
                             schema = @Schema(implementation = PostMailSendResponseDto.class)
                     ))})
     public ResponseEntity<? super PostMailSendResponseDto> sendMail(@RequestParam String userEmail) {
-        ResponseEntity<? super PostMailSendResponseDto> response = service.sendAuthCode(userEmail);
-        return response;
+        return service.sendAuthCode(userEmail);
     }
 
     @PostMapping("/mail-check")
@@ -45,10 +44,7 @@ public class MailController {
     public ResponseEntity<? super PostMailCheckResponseDto> mailCheck(
             @RequestParam String userEmail, @RequestParam String authKey)
     {
-        // Response 값에 대하여 true, false 값이 유동적으로 받아올려면, ResponseEntity 를 서비스에서 처리해야함으로
-        // Controller 에서 ResponseEntity 로 반환하지 않게 처리.
-        ResponseEntity<? super PostMailCheckResponseDto> response = service.checkCode(userEmail, authKey);
-        return response;
+        return service.checkCode(userEmail, authKey);
     }
 
 }
