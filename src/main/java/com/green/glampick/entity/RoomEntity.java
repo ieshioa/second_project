@@ -13,15 +13,15 @@ import lombok.NoArgsConstructor;
 public class RoomEntity {
     //객실 테이블
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long room_id;//객실 ID
-    private long glamp_id;//글램핑 ID
-    private String room_name;//객실명
-    private long room_price;//객실 가격
-    private long room_num_people;//객실 기준인원
-    private long room_max_people;//객실 최대인원
-    private String check_in_time;//객실 체크인 시간
-    private String check_out_time;//객실 체크아웃 시간
-    private String created_at;//객실 등록 일자
+    private long roomId;//객실 ID
+    private long glampId;//글램핑 ID
+    private String roomName;//객실명
+    private long roomPrice;//객실 가격
+    private long roomNumPeople;//객실 기준인원
+    private long roomMaxPeople;//객실 최대인원
+    private String checkInTime;//객실 체크인 시간
+    private String checkOutTime;//객실 체크아웃 시간
+    private String createdAt;//객실 등록 일자
 
 
 }

@@ -13,8 +13,8 @@ import lombok.NoArgsConstructor;
 public class GlampFavoriteEntity {
     //관심 글램핑 테이블
     @Id
-    private long user_id;//유저 ID
-    private long glamp_id;//글램핑 ID
-    private String created_at;//관심 설정 일자
+    private long userId;//유저 ID
+    private long glampId;//글램핑 ID
+    private String createdAt;//관심 설정 일자
 
 }

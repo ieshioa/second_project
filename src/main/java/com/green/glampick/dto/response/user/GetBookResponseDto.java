@@ -3,9 +3,13 @@ package com.green.glampick.dto.response.user;
 import com.green.glampick.common.response.ResponseCode;
 import com.green.glampick.common.response.ResponseMessage;
 import com.green.glampick.dto.ResponseDto;
+import lombok.Getter;
+import lombok.Setter;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
+@Setter
+@Getter
 public class GetBookResponseDto extends ResponseDto {
 
     private GetBookResponseDto() {
