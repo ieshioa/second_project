@@ -43,7 +43,6 @@ public class LoginServiceImpl implements LoginService {
     private final PasswordEncoder passwordEncoder;
     private final JwtTokenProvider jwtTokenProvider;
     private final CookieUtils cookieUtils;
-    private final AuthenticationFacade authenticationFacade;
     private final AppProperties appProperties;
     private final SmsUtils smsUtils;
 
