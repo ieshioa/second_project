@@ -3,7 +3,7 @@ package com.green.glampick.dto.response.glamping;
 import com.green.glampick.common.response.ResponseCode;
 import com.green.glampick.common.response.ResponseMessage;
 import com.green.glampick.dto.ResponseDto;
-import com.green.glampick.dto.object.glamping.GlampingReviewItem;
+import com.green.glampick.dto.object.glamping.GlampingDetailReviewItem;
 import com.green.glampick.dto.object.glamping.GlampingRoomListItem;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
@@ -31,7 +31,7 @@ public class GetGlampingInformationResponseDto extends ResponseDto {
         @Schema(example = "최대 인원 초과시 입실이 불가 합니다 (방문객 불가)", description = "유의사항")
         private String infoNotice;
 
-        private List<GlampingReviewItem> reviewItems;
+        private List<GlampingDetailReviewItem> reviewItems;
 
         private List<GlampingRoomListItem> roomItems;
 
