@@ -1,4 +1,4 @@
-package com.green.glampick.dto.response.glamping;
+package com.green.glampick.dto.response.owner;
 
 import com.green.glampick.common.response.ResponseCode;
 import com.green.glampick.common.response.ResponseMessage;
@@ -6,9 +6,9 @@ import com.green.glampick.dto.ResponseDto;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
-public class GetPopularGlampingListResponseDto extends ResponseDto {
+public class PostGlampingInfoResponseDto extends ResponseDto {
 
-    private GetPopularGlampingListResponseDto() {
+    public PostGlampingInfoResponseDto() {
         super(ResponseCode.SUCCESS, ResponseMessage.SUCCESS);
     }
 
@@ -16,5 +16,4 @@ public class GetPopularGlampingListResponseDto extends ResponseDto {
         ResponseDto result = new ResponseDto(ResponseCode.SUCCESS, ResponseMessage.SUCCESS);
         return ResponseEntity.status(HttpStatus.OK).body(result);
     }
-
 }

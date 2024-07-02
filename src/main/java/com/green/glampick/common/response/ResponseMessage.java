@@ -4,6 +4,7 @@ public interface ResponseMessage {
 
     // HTTP Status 200
     String SUCCESS = "Success";
+    String RESULT_IS_NULL = "결과가 없습니다.";
 
     // HTTP Status 400
     String VALIDATION_FAILED = "모든 정보를 입력해주세요.";
