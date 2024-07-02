@@ -5,7 +5,7 @@ import com.green.glampick.dto.response.glamping.GetGlampingInformationResponseDt
 import com.green.glampick.dto.response.glamping.GetSearchGlampingListResponseDto;
 import com.green.glampick.dto.response.glamping.favorite.GetFavoriteGlampingResponseDto;
 import com.green.glampick.service.GlampingService;
-import com.green.glampick.dto.request.GlampingSearch;
+import com.green.glampick.dto.request.GlampingSearchRequestDto;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -43,7 +43,7 @@ public class GlampingController {
                     schema = @Schema(implementation = GetSearchGlampingListResponseDto.class)
             )
     )
-    public ResponseEntity<? super GetSearchGlampingListResponseDto> searchGlamping(@ParameterObject @ModelAttribute GlampingSearch searchReq) {
+    public ResponseEntity<? super GetSearchGlampingListResponseDto> searchGlamping(@ParameterObject @ModelAttribute GlampingSearchRequestDto searchReq) {
         return service.searchGlamping();
     }
 
