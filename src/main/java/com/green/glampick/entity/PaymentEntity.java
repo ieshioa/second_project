@@ -14,10 +14,11 @@ import lombok.NoArgsConstructor;
 public class PaymentEntity {
 
     @Id
-    private String id;
-    private long reservationId;
-    private String pg;
-    private long payAmount;
+    private String id;  // 결제 ID
+    private long reservationId;  // 예약 PK
+    private long userId;  // 결제 유저 PK
+    private String pg;  // 결제 수단
+    private long payAmount;  // 결제 금액
 
 
     public PaymentEntity(PostPaymentRequestDto p) {

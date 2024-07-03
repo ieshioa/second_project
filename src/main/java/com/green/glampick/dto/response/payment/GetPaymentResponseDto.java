@@ -33,7 +33,12 @@ public class GetPaymentResponseDto extends ResponseDto {
 
     public static ResponseEntity<ResponseDto> noExistedPayment() {
         ResponseDto result = new ResponseDto(ResponseCode.NOT_EXISTED_PAYMENT, ResponseMessage.NOT_EXISTED_PAYMENT);
-        return ResponseEntity.status(HttpStatus.OK).body(result);
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(result);
+    }
+
+    public static ResponseEntity<ResponseDto> noPermission() {
+        ResponseDto result = new ResponseDto(ResponseCode.NOT_PERMISSION, ResponseMessage.NOT_PERMISSION);
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(result);
     }
 
 }

@@ -1,5 +1,6 @@
 package com.green.glampick.dto.request.user;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -7,7 +8,7 @@ import lombok.Setter;
 @Getter
 public class GetBookRequestDto {
 
-    private long userId;
+    @JsonIgnore private long userId;
 
 
 }

@@ -15,8 +15,8 @@ import lombok.NoArgsConstructor;
 public class UserCouponEntity {
     //유저 쿠폰 테이블
     @Id
-    private long userId;//유저 ID
-    private long couponId;//쿠폰 ID
-    private long isActive;//사용 유무
+    private long userId;  //유저 ID
+    private long couponId;  //쿠폰 ID
+    private long isActive;  //사용 유무
 
 }
