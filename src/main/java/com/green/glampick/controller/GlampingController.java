@@ -1,5 +1,6 @@
 package com.green.glampick.controller;
 
+import com.green.glampick.dto.request.glamping.GetFavoriteRequestDto;
 import com.green.glampick.dto.request.glamping.GetInfoRequestDto;
 import com.green.glampick.dto.request.glamping.ReviewInfoRequestDto;
 import com.green.glampick.dto.response.glamping.GetGlampingInformationResponseDto;
@@ -51,7 +52,7 @@ public class GlampingController {
 
 
 // 강국 =================================================================================================================
-    @GetMapping("favorite/{glamp_id}")
+    @GetMapping("favorite")
     @Operation(
             summary = "관심 글램핑 등록" ,
             description = "<strong> 변수명 glampId :  글램프 PK </strong> <p>  ex)23 </p>",
@@ -65,14 +66,9 @@ public class GlampingController {
 
                             content = @Content(
                                     mediaType = "application/json",
-                                    schema = @Schema(implementation = GetFavoriteGlampingResponseDto.class)
-                            )
-                    )
-            }
-
-    )
-    public ResponseEntity<? super GetFavoriteGlampingResponseDto> favoriteGlamping(@PathVariable long glampId) {
-        return service.favoriteGlamping(glampId);
+                                    schema = @Schema(implementation = GetFavoriteGlampingResponseDto.class)))})
+    public ResponseEntity<? super GetFavoriteGlampingResponseDto> favoriteGlamping(@ParameterObject @ModelAttribute GetFavoriteRequestDto p) {
+        return service.favoriteGlamping(p);
     }
 
     @Operation(summary = "글램핑 상세 페이지",

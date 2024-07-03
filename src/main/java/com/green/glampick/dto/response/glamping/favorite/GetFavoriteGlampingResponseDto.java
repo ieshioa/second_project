@@ -13,14 +13,15 @@ import org.springframework.http.ResponseEntity;
 public class GetFavoriteGlampingResponseDto extends ResponseDto {
 
     @Schema(example = "01", description = "관심 취소 등록 여부")
-    private int result;
+    private int resultValue;
 
-    private GetFavoriteGlampingResponseDto() {
+    private GetFavoriteGlampingResponseDto(int resultValue) {
         super(ResponseCode.SUCCESS, ResponseMessage.SUCCESS);
+        this.resultValue = resultValue;
     }
 
-    public static ResponseEntity<ResponseDto> success() {
-        ResponseDto result = new ResponseDto(ResponseCode.SUCCESS, ResponseMessage.SUCCESS);
+    public static ResponseEntity<GetFavoriteGlampingResponseDto> success(int resultValue) {
+        GetFavoriteGlampingResponseDto result = new GetFavoriteGlampingResponseDto(resultValue);
         return ResponseEntity.status(HttpStatus.OK).body(result);
     }
 
