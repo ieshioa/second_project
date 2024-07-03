@@ -30,7 +30,8 @@ public class OwnerServiceImpl implements OwnerService {
     @Override
     public ResponseEntity<? super PostGlampingInfoResponseDto> postGlampingInfo(GlampingPostRequestDto req) {
         // 유저 PK 불러오기
-        req.setUserId(authenticationFacade.getLoginUserId());
+      //  req.setUserId(authenticationFacade.getLoginUserId());
+        req.setUserId(1);
         if(req.getUserId() <= 0) {
             return PostGlampingInfoResponseDto.validateUserId();
         }
@@ -97,7 +98,7 @@ public class OwnerServiceImpl implements OwnerService {
         isNull(req.getBasic());
         isNull(req.getParking());
         isNull(req.getNotice());
-        isNull(req.getGlampingImg().get(0));
+        isNull(req.getGlampingImg());
         //--
         List<RoomItem> rooms = req.getRoomItems();
         for(RoomItem room : rooms) {

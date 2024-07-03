@@ -31,7 +31,7 @@ public class GlampingPostRequestDto {
     @Schema(example = "이거 저거 주의해주세요", description = "이용 안내")
     private String notice;
     @Schema(example = "abc.png", description = "글램핑 이미지")
-    private List<String> glampingImg;
+    private String glampingImg;
 
     // room 테이블
     private List<RoomItem> roomItems;
