@@ -1,7 +1,9 @@
 package com.green.glampick.service.implement;
 
-import com.green.glampick.dto.request.glamping.GetInfoReq;
+import com.green.glampick.dto.request.glamping.GetInfoRequestDto;
+import com.green.glampick.dto.request.glamping.ReviewInfoRequestDto;
 import com.green.glampick.dto.response.glamping.GetGlampingInformationResponseDto;
+import com.green.glampick.dto.response.glamping.GetGlampingReviewInfoResponseDto;
 import com.green.glampick.dto.response.glamping.GetSearchGlampingListResponseDto;
 import com.green.glampick.dto.response.glamping.favorite.GetFavoriteGlampingResponseDto;
 import com.green.glampick.mapper.GlampingMapper;
@@ -28,7 +30,11 @@ public class GlampingServiceImpl implements GlampingService {
         return null;
     }
 
-    public ResponseEntity<? super GetGlampingInformationResponseDto> getInfoGlampingDetail(GetInfoReq p) {
+    public ResponseEntity<? super GetGlampingInformationResponseDto> getInfoGlampingDetail(GetInfoRequestDto p) {
+        return null;
+    }
+
+    public ResponseEntity<? super GetGlampingReviewInfoResponseDto> getInfoReviewList(ReviewInfoRequestDto p) {
         return null;
     }
 }

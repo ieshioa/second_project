@@ -1,7 +1,9 @@
 package com.green.glampick.controller;
 
-import com.green.glampick.dto.request.glamping.GetInfoReq;
+import com.green.glampick.dto.request.glamping.GetInfoRequestDto;
+import com.green.glampick.dto.request.glamping.ReviewInfoRequestDto;
 import com.green.glampick.dto.response.glamping.GetGlampingInformationResponseDto;
+import com.green.glampick.dto.response.glamping.GetGlampingReviewInfoResponseDto;
 import com.green.glampick.dto.response.glamping.GetSearchGlampingListResponseDto;
 import com.green.glampick.dto.response.glamping.favorite.GetFavoriteGlampingResponseDto;
 import com.green.glampick.service.GlampingService;
@@ -106,9 +108,23 @@ public class GlampingController {
                                     schema = @Schema(implementation = GetGlampingInformationResponseDto.class)
                             ))})
     @GetMapping("info")
-    public ResponseEntity<? super GetGlampingInformationResponseDto> getInfoGlampingDetail(@ParameterObject @RequestParam GetInfoReq p) {
+    public ResponseEntity<? super GetGlampingInformationResponseDto> getInfoGlampingDetail(@ParameterObject @RequestParam GetInfoRequestDto p) {
         return service.getInfoGlampingDetail(p);
     }
-
+    @Operation(summary = "글램핑 리뷰 페이지",
+            description = "<strong> 변수명 glampId : 글램프 PK </strong> <p>  ex)35 </p>",
+            responses = {
+                    @ApiResponse(
+                            responseCode = "200",
+                            description = "성공에 대한 반환 값 입니다."
+                            ,
+                            content = @Content(
+                                    mediaType = "application/json",
+                                    schema = @Schema(implementation = GetGlampingReviewInfoResponseDto.class)
+                            ))})
+    @GetMapping("{glamp_id}/review")
+    public ResponseEntity<? super GetGlampingReviewInfoResponseDto> getInfoReviewList(@ParameterObject @ModelAttribute ReviewInfoRequestDto p) {
+        return service.getInfoReviewList(p);
+    }
 
 }
