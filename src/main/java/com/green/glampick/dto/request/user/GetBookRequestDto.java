@@ -7,5 +7,7 @@ import lombok.Setter;
 @Getter
 public class GetBookRequestDto {
 
+    private long userId;
+
 
 }
