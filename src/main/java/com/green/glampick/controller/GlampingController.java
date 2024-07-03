@@ -125,6 +125,7 @@ public class GlampingController {
     @GetMapping("{glamp_id}/review")
     public ResponseEntity<? super GetGlampingReviewInfoResponseDto> getInfoReviewList(@ParameterObject @ModelAttribute ReviewInfoRequestDto p) {
         return service.getInfoReviewList(p);
+
     }
 
 }
