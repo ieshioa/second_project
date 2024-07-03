@@ -10,7 +10,7 @@ public class GlampingReviewListItem {
     @Schema(example = "d7c01900-24d2-4a9d-a86f-f7057173a0cb.jpeg", description = "유저프로필이미지")
     private String userProfileImage;
 
-    @Schema(example = "누텔라듬뿍와플", description = "유저 닉네임")
+    @Schema(example = "누텔라범벅와플", description = "유저 닉네임")
     private String userNickName;
 
     @Schema(example = "4.6", description = "별점")
@@ -25,7 +25,6 @@ public class GlampingReviewListItem {
     @Schema(example = "너가 좋다니 나도좋아!", description = "사장이작성한리뷰내용")
     private String ownerReviewContent;
 
-    @Schema(example = "유저가넣은리뷰작성")
     private List<String> reviewImages;
 
     @Schema(example = "객실이름들")
