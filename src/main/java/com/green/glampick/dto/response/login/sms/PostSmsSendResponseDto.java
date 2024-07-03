@@ -13,18 +13,18 @@ import org.springframework.http.ResponseEntity;
 
 public class PostSmsSendResponseDto extends ResponseDto{
 
-    private String phoneKey;
+    private int phoneKey;
 
     private PostSmsSendResponseDto() {
         super(ResponseCode.SUCCESS, ResponseMessage.SUCCESS);
     }
 
-    private PostSmsSendResponseDto(String phoneKey) {
+    private PostSmsSendResponseDto(int phoneKey) {
         super(ResponseCode.SUCCESS, ResponseMessage.SUCCESS);
         this.phoneKey = phoneKey;
     }
 
-    public static ResponseEntity<ResponseDto> success(String authKey) {
+    public static ResponseEntity<ResponseDto> success(int authKey) {
         PostSmsSendResponseDto result = new PostSmsSendResponseDto(authKey);
         return ResponseEntity.status(HttpStatus.OK).body(result);
     }

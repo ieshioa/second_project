@@ -46,7 +46,7 @@ public class LoginServiceImpl implements LoginService {
     private final AppProperties appProperties;
     private final SmsUtils smsUtils;
 
-    private Map<String, String> phoneCodeMap;
+    private Map<String, Integer> phoneCodeMap;
     private Map<String, Long> phoneCodeExpiryMap;
 
     @PostConstruct
@@ -156,7 +156,7 @@ public class LoginServiceImpl implements LoginService {
     @Override
     public ResponseEntity<? super PostSmsSendResponseDto> sendOne(String userPhone) {
 
-        String verificationCode = null;
+        int verificationCode;
 
         try {
 
@@ -177,7 +177,7 @@ public class LoginServiceImpl implements LoginService {
     }
 
     @Override
-    public ResponseEntity<? super PostSmsCheckResponseDto> checkPhone(String userPhone, String phoneKey) {
+    public ResponseEntity<? super PostSmsCheckResponseDto> checkPhone(String userPhone, int phoneKey) {
 
         try {
             // 이메일과 인증코드가 Map 에 저장되어 있는 인증코드와 같다면
@@ -205,13 +205,13 @@ public class LoginServiceImpl implements LoginService {
     }
 
     @Override
-    public String createKey() {
+    public int createKey() {
         Random random = new Random();
-        StringBuilder key = new StringBuilder();
+        int key = 0;
         for (int i = 0; i < 6; i++) {
-            key.append(random.nextInt(10));
+            key = key * 10 + random.nextInt(10);
         }
-        return key.toString();
+        return key;
     }
 
 }
