@@ -15,8 +15,8 @@ import lombok.NoArgsConstructor;
 public class RoomServiceEntity {
     //룸 서비스시설 테이블
     @Id
-    private long room_id;//객실 ID
-    private long service_id;//서비스 ID
-    private String created_at;//객실 서비스 등록 일자
+    private long roomId;//객실 ID
+    private long serviceId;//서비스 ID
+    private String createdAt;//객실 서비스 등록 일자
 
 }

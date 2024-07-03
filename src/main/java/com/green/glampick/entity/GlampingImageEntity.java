@@ -13,10 +13,10 @@ import lombok.NoArgsConstructor;
 public class GlampingImageEntity {
 //글램핑 이미지 테이블
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long glamp_image_id;//글램핑 이미지 ID
-    private long glamp_id;//글램핑 ID
-    private String glamp_image_name;//글램핑 이미지명
-    private String created_at;//글램핑 이미지 등록 일자
+    private long glampImageId;//글램핑 이미지 ID
+    private long glampId;//글램핑 ID
+    private String glampImageName;//글램핑 이미지명
+    private String createdAt;//글램핑 이미지 등록 일자
 
 
 }
