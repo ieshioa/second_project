@@ -4,11 +4,15 @@ import com.green.glampick.common.response.ResponseCode;
 import com.green.glampick.common.response.ResponseMessage;
 import com.green.glampick.dto.ResponseDto;
 import io.swagger.v3.oas.annotations.media.Schema;
+import lombok.Getter;
+import lombok.Setter;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-
+@Setter
+@Getter
 public class GetFavoriteGlampingResponseDto extends ResponseDto {
-    @Schema(example = "0", description = "관심 취소 등록 여부")
+
+    @Schema(example = "01", description = "관심 취소 등록 여부")
     private int result;
 
     private GetFavoriteGlampingResponseDto() {

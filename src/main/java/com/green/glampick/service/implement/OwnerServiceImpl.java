@@ -2,8 +2,12 @@ package com.green.glampick.service.implement;
 
 import com.green.glampick.dto.object.glamping.RoomItem;
 import com.green.glampick.dto.request.GlampingPostRequestDto;
+import com.green.glampick.dto.request.ReviewPatchRequestDto;
+import com.green.glampick.dto.request.ReviewPostRequestDto;
 import com.green.glampick.dto.response.owner.GetOwnerBookListResponseDto;
+import com.green.glampick.dto.response.owner.PatchOwnerReviewInfoResponseDto;
 import com.green.glampick.dto.response.owner.PostGlampingInfoResponseDto;
+import com.green.glampick.dto.response.owner.PostOwnerReviewInfoResponseDto;
 import com.green.glampick.mapper.OwnerMapper;
 import com.green.glampick.security.AuthenticationFacade;
 import com.green.glampick.service.OwnerService;
@@ -114,6 +118,16 @@ public class OwnerServiceImpl implements OwnerService {
         return null;
     }
 
-// 강국 =================================================================================================================
 
+
+// 강국 =================================================================================================================
+    @Override
+    public ResponseEntity<? super PostOwnerReviewInfoResponseDto> postReview(ReviewPostRequestDto p) {
+        return null;
+    }
+
+    @Override
+    public ResponseEntity<? super PatchOwnerReviewInfoResponseDto> patchReview(ReviewPatchRequestDto p) {
+        return null;
+    }
 }

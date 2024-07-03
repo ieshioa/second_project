@@ -117,7 +117,19 @@ public class GlampingController {
                     @ApiResponse(
                             responseCode = "200",
                             description = "성공에 대한 반환 값 입니다."
-                            ,
+                            +
+                            "<p> </p>" +
+                            "<p> avgStarPoint: 글램핑 전체 평점 </p>" +
+                            "<p> [객실 정보]" +
+                            "<p> userProfileImage: 유저 프사 </p>" +
+                            "<p> userNickName: 유저 닉네임</p>" +
+                            "<p> starPoint: 별점 </p>" +
+                            "<p> createdAt: 리뷰 작성 날짜</p>" +
+                            "<p> userReviewContent: 유저가 작성한 리뷰내용 </p>" +
+                            "<p> ownerReviewContent: 사장이 작성한 리뷰내용 </p>" +
+                            "<p> reviewImages:  유저가 올린 리뷰사진들 </p>" +
+                            "<p> roomNames: 글램핑장의 객실 이름들 </p>" ,
+
                             content = @Content(
                                     mediaType = "application/json",
                                     schema = @Schema(implementation = GetGlampingReviewInfoResponseDto.class)
@@ -125,7 +137,5 @@ public class GlampingController {
     @GetMapping("{glamp_id}/review")
     public ResponseEntity<? super GetGlampingReviewInfoResponseDto> getInfoReviewList(@ParameterObject @ModelAttribute ReviewInfoRequestDto p) {
         return service.getInfoReviewList(p);
-
     }
-
 }
