@@ -18,8 +18,9 @@ public interface ResponseMessage {
     String NOT_EXISTED_BOOK = "존재하지 않는 예약내역 입니다.";
     String NOT_EXISTED_REVIEW = "존재하지 않는 후기 입니다.";
     String NOT_EXISTED_GLAMP = "존재하지 않는 글랭핑 입니다.";
+    String NOT_EXISTED_PAYMENT = "존재하지 않는 결제정보 입니다.";
 
-    String AAA = "로그인된 유저 정보를 불러오지 못했습니다.";
+            String AAA = "로그인된 유저 정보를 불러오지 못했습니다.";
     String BBB = "이미 회원님의 계정에 등록된 글램핑 정보가 있습니다.";
     String CCC = "이미 같은 위치에 등록된 글램핑장이 존재합니다.";
     String DDD = "객실의 가격 정보가 잘못되었습니다.";

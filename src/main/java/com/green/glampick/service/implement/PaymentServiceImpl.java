@@ -40,20 +40,23 @@ public class PaymentServiceImpl implements PaymentService {
     @Override
     public ResponseEntity<? super GetPaymentResponseDto> getPayment(long reservationId) {
 
-        PaymentEntity paymentEntities = null;
+        PaymentEntity paymentEntity = null;
 
         try {
 
-            paymentEntities = paymentRepository.findBy(reservationId);
+            // reservationId 에 대한 모든 정보를 Entity 에 담아 온다.
+            paymentEntity = paymentRepository.findByReservationId(reservationId);
 
-
+            if (paymentEntity == null) {
+                return GetPaymentResponseDto.noExistedPayment();
+            }
 
         } catch (Exception e) {
             e.printStackTrace();
             ResponseDto.databaseError();
         }
 
-        GetPaymentResponseDto.success(paymentEntities);
+        return GetPaymentResponseDto.success(paymentEntity);
 
     }
 
