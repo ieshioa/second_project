@@ -19,6 +19,12 @@ public interface ResponseCode {
     String NOT_EXISTED_REVIEW = "NR";
     String NOT_EXISTED_GLAMP = "NG";
 
+    String AAA = "A";
+    String BBB = "A";
+    String CCC = "A";
+    String DDD = "A";
+    String EEE = "A";
+
     // HTTP Status 401
     String SIGN_IN_FAILED = "SF";
     String AUTHORIZATION_FAILED = "AF";

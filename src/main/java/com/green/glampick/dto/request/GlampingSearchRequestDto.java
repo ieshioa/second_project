@@ -7,7 +7,7 @@ import lombok.Setter;
 import java.util.List;
 @Getter
 @Setter
-public class GlampingSearch {
+public class GlampingSearchRequestDto {
     @Schema(example = "대구", description = "지역")
     private String region;
     @Schema(example = "2024-06-28", description = "체크인")

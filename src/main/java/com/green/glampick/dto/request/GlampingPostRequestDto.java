@@ -10,12 +10,14 @@ import java.util.List;
 
 @Setter
 @Getter
-public class GlampingPost {
+public class GlampingPostRequestDto {
     // glamping 테이블
     @JsonIgnore
     private long userId;
     @Schema(example = "뉴욕 카라반", description = "글램핑 이름")
     private String glampName;
+    @Schema(example = "대구광역시 중구 109-2", description = "글램핑 주소")
+    private String glampLocation;
     @Schema(example = "서울경기", description = "지역 분류")
     private String region;
     @Schema(example = "10,000", description = "추가 인원에 대한 추가 요금")

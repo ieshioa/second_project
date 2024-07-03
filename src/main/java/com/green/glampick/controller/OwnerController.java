@@ -1,6 +1,6 @@
 package com.green.glampick.controller;
 
-import com.green.glampick.dto.request.GlampingPost;
+import com.green.glampick.dto.request.GlampingPostRequestDto;
 import com.green.glampick.dto.response.owner.GetOwnerBookListResponseDto;
 import com.green.glampick.dto.response.owner.PostGlampingInfoResponseDto;
 import com.green.glampick.service.OwnerService;
@@ -26,7 +26,8 @@ public class OwnerController {
 // 민지 =================================================================================================================
     @PostMapping
     @Operation(summary = "글램핑 정보 등록", description =
-            "<p> <strong> extraCharge(추가요금) 제외 모든 데이터가 필수 입력입니다. </strong> </p>" +
+            "<p> <strong> 선택입력 : extraCharge(추가요금), room.service[] </strong> </p>" +
+            "<p> <strong> 나머지 모든 데이터는 필수 입력입니다. </strong> </p>" +
                     "<p> 사진 업로드를 위해 테스트는 포스트맨에서 해주세요 ~ </p>"
     )
     @ApiResponse(
@@ -42,8 +43,8 @@ public class OwnerController {
                     schema = @Schema(implementation = PostGlampingInfoResponseDto.class)
             )
     )
-    public ResponseEntity<? super PostGlampingInfoResponseDto> postGlampingInfo(@RequestBody GlampingPost glampingPostReq) {
-        return service.postGlampingInfo(glampingPostReq);
+    public ResponseEntity<? super PostGlampingInfoResponseDto> postGlampingInfo(@RequestBody GlampingPostRequestDto glampingPostRequestDtoReq) {
+        return service.postGlampingInfo(glampingPostRequestDtoReq);
     }
 
     @GetMapping("book/{glamp_id}")
