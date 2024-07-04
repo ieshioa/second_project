@@ -191,10 +191,7 @@ public class OwnerServiceImpl implements OwnerService {
     }
 
 
-    @Override
-    public ResponseEntity<? super GetOwnerBookListResponseDto> getGlampReservation(long glampId) {
-        return null;
-    }
+
 
 
 

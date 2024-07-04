@@ -13,6 +13,7 @@ import org.springframework.http.ResponseEntity;
 @Setter
 public class DeleteReviewResponseDto extends ResponseDto {
 
+    static ReviewEntity reviewEntity;
     private long reviewId;
 
 
@@ -21,8 +22,8 @@ public class DeleteReviewResponseDto extends ResponseDto {
         this.reviewId = reviewEntity.getReviewId();
     }
 
-    public static ResponseEntity<ResponseDto> success() {
-        ResponseDto result = new ResponseDto(ResponseCode.SUCCESS, ResponseMessage.SUCCESS);
+    public static ResponseEntity<DeleteReviewResponseDto> success() {
+        DeleteReviewResponseDto result = new DeleteReviewResponseDto(reviewEntity);
         return ResponseEntity.status(HttpStatus.OK).body(result);
     }
 

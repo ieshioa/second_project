@@ -5,11 +5,11 @@ import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 import org.hibernate.annotations.CreationTimestamp;
 
-import java.time.LocalDateTime;
-
 @Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity(name = "review")
@@ -29,10 +29,13 @@ public class ReviewEntity {
 
 
     public ReviewEntity (PostReviewRequestDto dto) {
+
         this.userId = dto.getUserId();
         this.reservationId = dto.getReservationId();
         this.reviewContent = dto.getReviewContent();
         this.reviewStarPoint = dto.getReviewStarPoint();
     }
+
+
 
 }

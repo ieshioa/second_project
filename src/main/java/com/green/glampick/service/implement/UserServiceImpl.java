@@ -38,7 +38,9 @@ public class UserServiceImpl implements UserService {
 
             resultSets = reservationRepository.getBook(dto.getUserId());
 
-            if (resultSets == null) { return GetBookResponseDto.noExistedBook(); }
+            if (resultSets == null) {
+                return GetBookResponseDto.noExistedBook();
+            }
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -69,32 +71,45 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public ResponseEntity<? super DeleteReviewResponseDto> deleteReview(int email) {
-        return null;
-    }
+    public ResponseEntity<? super DeleteReviewResponseDto> deleteReview(long reviewId) {
 
-    @Override
-    public ResponseEntity<? super GetReviewResponseDto> getReview(GetReviewRequestDto email) {
-        return null;
-    }
+        ReviewEntity reviewEntity = new ReviewEntity();
 
-    @Override
-    public ResponseEntity<? super GetFavoriteGlampingListResponseDto> getFavoriteGlamping(GetFavoriteGlampingRequestDto email) {
-        return null;
-    }
+        try {
+            if (reviewId == 0) { return DeleteReviewResponseDto.noExistedReview(); }
+            reviewRepository.delete(reviewEntity);
+            System.out.println(reviewEntity.getReviewId());
+            System.out.println(reviewEntity);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseDto.databaseError();
+        }
 
-    @Override
-    public ResponseEntity<? super GetUserResponseDto> getUser(GetUserRequestDto email) {
-        return null;
+        return DeleteReviewResponseDto.success();
     }
+        @Override
+        public ResponseEntity<? super GetReviewResponseDto> getReview (GetReviewRequestDto email){
+            return null;
+        }
 
-    @Override
-    public ResponseEntity<? super UpdateUserResponseDto> updateUser(UpdateUserRequestDto email) {
-        return null;
-    }
+        @Override
+        public ResponseEntity<? super GetFavoriteGlampingListResponseDto> getFavoriteGlamping
+        (GetFavoriteGlampingRequestDto email){
+            return null;
+        }
 
-    @Override
-    public ResponseEntity<? super DeleteUserResponseDto> deleteUser(int userId) {
-        return null;
+        @Override
+        public ResponseEntity<? super GetUserResponseDto> getUser (GetUserRequestDto email){
+            return null;
+        }
+
+        @Override
+        public ResponseEntity<? super UpdateUserResponseDto> updateUser (UpdateUserRequestDto email){
+            return null;
+        }
+
+        @Override
+        public ResponseEntity<? super DeleteUserResponseDto> deleteUser ( int userId){
+            return null;
+        }
     }
-}
