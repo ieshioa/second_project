@@ -1,6 +1,7 @@
 package com.green.glampick.entity;
 
 import com.green.glampick.dto.request.login.SignUpRequestDto;
+import com.green.glampick.dto.request.user.GetBookRequestDto;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -61,4 +62,5 @@ public class UserEntity {
         this.userProfileImage = dto.getUserProfileImage();
         this.userRole = "USER";
     }
+
 }
