@@ -13,7 +13,7 @@ public interface UserService {
     ResponseEntity<?super GetReviewResponseDto> getReview(GetReviewRequestDto email);//리뷰 불러오기
     ResponseEntity<?super GetFavoriteGlampingListResponseDto> getFavoriteGlamping(GetFavoriteGlampingRequestDto email);// 관심 글램핑 불러오기
     //     ResponseEntity<?super PostReviewResponseDto> getCoupon(String email);//쿠폰 불러오기
-    ResponseEntity<?super GetUserResponseDto> getUser(GetUserRequestDto email);//유저 정보 불러오기
+    ResponseEntity<?super GetUserResponseDto> getUser(GetUserRequestDto dto);//유저 정보 불러오기
     ResponseEntity<?super UpdateUserResponseDto> updateUser(UpdateUserRequestDto dto);//유저 정보 수정하기
     ResponseEntity<?super DeleteUserResponseDto> deleteUser(int userId);//회원 탈퇴
 

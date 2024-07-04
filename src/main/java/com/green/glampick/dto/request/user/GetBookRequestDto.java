@@ -10,5 +10,4 @@ public class GetBookRequestDto {
 
     @JsonIgnore private long userId;
 
-
 }

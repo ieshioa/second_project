@@ -74,8 +74,8 @@ public class UserController {
     @GetMapping("")// 유저 정보 불러오기
     @Operation(summary = "유저 정보 불러오기", description = "<strong></strong>" +
             "<p></p>")
-    public ResponseEntity<?super GetUserResponseDto> getUser(@ParameterObject @ModelAttribute GetUserRequestDto email) {
-        return service.getUser(email);
+    public ResponseEntity<?super GetUserResponseDto> getUser(@ParameterObject GetUserRequestDto dto) {
+        return service.getUser(dto);
     }
 
     @PatchMapping("")// 유저 정보 수정하기

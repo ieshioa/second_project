@@ -121,8 +121,22 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public ResponseEntity<? super GetUserResponseDto> getUser(GetUserRequestDto email) {
-        return null;
+    public ResponseEntity<? super GetUserResponseDto> getUser(GetUserRequestDto dto) {
+
+        dto.setUserId(authenticationFacade.getLoginUserId());
+
+        try {
+
+            UserEntity userEntity = userRepository.findById(dto.getUserId()).get();
+            if (dto.getUserId() == 0) { return GetUserResponseDto.noExistedUser(); }
+
+            return GetUserResponseDto.success(userEntity);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseDto.databaseError();
+        }
+
     }
 
     @Override
