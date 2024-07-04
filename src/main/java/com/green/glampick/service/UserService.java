@@ -7,7 +7,7 @@ import org.springframework.http.ResponseEntity;
 public interface UserService {
 
     ResponseEntity<?super GetBookResponseDto> getBook(GetBookRequestDto dto);// 예약 내역 불러오기
-    ResponseEntity<?super PatchBookResponseDto> cancelBook(PatchBookRequestDto dto);//예약 내역 취소하기
+    ResponseEntity<?super CancelBookResponseDto> cancelBook(CancelBookRequestDto dto);//예약 내역 취소하기
     ResponseEntity<?super PostReviewResponseDto> postReview(PostReviewRequestDto dto);//리뷰 작성
     ResponseEntity<?super DeleteReviewResponseDto> deleteReview(int email);//리뷰 삭제
     ResponseEntity<?super GetReviewResponseDto> getReview(GetReviewRequestDto email);//리뷰 불러오기

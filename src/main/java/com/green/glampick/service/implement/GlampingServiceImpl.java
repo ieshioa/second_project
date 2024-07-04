@@ -70,6 +70,16 @@ public class GlampingServiceImpl implements GlampingService {
         return GetSearchGlampingListResponseDto.success(searchCount, result);
     }
 
+    @Override
+    public ResponseEntity<? super GetFavoriteGlampingResponseDto> favoriteGlamping(long glampId) {
+        return null;
+    }
+
+    @Override
+    public ResponseEntity<? super GetSearchGlampingListResponseDto> searchGlamping() {
+        return null;
+    }
+
 // 강국 =================================================================================================================
 
     public ResponseEntity<? super GetFavoriteGlampingResponseDto> favoriteGlamping(GetFavoriteRequestDto p) {

@@ -3,12 +3,13 @@ package com.green.glampick.service.implement;
 import com.green.glampick.dto.ResponseDto;
 import com.green.glampick.dto.request.user.*;
 import com.green.glampick.dto.response.user.*;
-import com.green.glampick.entity.ReservationEntity;
+import com.green.glampick.entity.ReservationBeforeEntity;
+import com.green.glampick.entity.ReservationCancelEntity;
 import com.green.glampick.entity.ReviewEntity;
-import com.green.glampick.entity.UserEntity;
 import com.green.glampick.repository.ReservationRepository;
 import com.green.glampick.repository.ReviewRepository;
 import com.green.glampick.repository.resultset.GetBookResultSet;
+import com.green.glampick.repository.ReservationCancelRepository;
 import com.green.glampick.security.AuthenticationFacade;
 import com.green.glampick.service.UserService;
 import lombok.RequiredArgsConstructor;
@@ -16,20 +17,22 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Slf4j
 @Service
 @RequiredArgsConstructor
 public class UserServiceImpl implements UserService {
     private final ReservationRepository reservationRepository;
+    private final ReservationCancelRepository reservationCancelRepository;
     private final ReviewRepository reviewRepository;
     private final AuthenticationFacade authenticationFacade;
 
 
     @Override
     public ResponseEntity<? super GetBookResponseDto> getBook(GetBookRequestDto dto) {
+
         dto.setUserId(authenticationFacade.getLoginUserId());
 
         List<GetBookResultSet> resultSets;
@@ -49,8 +52,37 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public ResponseEntity<? super PatchBookResponseDto> cancelBook(PatchBookRequestDto dto) {
-        return null;
+    public ResponseEntity<? super CancelBookResponseDto> cancelBook(CancelBookRequestDto dto) {
+//        dto.setUserId(authenticationFacade.getLoginUserId());
+
+        try {
+
+            Optional<ReservationBeforeEntity> optionalBeforeEntity = reservationRepository.findById(dto.getReservationId());
+
+            // Entity 로 가져온 데이터가 없다면, 존재하지 않는 예약내역에 대한 응답을 반환한다.
+            if (optionalBeforeEntity.isEmpty()) { return CancelBookResponseDto.noExistedBook(); }
+
+            ReservationBeforeEntity beforeEntity = optionalBeforeEntity.get();
+            ReservationCancelEntity cancelEntity = new ReservationCancelEntity(
+                    beforeEntity.getUserId()
+                    , beforeEntity.getGlampId()
+                    , beforeEntity.getRoomId()
+                    , beforeEntity.getInputName()
+                    , beforeEntity.getCheckInDate()
+                    , beforeEntity.getCheckOutDate()
+                    , beforeEntity.getReservationAmount()
+                    , dto.getComment()
+                    , beforeEntity.getCreatedAt());
+
+            reservationCancelRepository.save(cancelEntity);
+            reservationRepository.delete(beforeEntity);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseDto.databaseError();
+        }
+
+        return CancelBookResponseDto.success();
     }
 
     @Override

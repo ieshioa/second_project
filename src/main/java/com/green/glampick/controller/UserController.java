@@ -28,10 +28,10 @@ public class UserController {
         return service.getBook(dto);
     }
 
-    @PatchMapping("/book")// 예약 내역 취소하기
+    @PostMapping("/book-cancel")// 예약 내역 취소하기
     @Operation(summary = "예약 취소", description = "<strong></strong>" +
             "<p></p>")
-    public ResponseEntity<?super PatchBookResponseDto> cancelBook(@RequestBody PatchBookRequestDto dto) {
+    public ResponseEntity<?super CancelBookResponseDto> cancelBook(@RequestBody CancelBookRequestDto dto) {
         return service.cancelBook(dto);
     }
 
