@@ -17,15 +17,15 @@ import java.time.LocalDateTime;
 public class ReviewEntity {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long reviewId;
-    private long userId;
-    private long reservationId;
-    private String reviewContent;
-    private long reviewStarPoint;
+    private long reviewId;  // 리뷰 PK
+    private long userId;  // 유저 PK
+    private long reservationId;  // 예약 PK
+    private String reviewContent;  // 리뷰내용
+    private long reviewStarPoint;  // 리뷰 별점
 
     @CreationTimestamp
     @Column(updatable = false)
-    private String createdAt;
+    private String createdAt;  // 리뷰작성일자
 
 
     public ReviewEntity (PostReviewRequestDto dto) {

@@ -9,6 +9,7 @@ import com.green.glampick.entity.UserEntity;
 import com.green.glampick.repository.ReservationRepository;
 import com.green.glampick.repository.ReviewRepository;
 import com.green.glampick.repository.resultset.GetBookResultSet;
+import com.green.glampick.security.AuthenticationFacade;
 import com.green.glampick.service.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -16,6 +17,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.List;
 
 @Slf4j
 @Service
@@ -23,21 +25,27 @@ import java.util.ArrayList;
 public class UserServiceImpl implements UserService {
     private final ReservationRepository reservationRepository;
     private final ReviewRepository reviewRepository;
-    private final GetBookResultSet resultSet;
+    private final AuthenticationFacade authenticationFacade;
 
 
     @Override
-    public ResponseEntity<? super GetBookResponseDto> getBook(GetBookRequestDto userId) {
+    public ResponseEntity<? super GetBookResponseDto> getBook(GetBookRequestDto dto) {
+        dto.setUserId(authenticationFacade.getLoginUserId());
+
+        List<GetBookResultSet> resultSets;
 
         try {
-            GetBookResponseDto result = this.reservationRepository.getBook(userId);
-            if(result == null){
-                return GetBookResponseDto.noExistedUser();
-            }
+
+            resultSets = reservationRepository.getBook(dto.getUserId());
+
+            if (resultSets == null) { return GetBookResponseDto.noExistedBook(); }
+
         } catch (Exception e) {
             e.printStackTrace();
+            return ResponseDto.databaseError();
         }
-        return GetBookResponseDto.success(resultSet);
+
+        return GetBookResponseDto.success(resultSets);
     }
 
     @Override

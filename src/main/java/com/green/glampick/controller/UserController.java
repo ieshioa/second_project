@@ -24,7 +24,7 @@ public class UserController {
             "<p> reservationId = </p>" +
             "<p> reviewContent = </p>" +
             "<p> reviewStarPoint = </p>")
-    public ResponseEntity<?super GetBookResponseDto> getBook(@ParameterObject @ModelAttribute GetBookRequestDto dto) {
+    public ResponseEntity<?super GetBookResponseDto> getBook(@ParameterObject GetBookRequestDto dto) {
         return service.getBook(dto);
     }
 
