@@ -7,4 +7,7 @@ public interface GetBookResultSet {
     String getCheckInDate();
     String getCheckOutDate();
     String getCreatedAt();
+    String getCheckInTime();
+    String getCheckOutTime();
+    long getReservationId();
 }

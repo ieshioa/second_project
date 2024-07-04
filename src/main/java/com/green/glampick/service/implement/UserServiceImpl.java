@@ -17,6 +17,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.List;
 
 @Slf4j
 @Service
@@ -31,19 +32,20 @@ public class UserServiceImpl implements UserService {
     public ResponseEntity<? super GetBookResponseDto> getBook(GetBookRequestDto dto) {
         dto.setUserId(authenticationFacade.getLoginUserId());
 
+        List<GetBookResultSet> resultSets;
+
         try {
 
-            GetBookResultSet resultSet = reservationRepository.getBook(dto.getUserId());
+            resultSets = reservationRepository.getBook(dto.getUserId());
 
-            if (resultSet == null) { return GetBookResponseDto.noExistedBook(); }
-
-            return GetBookResponseDto.success(resultSet);
+            if (resultSets == null) { return GetBookResponseDto.noExistedBook(); }
 
         } catch (Exception e) {
             e.printStackTrace();
             return ResponseDto.databaseError();
         }
 
+        return GetBookResponseDto.success(resultSets);
     }
 
     @Override

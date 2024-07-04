@@ -6,6 +6,8 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
+
 @Repository
 public interface ReservationRepository extends JpaRepository<ReservationEntity, Long> {
 
@@ -16,6 +18,8 @@ public interface ReservationRepository extends JpaRepository<ReservationEntity, 
             ", A. check_in_date AS checkInDate" +
             ", A. check_out_date AS checkOutDate " +
             ", A. created_at AS createdAt " +
+            ", B. check_in_time AS checkInTime " +
+            ", B. check_out_time AS checkOutTime " +
             "FROM reservation_before A " +
             "JOIN room B " +
             "ON A.room_id = B.room_id " +
@@ -25,5 +29,5 @@ public interface ReservationRepository extends JpaRepository<ReservationEntity, 
             "ORDER BY A.created_at DESC ",
             nativeQuery = true
     )
-    GetBookResultSet getBook(Long userId);
+    List<GetBookResultSet> getBook(Long userId);
 }

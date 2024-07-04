@@ -12,35 +12,26 @@ import lombok.Setter;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
+import java.util.List;
+
 @Setter
 @Getter
 public class GetBookResponseDto extends ResponseDto {
 
-    private String createdAt;
-    private long reservationId;
-    private String checkInDate;
-    private String checkOutDate;
-    private String glampName;
-    private String roomName;
+    private List<GetBookResultSet> booklist;
 
-
-
-    private GetBookResponseDto(GetBookResultSet resultSet) {
+    private GetBookResponseDto(List<GetBookResultSet> booklist) {
         super(ResponseCode.SUCCESS, ResponseMessage.SUCCESS);
-        this.createdAt = resultSet.getCreatedAt();
-        this.checkInDate = resultSet.getCheckInDate();
-        this.checkOutDate = resultSet.getCheckOutDate();
-        this.glampName = resultSet.getGlampName();
-        this.roomName = resultSet.getRoomName();
+        this.booklist = booklist;
     }
 
-    public static ResponseEntity<ResponseDto> success(GetBookResultSet resultSet) {
-        GetBookResponseDto result = new GetBookResponseDto(resultSet);
+    public static ResponseEntity<ResponseDto> success(List<GetBookResultSet> booklist) {
+        GetBookResponseDto result = new GetBookResponseDto(booklist);
         return ResponseEntity.status(HttpStatus.OK).body(result);
     }
     public static ResponseEntity<ResponseDto> noExistedBook() {
         ResponseDto result = new ResponseDto(ResponseCode.NOT_EXISTED_BOOK, ResponseMessage.NOT_EXISTED_BOOK);
-        return ResponseEntity.status(HttpStatus.OK).body(result);
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(result);
     }
 
     public static ResponseEntity<ResponseDto> noExistedUser() {
