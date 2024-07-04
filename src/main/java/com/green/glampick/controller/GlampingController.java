@@ -46,7 +46,9 @@ public class GlampingController {
             )
     )
     public ResponseEntity<? super GetSearchGlampingListResponseDto> searchGlamping(@ParameterObject @ModelAttribute GlampingSearchRequestDto searchReq) {
-        return service.searchGlamping();
+        return service.searchGlamping(searchReq);
+//    public ResultGet searchGlamping(@ParameterObject @ModelAttribute GlampingSearchRequestDto searchReq) {
+//        return service.searchGlamping(searchReq);
     }
 
 

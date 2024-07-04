@@ -13,6 +13,9 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.util.List;
 
 @Slf4j
 @RestController
@@ -28,7 +31,8 @@ public class OwnerController {
     @Operation(summary = "글램핑 정보 등록", description =
             "<p> <strong> 선택입력 : extraCharge(추가요금), room.service[] </strong> </p>" +
             "<p> <strong> 나머지 모든 데이터는 필수 입력입니다. </strong> </p>" +
-                    "<p> 사진 업로드를 위해 테스트는 포스트맨에서 해주세요 ~ </p>"
+                    "<p> 사진 업로드를 위해 테스트는 포스트맨에서 해주세요 ~ </p>" +
+                    "<p> <strong> 시간 입력 형식 = 시:분:초  ex) 12:00:00 </strong> </p>"
     )
     @ApiResponse(
             description =
@@ -43,8 +47,9 @@ public class OwnerController {
                     schema = @Schema(implementation = PostGlampingInfoResponseDto.class)
             )
     )
-    public ResponseEntity<? super PostGlampingInfoResponseDto> postGlampingInfo(@RequestBody GlampingPostRequestDto glampingPostRequestDtoReq) {
-        return service.postGlampingInfo(glampingPostRequestDtoReq);
+    public ResponseEntity<? super PostGlampingInfoResponseDto> postGlampingInfo(@RequestPart GlampingPostRequestDto glampingPostRequestDtoReq
+                                        , @RequestPart MultipartFile glampImg, @RequestPart List<MultipartFile> roomImg) {
+        return service.postGlampingInfo(glampingPostRequestDtoReq, glampImg);
     }
 
     @GetMapping("book/{glamp_id}")

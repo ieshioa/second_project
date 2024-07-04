@@ -12,14 +12,15 @@ import io.swagger.v3.oas.annotations.security.SecurityScheme;
         title = "글램픽",
         description = "Second Phase Project",
         version = "v1"
-    ),
-        security = @SecurityRequirement(name = "authorization")
+    )
+//        ,
+//        security = @SecurityRequirement(name = "authorization")
 )
-@SecurityScheme(
-        type = SecuritySchemeType.HTTP
-        , name = "authorization"
-        , in = SecuritySchemeIn.HEADER
-        , bearerFormat = "JWT"
-        , scheme = "Bearer"
-)
+//@SecurityScheme(
+//        type = SecuritySchemeType.HTTP
+//        , name = "authorization"
+//        , in = SecuritySchemeIn.HEADER
+//        , bearerFormat = "JWT"
+//        , scheme = "Bearer"
+//)
 public class SwaggerConfiguration {}

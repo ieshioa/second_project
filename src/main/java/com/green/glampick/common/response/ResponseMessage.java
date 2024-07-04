@@ -19,11 +19,10 @@ public interface ResponseMessage {
     String NOT_EXISTED_REVIEW = "존재하지 않는 후기 입니다.";
     String NOT_EXISTED_GLAMP = "존재하지 않는 글랭핑 입니다.";
 
+    String WRONG_PERSONNEL = "인원 정보가 잘못 입력되었습니다.";
+    String WRONG_DATE = "날짜 정보가 잘못 입력되었습니다.";
     String AAA = "로그인된 유저 정보를 불러오지 못했습니다.";
-    String BBB = "이미 회원님의 계정에 등록된 글램핑 정보가 있습니다.";
-    String CCC = "이미 같은 위치에 등록된 글램핑장이 존재합니다.";
-    String DDD = "객실의 가격 정보가 잘못되었습니다.";
-    String EEE = "객실의 인원 정보가 잘못되었습니다.";
+    String GGG = "파일 업로드 과정에서 오류가 생겼습니다.";
 
 
     // HTTP Status 401 UNAUTHORIZED
