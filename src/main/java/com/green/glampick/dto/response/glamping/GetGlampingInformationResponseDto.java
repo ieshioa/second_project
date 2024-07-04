@@ -7,13 +7,16 @@ import com.green.glampick.dto.object.glamping.GlampingDetailReviewItem;
 import com.green.glampick.dto.object.glamping.GlampingRoomListItem;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
 import java.util.List;
 
 
-@Data
+@Getter
+@Setter
 public class GetGlampingInformationResponseDto extends ResponseDto {
 
         @Schema(example = "그린 파인트리글램핑&카라반 ", description = "글램핑 명")

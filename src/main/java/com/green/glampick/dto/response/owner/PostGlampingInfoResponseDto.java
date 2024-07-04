@@ -29,24 +29,14 @@ public class PostGlampingInfoResponseDto extends ResponseDto {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(result);
     }
 
-    public static ResponseEntity<ResponseDto> hasExistingGlamping() {
-        ResponseDto result = new ResponseDto(ResponseCode.BBB, ResponseMessage.BBB);
+    public static ResponseEntity<ResponseDto> validationFailed(String errorMsg) {
+        ResponseDto result = new ResponseDto(ResponseCode.VALIDATION_FAILED, errorMsg);
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(result);
     }
 
-    public static ResponseEntity<ResponseDto> existingLocation() {
-        ResponseDto result = new ResponseDto(ResponseCode.CCC, ResponseMessage.CCC);
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(result);
-    }
-
-    public static ResponseEntity<ResponseDto> badPrice() {
-        ResponseDto result = new ResponseDto(ResponseCode.DDD, ResponseMessage.DDD);
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(result);
-    }
-
-    public static ResponseEntity<ResponseDto> badPeople() {
-        ResponseDto result = new ResponseDto(ResponseCode.EEE, ResponseMessage.EEE);
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(result);
+    public static ResponseEntity<ResponseDto> fileUploadError() {
+        ResponseDto result = new ResponseDto(ResponseCode.GGG, ResponseMessage.GGG);
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(result);
     }
 
 }
