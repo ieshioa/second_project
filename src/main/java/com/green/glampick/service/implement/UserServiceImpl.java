@@ -3,25 +3,47 @@ package com.green.glampick.service.implement;
 import com.green.glampick.dto.ResponseDto;
 import com.green.glampick.dto.request.user.*;
 import com.green.glampick.dto.response.user.*;
+import com.green.glampick.entity.ReservationEntity;
 import com.green.glampick.entity.ReviewEntity;
+import com.green.glampick.entity.UserEntity;
+import com.green.glampick.repository.ReservationRepository;
 import com.green.glampick.repository.ReviewRepository;
+import com.green.glampick.repository.resultset.GetBookResultSet;
+import com.green.glampick.security.AuthenticationFacade;
 import com.green.glampick.service.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+
 @Slf4j
 @Service
 @RequiredArgsConstructor
 public class UserServiceImpl implements UserService {
-
-
+    private final ReservationRepository reservationRepository;
     private final ReviewRepository reviewRepository;
+    private final AuthenticationFacade authenticationFacade;
+
 
     @Override
     public ResponseEntity<? super GetBookResponseDto> getBook(GetBookRequestDto dto) {
-        return null;
+        dto.setUserId(authenticationFacade.getLoginUserId());
+
+        try {
+
+            GetBookResultSet resultSet = reservationRepository.getBook(dto.getUserId());
+
+            if (resultSet == null) { return GetBookResponseDto.noExistedBook(); }
+
+            return GetBookResponseDto.success(resultSet);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseDto.databaseError();
+        }
+
     }
 
     @Override

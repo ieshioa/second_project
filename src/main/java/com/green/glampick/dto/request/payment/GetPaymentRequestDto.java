@@ -6,12 +6,9 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class PostPaymentRequestDto {
+public class GetPaymentRequestDto {
 
-    private String id;
-    private long reservationId;
     @JsonIgnore private long userId;
-    private String pg;
-    private long payAmount;
+    private long reservationId;
 
 }

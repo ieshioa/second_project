@@ -13,9 +13,9 @@ import lombok.NoArgsConstructor;
 public class ServiceEntity {
     //서비스시설 테이블
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long serviceId;//서비스 ID
-    private String serviceTitle; //서비스 이름
-    private String createdAt;//데이터 등록 일자
+    private long serviceId;  //서비스 ID
+    private String serviceTitle;  //서비스 이름
+    private String createdAt;  //데이터 등록 일자
 
 
 }
