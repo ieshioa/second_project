@@ -8,10 +8,13 @@ import java.util.List;
 public class GlampingRoomListItem {
 
     private List<String> roomPics;
+
     @Schema(example = "5", description = "객실 pk")
     private long roomId;
     @Schema(example = "7", description = "글램핑 pk")
     private long glampId;
+    @Schema(example = "우당탕탕카라반", description = "객실네임")
+    private String roomName;
     @Schema(example = "137,000", description = "객실 가격")
     private String roomPrice;
     @Schema(example = "기준 2명", description = "기준 명 수")

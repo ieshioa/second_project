@@ -1,5 +1,6 @@
 package com.green.glampick.controller;
 
+import com.green.glampick.dto.request.glamping.GetFavoriteRequestDto;
 import com.green.glampick.dto.request.glamping.GetInfoRequestDto;
 import com.green.glampick.dto.request.glamping.ReviewInfoRequestDto;
 import com.green.glampick.dto.response.glamping.GetGlampingInformationResponseDto;
@@ -51,7 +52,45 @@ public class GlampingController {
 
 
 // 강국 =================================================================================================================
-    @GetMapping("favorite/{glamp_id}")
+@Operation(summary = "글램핑 상세 페이지",
+        description = "<strong> 변수명 glampId : 글램프 PK </strong> <p>  ex)23 </p>",
+        responses = {
+                @ApiResponse(
+                        responseCode = "200",
+                        description = "성공에 대한 반환 값 입니다." +
+                                "<p> [글램핑 정보]" +
+                                "<p> glampId: 글램핑 PK</p>" +
+                                "<p> glampName:  글램핑장 이름 </p>" +
+                                "<p> starPointAvg: 별점 </p>" +
+                                "<p> glampLocation: 글램핑장 주소</p>" +
+                                "<p> glampIntro: 글램핑 소개글</p>" +
+                                "<p> infoBasic: 기본 정보</p>" +
+                                "<p> infoParking: 주차장 정보</p>" +
+                                "<p> infoNotice: 유의 사항</p>" +
+                                "<p> [리뷰 정보] </p>" +
+                                "<p> userName: 유저닉네임</p>" +
+                                "<p> content: 리뷰내용</p>" +
+                                "<p> countReviewUsers: 리뷰인원수</p>" +
+                                "<p> [객실정보] </p>" +
+                                "<p> roomPics: 객실 사진</p>" +
+                                "<p> roomId: 객실 PK</p>" +
+                                "<p> roomName: 객실 명</p>" +
+                                "<p> roomPrice: 객실 가격</p>" +
+                                "<p> roomNumPeople: 객실 기본인원 수</p>" +
+                                "<p> roomMaxPeople: 객실 최대인원 수</p>" +
+                                "<p> checkInTime: 체크인 시간</p>" +
+                                "<p> checkOutTime: 체크아웃 시간</p>"
+                        ,
+                        content = @Content(
+                                mediaType = "application/json",
+                                schema = @Schema(implementation = GetGlampingInformationResponseDto.class)
+                        ))})
+@GetMapping("info")
+public ResponseEntity<? super GetGlampingInformationResponseDto> getInfoGlampingDetail(@ParameterObject @RequestParam GetInfoRequestDto p) {
+    return service.getInfoGlampingDetail(p);
+}
+
+    @GetMapping("favorite")
     @Operation(
             summary = "관심 글램핑 등록" ,
             description = "<strong> 변수명 glampId :  글램프 PK </strong> <p>  ex)23 </p>",
@@ -65,51 +104,9 @@ public class GlampingController {
 
                             content = @Content(
                                     mediaType = "application/json",
-                                    schema = @Schema(implementation = GetFavoriteGlampingResponseDto.class)
-                            )
-                    )
-            }
-
-    )
-    public ResponseEntity<? super GetFavoriteGlampingResponseDto> favoriteGlamping(@PathVariable long glampId) {
-        return service.favoriteGlamping(glampId);
-    }
-
-    @Operation(summary = "글램핑 상세 페이지",
-            description = "<strong> 변수명 glampId : 글램프 PK </strong> <p>  ex)23 </p>",
-            responses = {
-                    @ApiResponse(
-                            responseCode = "200",
-                            description = "성공에 대한 반환 값 입니다." +
-                                    "<p> [글램핑 정보]" +
-                                    "<p> glampName:  글램핑장 이름 </p>" +
-                                    "<p> starPointAvg: 별점 </p>" +
-                                    "<p> glampLocation: 글램핑장 주소</p>" +
-                                    "<p> glampIntro: 글램핑 소개글</p>" +
-                                    "<p> infoBasic: 기본 정보</p>" +
-                                    "<p> infoParking: 주차장 정보</p>" +
-                                    "<p> infoNotice: 유의 사항</p>" +
-                                    "<p> [리뷰 정보] </p>" +
-                                    "<p> userName: 유저닉네임</p>" +
-                                    "<p> content: 리뷰내용</p>" +
-                                    "<p> countReviewUsers: 리뷰인원수</p>" +
-                                    "<p> [객실정보] </p>" +
-                                    "<p> roomPics: 객실 사진</p>" +
-                                    "<p> roomId: 객실 PK</p>" +
-                                    "<p> glampId: 글램핑 PK</p>" +
-                                    "<p> roomPrice: 객실 가격</p>" +
-                                    "<p> roomNumPeople: 객실 기본인원 수</p>" +
-                                    "<p> roomMaxPeople: 객실 최대인원 수</p>" +
-                                    "<p> checkInTime: 체크인 시간</p>" +
-                                    "<p> checkOutTime: 체크아웃 시간</p>"
-                            ,
-                            content = @Content(
-                                    mediaType = "application/json",
-                                    schema = @Schema(implementation = GetGlampingInformationResponseDto.class)
-                            ))})
-    @GetMapping("info")
-    public ResponseEntity<? super GetGlampingInformationResponseDto> getInfoGlampingDetail(@ParameterObject @RequestParam GetInfoRequestDto p) {
-        return service.getInfoGlampingDetail(p);
+                                    schema = @Schema(implementation = GetFavoriteGlampingResponseDto.class)))})
+    public ResponseEntity<? super GetFavoriteGlampingResponseDto> favoriteGlamping(@ParameterObject @ModelAttribute GetFavoriteRequestDto p) {
+        return service.favoriteGlamping(p);
     }
     @Operation(summary = "글램핑 리뷰 페이지",
             description = "<strong> 변수명 glampId : 글램프 PK </strong> <p>  ex)35 </p>",
@@ -117,7 +114,19 @@ public class GlampingController {
                     @ApiResponse(
                             responseCode = "200",
                             description = "성공에 대한 반환 값 입니다."
-                            ,
+                            +
+                            "<p> </p>" +
+                            "<p> avgStarPoint: 글램핑 전체 평점 </p>" +
+                            "<p> [객실 정보]" +
+                            "<p> userProfileImage: 유저 프사 </p>" +
+                            "<p> userNickName: 유저 닉네임</p>" +
+                            "<p> starPoint: 별점 </p>" +
+                            "<p> createdAt: 리뷰 작성 날짜</p>" +
+                            "<p> userReviewContent: 유저가 작성한 리뷰내용 </p>" +
+                            "<p> ownerReviewContent: 사장이 작성한 리뷰내용 </p>" +
+                            "<p> reviewImages:  유저가 올린 리뷰사진들 </p>" +
+                            "<p> roomNames: 글램핑장의 객실 이름들 </p>" ,
+
                             content = @Content(
                                     mediaType = "application/json",
                                     schema = @Schema(implementation = GetGlampingReviewInfoResponseDto.class)
@@ -125,7 +134,5 @@ public class GlampingController {
     @GetMapping("{glamp_id}/review")
     public ResponseEntity<? super GetGlampingReviewInfoResponseDto> getInfoReviewList(@ParameterObject @ModelAttribute ReviewInfoRequestDto p) {
         return service.getInfoReviewList(p);
-
     }
-
 }
