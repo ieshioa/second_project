@@ -2,7 +2,6 @@ package com.green.glampick.service.implement;
 
 import com.green.glampick.dto.ResponseDto;
 import com.green.glampick.dto.request.payment.PostPaymentRequestDto;
-import com.green.glampick.dto.response.payment.GetPaymentResponseDto;
 import com.green.glampick.dto.response.payment.PostPaymentResponseDto;
 import com.green.glampick.entity.PaymentEntity;
 import com.green.glampick.repository.PaymentRepository;
@@ -11,9 +10,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-
-import java.util.ArrayList;
-import java.util.List;
 
 @Slf4j
 @Service

@@ -1,7 +1,6 @@
 package com.green.glampick.service;
 
 import com.green.glampick.dto.request.payment.PostPaymentRequestDto;
-import com.green.glampick.dto.response.payment.GetPaymentResponseDto;
 import com.green.glampick.dto.response.payment.PostPaymentResponseDto;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestBody;
