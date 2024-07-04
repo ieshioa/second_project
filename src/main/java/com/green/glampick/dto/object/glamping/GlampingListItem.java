@@ -30,5 +30,4 @@ public class GlampingListItem {
     private int price;
 
 
-
 }
