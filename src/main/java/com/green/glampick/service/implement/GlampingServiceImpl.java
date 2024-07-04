@@ -1,6 +1,9 @@
 package com.green.glampick.service.implement;
 
+import com.green.glampick.dto.object.ReviewListItem;
+import com.green.glampick.dto.object.glamping.GlampingDetailReviewItem;
 import com.green.glampick.dto.object.glamping.GlampingListItem;
+import com.green.glampick.dto.object.glamping.GlampingRoomListItem;
 import com.green.glampick.dto.request.GlampingSearchRequestDto;
 import com.green.glampick.dto.ResponseDto;
 import com.green.glampick.dto.request.glamping.GetFavoriteRequestDto;
@@ -15,14 +18,13 @@ import com.green.glampick.security.AuthenticationFacade;
 import com.green.glampick.service.GlampingService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
-
-import static com.green.glampick.common.GlobalConst.SEARCH_PAGING_SIZE;
 
 @Slf4j
 @Service
@@ -70,12 +72,13 @@ public class GlampingServiceImpl implements GlampingService {
         return GetSearchGlampingListResponseDto.success(searchCount, result);
     }
 
-// 강국 =================================================================================================================
 
+
+// 강국 =================================================================================================================
+    @Override
     public ResponseEntity<? super GetFavoriteGlampingResponseDto> favoriteGlamping(GetFavoriteRequestDto p) {
         //p.setUserId(facade.getLoginUserId());
         p.setUserId(1);
-        System.out.println(p.getGlampId() + "and" + p.getUserId());
         try {
             //관심글램픽
             int result = mapper.deleteFavorite(p);
@@ -94,13 +97,40 @@ public class GlampingServiceImpl implements GlampingService {
             return ResponseDto.databaseError();
         }
     }
-
+    @Override
     public ResponseEntity<? super GetGlampingInformationResponseDto> getInfoGlampingDetail(GetInfoRequestDto p) {
         //글램핑 정보 불러오기
-        return null;
+        GetGlampingInformationResponseDto glampInfoDto = mapper.selGlampingInfo(p);
+
+        List<GlampingRoomListItem> rooms = mapper.selRoomInfo(p);   // 글램핑 상세페이지 객실 정보 리스트
+        List<GlampingDetailReviewItem> reviews = mapper.selReviewInfoInGlamping(p.getGlampId()); // 글램핑 상세페이지 리뷰 리스트
+        int userCount = mapper.selCount(p.getGlampId()); // 리뷰 유저수
+
+        // dto 데이터 세팅
+        glampInfoDto.setCountReviewUsers(userCount);
+        glampInfoDto.setReviewItems(reviews);
+        glampInfoDto.setRoomItems(rooms);
+
+        for (GlampingRoomListItem room : rooms) {
+            List<String> inputPicsList = mapper.selRoomPics(room.getRoomId());
+            room.setRoomPics(inputPicsList);
+        }
+
+        return new ResponseEntity<>(glampInfoDto,HttpStatus.OK) ;
     }
+    @Override
     public ResponseEntity<? super GetGlampingReviewInfoResponseDto> getInfoReviewList(ReviewInfoRequestDto p) {
         //리뷰 불러오기
+
+
+
+//        GetGlampingReviewInfoResponseDto.builder().reviewListItems().build();
+
+        List<ReviewListItem> reviews = mapper.selReviewInfo(p.getGlampId());
+//        private List<String> reviewImages;
+//        private List<String> roomNames;
+
+
         return null;
     }
 

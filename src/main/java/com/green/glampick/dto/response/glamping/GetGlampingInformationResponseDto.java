@@ -9,6 +9,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.ToString;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
@@ -17,8 +18,13 @@ import java.util.List;
 
 @Getter
 @Setter
+@ToString
 public class GetGlampingInformationResponseDto extends ResponseDto {
 
+        @Schema(example = "1", description = "글랭핑PK")
+        private long glampId;
+        @Schema(example = "cb4a0b8f-629e-4d20-9626-cd45347837df.png", description = "글램핑대표사진")
+        private String glampImage;
         @Schema(example = "그린 파인트리글램핑&카라반 ", description = "글램핑 명")
         private String glampName;
         @Schema(example = "9.5 ", description = "별점")
@@ -33,6 +39,8 @@ public class GetGlampingInformationResponseDto extends ResponseDto {
         private String infoParking;
         @Schema(example = "최대 인원 초과시 입실이 불가 합니다 (방문객 불가)", description = "유의사항")
         private String infoNotice;
+        @Schema(example = "1329명", description = "리뷰 평가자 숫자")
+        private int countReviewUsers;
 
         private List<GlampingDetailReviewItem> reviewItems;
 
