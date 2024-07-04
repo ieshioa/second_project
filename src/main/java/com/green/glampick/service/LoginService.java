@@ -22,7 +22,7 @@ public interface LoginService {
     ResponseEntity<? super GetAccessTokenResponseDto> getAccessToken(HttpServletRequest req);
 
     ResponseEntity<? super PostSmsSendResponseDto> sendOne(String userPhone);
-    ResponseEntity<? super PostSmsCheckResponseDto> checkPhone(String userPhone, String phoneKey);
+    ResponseEntity<? super PostSmsCheckResponseDto> checkPhone(String userPhone, int phoneKey);
 
-    String createKey();
+    int createKey();
 }

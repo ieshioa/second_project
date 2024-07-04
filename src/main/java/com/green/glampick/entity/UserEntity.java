@@ -21,34 +21,25 @@ import java.time.LocalDateTime;
 public class UserEntity {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long userId;
+    private long userId;  // 유저 PK
 
-    @Column(nullable = false)
-    private String userEmail;
+    private String userEmail;  // 유저 이메일
 
-    @Column(nullable = false)
-    private String userPw;
+    private String userPw;  // 유저 비밀번호
 
-    @Column(nullable = false)
-    private String userName;
+    private String userName;  // 유저 실명
 
-    @Column(nullable = false)
-    private String userNickname;
+    private String userNickname;  // 유저 닉네임
 
-    @Column(nullable = false)
-    private String userPhone;
+    private String userPhone;  // 유저 휴대폰 번호
 
-    @Column(nullable = true)
-    private String userProfileImage;
+    private String userProfileImage;  // 유저 프로필 이미지
 
-    @Column(nullable = false)
-    private String userRole;
+    private String userRole;  // 유저 권한
 
-    @Column(nullable = true)
-    private String providerId;
+    private String providerId;  // 소셜 유저 ID
 
-    @Column(nullable = true)
-    private String userSocialType;
+    private String userSocialType;  // 소셜 로그인 타입
 
     @CreationTimestamp
     @Column(nullable = false, updatable = false)

@@ -1,4 +1,4 @@
-package com.green.glampick.dto.object.glamping;
+package com.green.glampick.dto.object;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
@@ -6,7 +6,7 @@ import lombok.Data;
 import java.util.List;
 
 @Data
-public class GlampingReviewListItem {
+public class ReviewListItem {
     @Schema(example = "d7c01900-24d2-4a9d-a86f-f7057173a0cb.jpeg", description = "유저프로필이미지")
     private String userProfileImage;
 
@@ -26,8 +26,6 @@ public class GlampingReviewListItem {
     private String ownerReviewContent;
 
     private List<String> reviewImages;
-
-    @Schema(example = "객실이름들")
     private List<String> roomNames;
 
 }

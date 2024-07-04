@@ -9,6 +9,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springdoc.core.annotations.ParameterObject;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 @Slf4j
@@ -24,7 +25,7 @@ public class UserController {
             "<p> reservationId = </p>" +
             "<p> reviewContent = </p>" +
             "<p> reviewStarPoint = </p>")
-    public ResponseEntity<?super GetBookResponseDto> getBook(@ParameterObject @ModelAttribute GetBookRequestDto dto) {
+    public ResponseEntity<?super GetBookResponseDto> getBook(@ParameterObject GetBookRequestDto dto) {
         return service.getBook(dto);
     }
 
@@ -46,9 +47,10 @@ public class UserController {
 
     @DeleteMapping("/delete")// 리뷰 삭제
     @Operation(summary = "리뷰 삭제", description = "<strong></strong>" +
-            "<p></p>")
-    public ResponseEntity<?super DeleteReviewResponseDto> deleteReview(@RequestParam("review_id") int reviewId) {
+            "<p></p>")//
+    public ResponseEntity<?super DeleteReviewResponseDto> deleteReview(@RequestParam("review_id") long reviewId) {
         return service.deleteReview(reviewId);
+
     }
 
     @GetMapping("/review")// 리뷰 불러오기

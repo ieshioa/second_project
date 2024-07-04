@@ -1,6 +1,7 @@
 package com.green.glampick.repository;
 
 import com.green.glampick.entity.ReviewEntity;
+import jakarta.transaction.Transactional;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
@@ -12,6 +13,9 @@ public interface ReviewRepository extends JpaRepository<ReviewEntity, Long> {
     boolean existsByReviewContent(String reviewContent);
     boolean existsByReviewStarPoint(long reviewStarPoint);
     boolean existsByCreatedAt(String createdAt);
+
+    /*@Transactional
+    void DeleteReviewResponseDto(long reviewId);*/
 
 
 }

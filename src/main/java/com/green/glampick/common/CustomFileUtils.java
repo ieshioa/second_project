@@ -46,7 +46,9 @@ public class CustomFileUtils {
         return mf == null ? null : makeRandomFileName(mf.getOriginalFilename());
     }
 
-    //파일 저장
+    //파일 저장]
+
+
     public void transferTo(MultipartFile mf, String target) throws Exception {
         File saveFile = new File(uploadPath, target); //최종 경로
         mf.transferTo(saveFile);
