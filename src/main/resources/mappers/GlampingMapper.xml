@@ -2,6 +2,44 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.green.glampick.mapper.GlampingMapper">
+    <!-- Favorite SQL-->
+    <insert id="insertFavorite">
+        INSERT INTO glamp_favorite (user_id, glamp_id)
+        VALUES (#{userId},#{glampId})
+    </insert>
+    <!-- Favorite SQL-->
+    <delete id="deleteFavorite">
+        DELETE FROM glamp_favorite WHERE user_id = #{userId} AND glamp_id = #{glampId}
+    </delete>
+
+    <!--  -->
+    <select id="selGlampingInfo">
+        SELECT		glamp_id AS glampId,
+                    glamp_name AS glampName,
+                    star_point_avg AS starPointAvg,
+                    glamp_location AS glampLocation,
+                    glamp_intro AS glampIntro,
+                    info_basic AS infoBasic,
+                    info_parking AS infoParking,
+                    info_notice AS infoNotice
+        FROM 		glamping
+        WHERE 		glamp_id = #{glampId}
+    </select>
+
+    <select id="selRoomInfo">
+        SELECT		    B.user_name AS userName,
+                        A.review_content AS content
+        FROM			review A
+        INNER JOIN      user B
+        ON 			    A.user_id = B.user_id
+        WHERE 		    glamp_id = #{glampId};
+    </select>
+    <select id="selCount">
+        SELECT COUNT(review_id) AS
+        FROM review
+        WHERE glamp_id = 1;
+    </select>
+
 
     <sql id="sort">
         <if test="sortType == 1">
