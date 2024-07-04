@@ -2,6 +2,9 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.green.glampick.mapper.GlampingMapper">
+
+<!--  강국 ===================================================================  -->
+
     <!-- 글램핑 관심 등록-->
     <insert id="insertFavorite">
         INSERT INTO glamp_favorite (user_id, glamp_id)
@@ -41,5 +44,68 @@
         WHERE glamp_id = 1;
     </select>
 
+<!--  민지 ===================================================================  -->
+
+    <sql id="sort">
+        <if test="sortType == 1">
+            ORDER BY recommend_score DESC
+        </if>
+        <if test="sortType == 2">
+            ORDER BY starPoint DESC
+        </if>
+        <if test="sortType == 3">
+            ORDER BY reviewCount DESC
+        </if>
+        <if test="sortType == 4">
+            ORDER BY price
+        </if>
+        <if test="sortType == 5">
+            ORDER BY price DESC
+        </if>
+    </sql>
+
+    <select id="searchGlampList">
+        SELECT distinct(A.glamp_id) AS glampId
+            , A.glamp_name AS glampName
+            , A.glamp_image AS glampPic
+            , A.star_point_avg AS starPoint
+            , A.review_count AS reviewCount
+             , D.room_price AS price
+        FROM glamping A
+        LEFT JOIN (
+            SELECT glamp_id, room_id
+            FROM reservation_before
+            WHERE (check_in_date >= #{outDate}
+            OR #{inDate} >= check_out_date )
+            AND room_id IS NOT NULL
+        ) B
+        ON A.glamp_id = B.glamp_id
+        <if test="filterSize != 0">
+        JOIN (
+            SELECT A.glamp_id
+            FROM room A
+            JOIN room_service B ON A.room_id = B.room_id
+            WHERE B.service_id IN
+            <foreach item="filterId" collection="filter" open="(" separator="," close=")">
+                #{filterId}
+            </foreach>
+            GROUP BY A.glamp_id
+            HAVING COUNT(DISTINCT B.service_id) = #{filterSize}
+        ) C
+        ON A.glamp_id = C.glamp_id
+        </if>
+        JOIN room D
+        ON A.glamp_id = D.glamp_id
+            AND D.room_price = ( SELECT MIN(room_price)
+                    FROM room
+                    WHERE glamp_id = A.glamp_id
+                            AND (#{people} >= room_num_people  AND room_max_people >= #{people})
+            )
+        <if test="searchWord != null and searchWord != ''">
+            WHERE A.glamp_name like '%${searchWord}%'
+        </if>
+        <include refid="sort"/>
+        LIMIT #{startIdx}, #{size}
+    </select>
 
 </mapper>

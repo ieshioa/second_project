@@ -12,7 +12,6 @@ function tosspay(){
         pay_method: "tosspay", // 'tosspay_card', 'tosspay_money' 도 지원됩니다.
         merchant_uid: "orderMonthly02", // 상점에서 관리하는 주문 번호
         name: "최초인증결제",
-        buyer_email: "test@portone.io",
         buyer_name: "포트원",
         buyer_tel: "02-1234-1234",
         m_redirect_url: "{모바일에서 결제 완료 후 리디렉션 될 URL}",

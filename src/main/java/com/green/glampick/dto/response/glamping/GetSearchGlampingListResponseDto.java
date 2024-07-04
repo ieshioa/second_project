@@ -1,5 +1,6 @@
 package com.green.glampick.dto.response.glamping;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.green.glampick.common.response.ResponseCode;
 import com.green.glampick.common.response.ResponseMessage;
 import com.green.glampick.dto.ResponseDto;
@@ -20,18 +21,54 @@ public class GetSearchGlampingListResponseDto extends ResponseDto {
     private int searchCount;
     private List<GlampingListItem> glampingListItems;
 
-    private GetSearchGlampingListResponseDto() {
+    @JsonIgnore
+    private long glampId;
+
+    private GetSearchGlampingListResponseDto(int searchCount, List<GlampingListItem> glampingListItems) {
         super(ResponseCode.SUCCESS, ResponseMessage.SUCCESS);
+        this.searchCount = searchCount;
+        this.glampingListItems = glampingListItems;
     }
 
-    public static ResponseEntity<ResponseDto> success() {
-        ResponseDto result = new ResponseDto(ResponseCode.SUCCESS, ResponseMessage.SUCCESS);
+    private GetSearchGlampingListResponseDto(long glamId) {
+        super(ResponseCode.SUCCESS, "검색어와 일치하는 글램핑이 1개 있습니다.");
+        this.glampId = glamId;
+    }
+
+    public static ResponseEntity<GetSearchGlampingListResponseDto> success(int searchCount, List<GlampingListItem> glampingListItems) {
+        GetSearchGlampingListResponseDto result = new GetSearchGlampingListResponseDto(searchCount, glampingListItems);
         return ResponseEntity.status(HttpStatus.OK).body(result);
+    }
+
+    public static ResponseEntity<ResponseDto> validationFailed(String errorMsg) {
+        ResponseDto result = new ResponseDto(ResponseCode.VALIDATION_FAILED, errorMsg);
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(result);
+    }
+
+    public static ResponseEntity<ResponseDto> existGlamp() {
+        ResponseDto result = new ResponseDto(ResponseCode.RESULT_IS_NULL, ResponseMessage.RESULT_IS_NULL);
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(result);
+    }
+
+    public static ResponseEntity<ResponseDto> existGlamp(long glamId) {
+        GetSearchGlampingListResponseDto result = new GetSearchGlampingListResponseDto(glamId);
+        return ResponseEntity.status(HttpStatus.OK).body(result);
+    }
+
+    public static ResponseEntity<ResponseDto> wrongPersonnel() {
+        ResponseDto result = new ResponseDto(ResponseCode.WRONG_PERSONNEL, ResponseMessage.WRONG_PERSONNEL);
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(result);
+    }
+
+    public static ResponseEntity<ResponseDto> wrongDate() {
+        ResponseDto result = new ResponseDto(ResponseCode.WRONG_DATE, ResponseMessage.WRONG_DATE);
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(result);
     }
 
     public static ResponseEntity<ResponseDto> isNull() {
         ResponseDto result = new ResponseDto(ResponseCode.RESULT_IS_NULL, ResponseMessage.RESULT_IS_NULL);
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(result);
     }
+
 
 }

@@ -93,7 +93,7 @@ public class LoginController {
                             schema = @Schema(implementation = PostSmsCheckResponseDto.class)
                     ))})
     public ResponseEntity<? super PostSmsCheckResponseDto> smsCheck(
-            @RequestParam String userPhone, @RequestParam String phoneKey)
+            @RequestParam String userPhone, @RequestParam int phoneKey)
     {
         return service.checkPhone(userPhone, phoneKey);
     }

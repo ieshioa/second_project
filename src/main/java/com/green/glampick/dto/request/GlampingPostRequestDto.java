@@ -20,7 +20,7 @@ public class GlampingPostRequestDto {
     private String glampLocation;
     @Schema(example = "서울경기", description = "지역 분류")
     private String region;
-    @Schema(example = "10,000", description = "추가 인원에 대한 추가 요금")
+    @Schema(example = "10000", description = "추가 인원에 대한 추가 요금")
     private int extraCharge;
     @Schema(example = "소개소개", description = "글램핑 소개")
     private String intro;
@@ -30,11 +30,12 @@ public class GlampingPostRequestDto {
     private String parking;
     @Schema(example = "이거 저거 주의해주세요", description = "이용 안내")
     private String notice;
-    @Schema(example = "abc.png", description = "글램핑 이미지")
-    private String glampingImg;
 
-    // room 테이블
     private List<RoomItem> roomItems;
+
+    // 이미지
+    @JsonIgnore
+    private String glampingImg;
 
     // 테스트 이후 지우기 (스웨거 PK 보여주기 용)
     @JsonIgnore

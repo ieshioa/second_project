@@ -18,12 +18,13 @@ public interface ResponseCode {
     String NOT_EXISTED_BOOK = "NB";
     String NOT_EXISTED_REVIEW = "NR";
     String NOT_EXISTED_GLAMP = "NG";
+    String NOT_EXISTED_PAYMENT = "NP";
+
+    String WRONG_PERSONNEL = "WP";
+    String WRONG_DATE = "WD";
 
     String AAA = "A";
-    String BBB = "A";
-    String CCC = "A";
-    String DDD = "A";
-    String EEE = "A";
+    String GGG = "A";
 
     // HTTP Status 401
     String SIGN_IN_FAILED = "SF";
