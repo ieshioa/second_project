@@ -37,6 +37,10 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public ResponseEntity<? super GetBookResponseDto> getBook(GetBookRequestDto dto) {
+        long loggedInUserId = authenticationFacade.getLoginUserId();
+
+        if (loggedInUserId == 0) { return GetBookResponseDto.noPermission(); }
+        if (dto.getUserId() != loggedInUserId) { return GetBookResponseDto.noPermission(); }
 
         dto.setUserId(authenticationFacade.getLoginUserId());
 

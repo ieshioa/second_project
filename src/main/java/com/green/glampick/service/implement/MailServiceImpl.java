@@ -28,14 +28,13 @@ import java.util.concurrent.ConcurrentHashMap;
 public class MailServiceImpl implements MailService {
     private final UserRepository userRepository;
 
-
     @Autowired
     private JavaMailSender mailSender;
 
-    private Map<String, String> authCodeMap;
+    private Map<String, Integer> authCodeMap;
     private Map<String, Long> authCodeExpiryMap;
 
-    //  인증 코드와 인증 코드의 만료시간을 저장할 맵이 초기화될 때, 실행되는 초기화 메소드  //
+    //  최초 실행 시, 초기화를 한번만 진행  //
     @PostConstruct
     @Override
     public void init() {
@@ -43,18 +42,18 @@ public class MailServiceImpl implements MailService {
         authCodeExpiryMap = new ConcurrentHashMap<>();
     }
 
-    //  6자리의 랜덤 인증코드를 생성하는 메소드  //
+    //  6자리의 랜덤 숫자코드를 생성  //
     @Override
-    public String createKey() {
+    public int createKey() {
         Random random = new Random();
-        StringBuilder key = new StringBuilder();
+        int key = 0;
         for (int i = 0; i < 6; i++) {
-            key.append(random.nextInt(10));
+            key = key * 10 + random.nextInt(10);
         }
-        return key.toString();
+        return key;
     }
 
-    //  인증 코드를 생성하여 HashMap 에 저장하고 이메일로 전송하는 메소드  //
+    //  이메일 인증 보내기  //
     @Override
     public ResponseEntity<? super PostMailSendResponseDto> sendAuthCode(String userEmail) {
 
@@ -69,17 +68,23 @@ public class MailServiceImpl implements MailService {
             boolean existedEmail = userRepository.existsByUserEmail(userEmail);
             if (existedEmail) { return PostMailSendResponseDto.duplicatedEmail(); }
 
-            String authCode = createKey();
-            authCodeMap.put(userEmail, authCode);
-            authCodeExpiryMap.put(userEmail, System.currentTimeMillis() + 300000); // 5분 후 만료
+            //  변수에 랜덤으로 생성되는 6자리의 숫자를 넣는다.  //
+            int authCode = createKey();
 
+            //  Map 객체에 유저 이메일과 위에서 생성한 코드를 추가하고, 유효시간은 5분으로 지정한다. (5분뒤 삭제) //
+            authCodeMap.put(userEmail, authCode);
+            authCodeExpiryMap.put(userEmail, System.currentTimeMillis() + 300000);
+
+            //  MimeMessage 객체를 만든다.  //
             MimeMessage mimeMessage = mailSender.createMimeMessage();
 
+            //  MimeMessage 에 받아온 유저 이메일과, Text, Code 에 대한 값을 넣는다.  //
             MimeMessageHelper helper = new MimeMessageHelper(mimeMessage, false, "UTF-8");
             helper.setTo(userEmail);
             helper.setSubject("Your Authentication Code");
             helper.setText("Your authentication code is: " + authCode, true);
 
+            //  위에서 정의한 MimeMessage 를 전송한다.  //
             mailSender.send(mimeMessage);
 
             return PostMailSendResponseDto.success(authCode);
@@ -90,26 +95,35 @@ public class MailServiceImpl implements MailService {
         }
     }
 
-    //  인증 코드를 확인하고, 해당 인증코드가 만료되었는지 체크하는 메소드  //
+    //  이메일 코드 체크하기  //
     @Override
-    public ResponseEntity<? super PostMailCheckResponseDto> checkCode(String userEmail, String authKey) {
+    public ResponseEntity<? super PostMailCheckResponseDto> checkCode(String userEmail, int authKey) {
 
         try {
-            // 이메일과 인증코드가 Map 에 저장되어 있는 인증코드와 같다면
+            //  이메일과 인증코드가 Map 에 저장되어 있는 인증코드와 같다면  //
             if (authCodeMap.containsKey(userEmail) && authCodeMap.get(userEmail).equals(authKey)) {
-                // Map 에 저장되어 있는 인증코드의 유효시간이 지났다면
+
+                //  Map 에 저장되어 있는 인증코드의 유효시간이 지났다면  //
                 if (System.currentTimeMillis() > authCodeExpiryMap.get(userEmail)) {
+
+                    //  Map 에 저장되어 있는 정보를 삭제하고, 유효시간이 만료된 응답을 보낸다.  //
                     authCodeMap.remove(userEmail);
                     authCodeExpiryMap.remove(userEmail);
                     return PostMailCheckResponseDto.expiredCode();
+
                 }
-                // 인증 성공 시, Map 에 저장되어 있는 코드와 유효시간을 삭제한다.
+
+                //  인증 성공 시, Map 에 저장되어 있는 코드와 유효시간을 삭제한다.  //
                 authCodeMap.remove(userEmail);
                 authCodeExpiryMap.remove(userEmail);
+
                 return PostMailCheckResponseDto.success();
+
             } else {
-                // 인증코드가 틀리다면 아래 코드를 실행한다.
+
+                //  인증코드가 틀리다면 틀린 인증번호에 대한 응답을 보낸다.  //
                 return PostMailCheckResponseDto.invalidCode();
+
             }
 
         } catch (Exception e) {
