@@ -8,7 +8,7 @@ import lombok.Setter;
 @Getter
 public class CancelBookRequestDto {
 
-//    @JsonIgnore private long userId;
+    @JsonIgnore private long userId;
     private long reservationId;
     private String comment;
 

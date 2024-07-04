@@ -6,8 +6,10 @@ import com.green.glampick.dto.response.user.*;
 import com.green.glampick.entity.ReservationBeforeEntity;
 import com.green.glampick.entity.ReservationCancelEntity;
 import com.green.glampick.entity.ReviewEntity;
+import com.green.glampick.entity.UserEntity;
 import com.green.glampick.repository.ReservationRepository;
 import com.green.glampick.repository.ReviewRepository;
+import com.green.glampick.repository.UserRepository;
 import com.green.glampick.repository.resultset.GetBookResultSet;
 import com.green.glampick.repository.ReservationCancelRepository;
 import com.green.glampick.security.AuthenticationFacade;
@@ -15,6 +17,7 @@ import com.green.glampick.service.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -24,10 +27,12 @@ import java.util.Optional;
 @Service
 @RequiredArgsConstructor
 public class UserServiceImpl implements UserService {
+    private final UserRepository userRepository;
     private final ReservationRepository reservationRepository;
     private final ReservationCancelRepository reservationCancelRepository;
     private final ReviewRepository reviewRepository;
     private final AuthenticationFacade authenticationFacade;
+    private final PasswordEncoder passwordEncoder;
 
 
     @Override
@@ -53,7 +58,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public ResponseEntity<? super CancelBookResponseDto> cancelBook(CancelBookRequestDto dto) {
-//        dto.setUserId(authenticationFacade.getLoginUserId());
+        dto.setUserId(authenticationFacade.getLoginUserId());
 
         try {
 
@@ -121,8 +126,28 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public ResponseEntity<? super UpdateUserResponseDto> updateUser(UpdateUserRequestDto email) {
-        return null;
+    public ResponseEntity<? super UpdateUserResponseDto> updateUser(UpdateUserRequestDto dto) {
+        dto.setUserId(authenticationFacade.getLoginUserId());
+
+        try {
+            UserEntity userEntity = userRepository.findById(dto.getUserId()).get();
+            if (dto.getUserId() == 0) { return UpdateUserResponseDto.noExistedUser();}
+
+            String userPw = dto.getUserPw();
+            String encodingPw = passwordEncoder.encode(userPw);
+            dto.setUserPw(encodingPw);
+
+            userEntity.setUserNickname(dto.getUserNickname());
+            userEntity.setUserPw(dto.getUserPw());
+
+            userRepository.save(userEntity);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseDto.databaseError();
+        }
+
+        return UpdateUserResponseDto.success();
     }
 
     @Override

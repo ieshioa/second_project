@@ -81,8 +81,8 @@ public class UserController {
     @PatchMapping("")// 유저 정보 수정하기
     @Operation(summary = "유저 정보 수정하기", description = "<strong></strong>" +
             "<p></p>")
-    public ResponseEntity<?super UpdateUserResponseDto> updateUser(@RequestBody UpdateUserRequestDto email) {
-        return service.updateUser(email);
+    public ResponseEntity<?super UpdateUserResponseDto> updateUser(@RequestBody UpdateUserRequestDto dto) {
+        return service.updateUser(dto);
     }
 
     @DeleteMapping("")// 회원탈퇴
