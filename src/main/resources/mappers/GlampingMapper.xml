@@ -2,6 +2,9 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.green.glampick.mapper.GlampingMapper">
+
+<!--  강국 ===================================================================  -->
+
     <!-- Favorite SQL-->
     <insert id="insertFavorite">
         INSERT INTO glamp_favorite (user_id, glamp_id)
@@ -40,6 +43,7 @@
         WHERE glamp_id = 1;
     </select>
 
+<!--  민지 ===================================================================  -->
 
     <sql id="sort">
         <if test="sortType == 1">
@@ -58,8 +62,6 @@
             ORDER BY price DESC
         </if>
     </sql>
-
-<!--  ===================================================================  -->
 
     <select id="searchGlampList">
         SELECT distinct(A.glamp_id) AS glampId
