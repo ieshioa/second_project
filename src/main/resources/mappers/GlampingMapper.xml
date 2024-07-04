@@ -5,17 +5,17 @@
 
 <!--  강국 ===================================================================  -->
 
-    <!-- Favorite SQL-->
+    <!-- 글램핑 관심 등록-->
     <insert id="insertFavorite">
         INSERT INTO glamp_favorite (user_id, glamp_id)
         VALUES (#{userId},#{glampId})
     </insert>
-    <!-- Favorite SQL-->
+    <!-- 글램핑 관심 취소-->
     <delete id="deleteFavorite">
         DELETE FROM glamp_favorite WHERE user_id = #{userId} AND glamp_id = #{glampId}
     </delete>
 
-    <!--  -->
+    <!-- 글램핑 상세 페이지 글램핑 정보 -->
     <select id="selGlampingInfo">
         SELECT		glamp_id AS glampId,
                     glamp_name AS glampName,
@@ -28,7 +28,7 @@
         FROM 		glamping
         WHERE 		glamp_id = #{glampId}
     </select>
-
+    <!-- 글램핑 상세 페이지 리뷰 데이터 -->
     <select id="selRoomInfo">
         SELECT		    B.user_name AS userName,
                         A.review_content AS content
@@ -37,8 +37,9 @@
         ON 			    A.user_id = B.user_id
         WHERE 		    glamp_id = #{glampId};
     </select>
+    <!-- 리뷰 유저수 -->
     <select id="selCount">
-        SELECT COUNT(review_id) AS
+        SELECT COUNT(review_id) AS countReviewUsers
         FROM review
         WHERE glamp_id = 1;
     </select>
