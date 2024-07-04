@@ -21,18 +21,10 @@ public class GetSearchGlampingListResponseDto extends ResponseDto {
     private int searchCount;
     private List<GlampingListItem> glampingListItems;
 
-    @JsonIgnore
-    private long glampId;
-
     private GetSearchGlampingListResponseDto(int searchCount, List<GlampingListItem> glampingListItems) {
         super(ResponseCode.SUCCESS, ResponseMessage.SUCCESS);
         this.searchCount = searchCount;
         this.glampingListItems = glampingListItems;
-    }
-
-    private GetSearchGlampingListResponseDto(long glamId) {
-        super(ResponseCode.SUCCESS, "검색어와 일치하는 글램핑이 1개 있습니다.");
-        this.glampId = glamId;
     }
 
     public static ResponseEntity<GetSearchGlampingListResponseDto> success(int searchCount, List<GlampingListItem> glampingListItems) {
@@ -48,11 +40,6 @@ public class GetSearchGlampingListResponseDto extends ResponseDto {
     public static ResponseEntity<ResponseDto> existGlamp() {
         ResponseDto result = new ResponseDto(ResponseCode.RESULT_IS_NULL, ResponseMessage.RESULT_IS_NULL);
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(result);
-    }
-
-    public static ResponseEntity<ResponseDto> existGlamp(long glamId) {
-        GetSearchGlampingListResponseDto result = new GetSearchGlampingListResponseDto(glamId);
-        return ResponseEntity.status(HttpStatus.OK).body(result);
     }
 
     public static ResponseEntity<ResponseDto> wrongPersonnel() {

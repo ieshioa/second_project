@@ -3,12 +3,14 @@ package com.green.glampick.service.implement;
 import com.green.glampick.dto.object.glamping.GlampingListItem;
 import com.green.glampick.dto.request.GlampingSearchRequestDto;
 import com.green.glampick.dto.ResponseDto;
+import com.green.glampick.dto.request.glamping.GetExistGlamp;
 import com.green.glampick.dto.request.glamping.GetFavoriteRequestDto;
 import com.green.glampick.dto.request.glamping.GetInfoRequestDto;
 import com.green.glampick.dto.request.glamping.ReviewInfoRequestDto;
 import com.green.glampick.dto.response.glamping.GetGlampingInformationResponseDto;
 import com.green.glampick.dto.response.glamping.GetGlampingReviewInfoResponseDto;
 import com.green.glampick.dto.response.glamping.GetSearchGlampingListResponseDto;
+import com.green.glampick.dto.response.glamping.GetSearchGlampingResponseDto;
 import com.green.glampick.dto.response.glamping.favorite.GetFavoriteGlampingResponseDto;
 import com.green.glampick.mapper.GlampingMapper;
 import com.green.glampick.security.AuthenticationFacade;
@@ -52,20 +54,30 @@ public class GlampingServiceImpl implements GlampingService {
             return GetSearchGlampingListResponseDto.wrongDate();
         }
 
-//        // 검색어와 일치하는 글램핑장이 존재하나?
-//        // existGlamp : 일치하는 글램핑장 pk
-//        List<Long> existGlamp = mapper.existGlamp(req.getRegion(), req.getSearchWord());
-//        if (existGlamp.size() == 1) {
-//            return GetSearchGlampingListResponseDto.existGlamp(existGlamp.get(0));
-//        }
+        // 검색어와 일치하는 글램핑장이 존재하나?
+        // List : 일치하는 글램핑장 pk
+        if (req.getSearchWord() != null) {
+            GetExistGlamp p = new GetExistGlamp(req.getRegion(), req.getSearchWord());
+            List<Long> existGlampLike = mapper.existGlampLike(p);
+            if(existGlampLike != null) {  // 지역이 일치하고 검색어가 포함된 것이 하나만 있다면
+                List<Long> existGlamp = mapper.existGlamp(p);
+                if (existGlamp.size() == 1) {       // 그 하나의 검색어와 완벽히 일치하는 글램핑장이 존재한다면
+                    return GetSearchGlampingResponseDto.existGlamp(existGlamp.get(0));  // 바로 상세보기 페이지로 갈 수 있게 pk를 리턴한다
+                }
+            }
+        }
+
+        List<Integer> filter = req.getFilter();
+        if(filter != null) {
+            req.setFilterSize(filter.size());
+        }
 
         List<GlampingListItem> result = mapper.searchGlampList(req);
         if(result == null || result.isEmpty()) {
             return GetSearchGlampingListResponseDto.isNull();
         }
 
-
-        int searchCount = 1;
+        int searchCount = mapper.searchCount(req);
 
         return GetSearchGlampingListResponseDto.success(searchCount, result);
     }

@@ -35,6 +35,6 @@ public class GlampingSearchRequestDto extends Paging {
     private List<Integer> filter;
 
     @JsonIgnore
-    private int filterSize;
+    private int filterSize = 0;
 
 }
