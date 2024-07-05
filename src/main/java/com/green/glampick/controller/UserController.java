@@ -29,10 +29,10 @@ public class UserController {
         return service.getBook(dto);
     }
 
-    @PatchMapping("/book")// 예약 내역 취소하기
+    @PostMapping("/book-cancel")// 예약 내역 취소하기
     @Operation(summary = "예약 취소", description = "<strong></strong>" +
             "<p></p>")
-    public ResponseEntity<?super PatchBookResponseDto> cancelBook(@RequestBody PatchBookRequestDto dto) {
+    public ResponseEntity<?super CancelBookResponseDto> cancelBook(@RequestBody CancelBookRequestDto dto) {
         return service.cancelBook(dto);
     }
 
@@ -76,15 +76,15 @@ public class UserController {
     @GetMapping("")// 유저 정보 불러오기
     @Operation(summary = "유저 정보 불러오기", description = "<strong></strong>" +
             "<p></p>")
-    public ResponseEntity<?super GetUserResponseDto> getUser(@ParameterObject @ModelAttribute GetUserRequestDto email) {
-        return service.getUser(email);
+    public ResponseEntity<?super GetUserResponseDto> getUser(@ParameterObject GetUserRequestDto dto) {
+        return service.getUser(dto);
     }
 
     @PatchMapping("")// 유저 정보 수정하기
     @Operation(summary = "유저 정보 수정하기", description = "<strong></strong>" +
             "<p></p>")
-    public ResponseEntity<?super UpdateUserResponseDto> updateUser(@RequestBody UpdateUserRequestDto email) {
-        return service.updateUser(email);
+    public ResponseEntity<?super UpdateUserResponseDto> updateUser(@RequestBody UpdateUserRequestDto dto) {
+        return service.updateUser(dto);
     }
 
     @DeleteMapping("")// 회원탈퇴

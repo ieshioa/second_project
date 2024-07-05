@@ -1,6 +1,6 @@
 package com.green.glampick.repository;
 
-import com.green.glampick.entity.ReservationEntity;
+import com.green.glampick.entity.ReservationBeforeEntity;
 import com.green.glampick.repository.resultset.GetBookResultSet;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -9,7 +9,7 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository
-public interface ReservationRepository extends JpaRepository<ReservationEntity, Long> {
+public interface ReservationRepository extends JpaRepository<ReservationBeforeEntity, Long> {
 
     @Query(
             value =
@@ -29,6 +29,5 @@ public interface ReservationRepository extends JpaRepository<ReservationEntity, 
             "ORDER BY A.created_at DESC ",
             nativeQuery = true
     )
-
     List<GetBookResultSet> getBook(Long userId);
 }

@@ -6,8 +6,10 @@ import lombok.Setter;
 
 @Setter
 @Getter
-public class GetBookRequestDto {
+public class CancelBookRequestDto {
 
     @JsonIgnore private long userId;
+    private long reservationId;
+    private String comment;
 
 }

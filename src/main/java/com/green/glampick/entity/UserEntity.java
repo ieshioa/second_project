@@ -7,6 +7,7 @@ import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 import org.hibernate.annotations.CreationTimestamp;
 
@@ -25,10 +26,12 @@ public class UserEntity {
 
     private String userEmail;  // 유저 이메일
 
+    @Setter
     private String userPw;  // 유저 비밀번호
 
     private String userName;  // 유저 실명
 
+    @Setter
     private String userNickname;  // 유저 닉네임
 
     private String userPhone;  // 유저 휴대폰 번호
@@ -55,8 +58,9 @@ public class UserEntity {
         this.userRole = "USER";
     }
 
-    public UserEntity(UpdateUserRequestDto dto){
-
+    public UserEntity(UpdateUserRequestDto dto) {
+        this.userPw = dto.getUserPw();
+        this.userNickname = dto.getUserNickname();
     }
 
 }

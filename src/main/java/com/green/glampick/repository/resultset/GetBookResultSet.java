@@ -9,5 +9,4 @@ public interface GetBookResultSet {
     String getCreatedAt();
     String getCheckInTime();
     String getCheckOutTime();
-    long getReservationId();
 }

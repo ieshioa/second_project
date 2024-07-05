@@ -44,7 +44,7 @@ public class MailController {
                             schema = @Schema(implementation = PostMailCheckResponseDto.class)
                     ))})
     public ResponseEntity<? super PostMailCheckResponseDto> mailCheck(
-            @RequestParam String userEmail, @RequestParam String authKey)
+            @RequestParam String userEmail, @RequestParam int authKey)
     {
         return service.checkCode(userEmail, authKey);
     }

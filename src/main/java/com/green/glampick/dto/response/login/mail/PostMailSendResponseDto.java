@@ -12,18 +12,18 @@ import org.springframework.http.ResponseEntity;
 @Setter
 public class PostMailSendResponseDto extends ResponseDto {
 
-    private String authKey;
+    private int authKey;
 
     private PostMailSendResponseDto() {
         super(ResponseCode.SUCCESS, ResponseMessage.SUCCESS);
     }
 
-    private PostMailSendResponseDto(String authKey) {
+    private PostMailSendResponseDto(int authKey) {
         super(ResponseCode.SUCCESS, ResponseMessage.SUCCESS);
         this.authKey = authKey;
     }
 
-    public static ResponseEntity<ResponseDto> success(String authKey) {
+    public static ResponseEntity<ResponseDto> success(int authKey) {
         PostMailSendResponseDto result = new PostMailSendResponseDto(authKey);
         return ResponseEntity.status(HttpStatus.OK).body(result);
     }
