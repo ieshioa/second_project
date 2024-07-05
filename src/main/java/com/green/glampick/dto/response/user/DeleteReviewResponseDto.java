@@ -13,6 +13,7 @@ import org.springframework.http.ResponseEntity;
 @Setter
 public class DeleteReviewResponseDto extends ResponseDto {
 
+
     private long reviewId;
 
 

@@ -18,18 +18,20 @@ import java.time.LocalDateTime;
 public class PostReviewResponseDto extends ResponseDto {
 
     private long userId;
-    private long reservationId;
+    private long glampId;
     private String reviewContent;
     private long reviewStarPoint;
     private String createdAt;
+    private long roomId;
 
     private PostReviewResponseDto(ReviewEntity reviewEntity) {
         super(ResponseCode.SUCCESS, ResponseMessage.SUCCESS);
-        this.reservationId = reviewEntity.getReservationId();
+        this.glampId = reviewEntity.getGlampId();
         this.userId = reviewEntity.getUserId();
         this.reviewContent = reviewEntity.getReviewContent();
         this.reviewStarPoint = reviewEntity.getReviewStarPoint();
         this.createdAt = reviewEntity.getCreatedAt();
+        this.roomId = reviewEntity.getRoomId();
     }
     //
 

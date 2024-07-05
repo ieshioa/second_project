@@ -2,6 +2,7 @@ package com.green.glampick.entity;
 
 import com.green.glampick.dto.request.login.SignUpRequestDto;
 import com.green.glampick.dto.request.user.GetBookRequestDto;
+import com.green.glampick.dto.request.user.UpdateUserRequestDto;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -52,6 +53,10 @@ public class UserEntity {
         this.userNickname = dto.getUserNickname();
         this.userProfileImage = dto.getUserProfileImage();
         this.userRole = "USER";
+    }
+
+    public UserEntity(UpdateUserRequestDto dto){
+
     }
 
 }
