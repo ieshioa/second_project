@@ -31,13 +31,14 @@ public class GlampingPostRequestDto {
     @Schema(example = "이거 저거 주의해주세요", description = "이용 안내")
     private String notice;
 
-    private List<RoomItem> roomItems;
-
     // 이미지
     @JsonIgnore
     private String glampingImg;
 
-    // 테스트 이후 지우기 (스웨거 PK 보여주기 용)
+    // 객실 정보
+    private List<RoomItem> roomItems;
+
+    // insert하면서 pk 얻어와서 room insert 할 때 쓰기
     @JsonIgnore
     private long glampId;
 

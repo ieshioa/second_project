@@ -32,7 +32,7 @@ public class OwnerController {
     private final OwnerService service;
 
 // 민지 =================================================================================================================
-    @PostMapping
+    @PostMapping("glamping")
     @Operation(summary = "글램핑 정보 등록", description =
             "<p> <strong> 선택입력 : extraCharge(추가요금), room.service[] </strong> </p>" +
             "<p> <strong> 나머지 모든 데이터는 필수 입력입니다. </strong> </p>" +
@@ -52,10 +52,11 @@ public class OwnerController {
                     schema = @Schema(implementation = PostGlampingInfoResponseDto.class)
             )
     )
-    public ResponseEntity<? super PostGlampingInfoResponseDto> postGlampingInfo(@RequestPart GlampingPostRequestDto glampingPostRequestDtoReq
-                                        , @RequestPart MultipartFile glampImg, @RequestPart List<MultipartFile> roomImg) {
-        return service.postGlampingInfo(glampingPostRequestDtoReq, glampImg);
+    public ResponseEntity<? super PostGlampingInfoResponseDto> postGlampingInfo(@RequestPart GlampingPostRequestDto req
+                                        , @RequestPart MultipartFile glampImg ) {
+        return service.postGlampingInfo(req, glampImg);
     }
+
 
     @GetMapping("book/{glamp_id}")
     @Operation(summary = "글램핑 예약 내역 불러오기", description =

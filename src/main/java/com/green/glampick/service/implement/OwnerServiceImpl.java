@@ -19,6 +19,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import static com.green.glampick.common.GlobalConst.*;
@@ -37,55 +38,85 @@ public class OwnerServiceImpl implements OwnerService {
     @Transactional
     public ResponseEntity<? super PostGlampingInfoResponseDto> postGlampingInfo(GlampingPostRequestDto req
                         , MultipartFile glampImg) {
-//        // 유저 PK 불러오기
-//      //  req.setUserId(authenticationFacade.getLoginUserId());
-//        req.setUserId(1);
-//        if(req.getUserId() <= 0) {
-//            return PostGlampingInfoResponseDto.validateUserId();
-//        }
-//
-//        // VALIDATION_FAILED
-//        try {
-//            postValidate(req, glampImg);
-//        } catch (Exception e) {
-//            String msg = e.getMessage();
-//            return PostGlampingInfoResponseDto.validationFailed(msg);
-//        }
-//
-//        // 랜덤 파일명 생성
-//        String glmapImgName = customFileUtils.makeRandomFileName(glampImg);
-//        req.setGlampingImg(glmapImgName);
-//        for (RoomItem roomItem : req.getRoomItems()) {
-//            List<String> roomImg = new ArrayList<>();
-//            for (MultipartFile img : roomItem.getRoomImg()) {
-//                String imgName = customFileUtils.makeRandomFileName(img);
-//                roomImg.add(imgName);
-//            }
-//            roomItem.setRoomImgName(roomImg);
-//        }
-//
-//        // glamping insert 실행
-//        try {
-//            mapper.postGlamping(req);
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//            return PostGlampingInfoResponseDto.databaseError();
-//        }
-//
-//        try {
-//            // 폴더 : /glamping/{glampId}
-//            String glampPath = String.format("/glamping/%s", req.getGlampId());
-//            customFileUtils.makeFolders(glampPath);
-//
-//
-//            // 파일을 저장한다
-//
-//
-//        } catch (Exception e) {
-//            return PostGlampingInfoResponseDto.validateUserId();
-//        }
-//
-//
+        // 유저 PK 불러오기
+      //  req.setUserId(authenticationFacade.getLoginUserId());
+        req.setUserId(1);
+        if(req.getUserId() <= 0) {
+            return PostGlampingInfoResponseDto.validateUserId();
+        }
+
+        // VALIDATION_FAILED
+        try {
+            postValidate(req, glampImg);
+        } catch (Exception e) {
+            String msg = e.getMessage();
+            return PostGlampingInfoResponseDto.validationFailed(msg);
+        }
+
+        // 이미지 파일명 만들기
+        String glmapImgName = customFileUtils.makeRandomFileName(glampImg);
+        req.setGlampingImg(glmapImgName);
+        // glamping insert 실행
+        try {
+            mapper.insertGlamping(req);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return PostGlampingInfoResponseDto.databaseError();
+        }
+        long glampId = req.getGlampId();
+
+        // 글램핑 대표 이미지 넣기
+        try {
+            // 폴더 : /glamping/{glampId}
+            String glampPath = String.format("/glamping/%s", glampId);
+            customFileUtils.makeFolders(glampPath);
+            // 파일을 저장한다
+            String target = String.format("/%s/%s", glampPath, glmapImgName);
+            customFileUtils.transferTo(glampImg, target);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return PostGlampingInfoResponseDto.fileUploadError();
+        }
+
+        // 객실 정보 등록하기
+        for (RoomItem roomItem : req.getRoomItems()) {
+            roomItem.setGlampId(glampId);
+            mapper.insertRoom(roomItem);  // room 테이블 insert
+            long roomId = roomItem.getRoomId();
+            // 폴더 만들기
+            String roomPath = String.format("/glamping/%s/room/%s", glampId, roomId);
+            customFileUtils.makeFolders(roomPath);
+            // room 파일명 생성 및 저장
+            try {
+                List<String> roomImg = new ArrayList<>();
+                for (MultipartFile img : roomItem.getRoomImg()) {
+                    String imgName = customFileUtils.makeRandomFileName(img);
+                    roomImg.add(imgName);
+                    String target = String.format("%s/%s", roomPath, imgName);
+                    customFileUtils.transferTo(img, target);
+                }
+                roomItem.setRoomImgName(roomImg);
+            } catch (Exception e) {
+                e.printStackTrace();
+                return PostGlampingInfoResponseDto.fileUploadError();
+            }
+            // 룸 이미지 / 룸 서비스 insert
+            try {
+                mapper.insertRoomImg(roomItem);
+                mapper.insertRoomService(roomItem);
+            } catch (Exception e) {
+                e.printStackTrace();
+                return PostGlampingInfoResponseDto.databaseError();
+            }
+
+            return PostGlampingInfoResponseDto.success(glampId);
+        }
+
+
+
+
+
+
 
         return null;
     }
@@ -191,11 +222,11 @@ public class OwnerServiceImpl implements OwnerService {
     }
 
 
+
 //    @Override
 //    public ResponseEntity<? super GetOwnerBookListResponseDto> getGlampReservation(long glampId) {
 //        return null;
 //    }
-
 
 
 // 강국 =================================================================================================================
