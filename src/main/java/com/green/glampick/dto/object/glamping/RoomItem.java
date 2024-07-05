@@ -11,6 +11,9 @@ import java.util.List;
 @Getter
 @Setter
 public class RoomItem {
+    @JsonIgnore
+    private long glampId;
+
     @Schema(example = "카라반 102호", description = "객실 이름")
     private String roomName;
     @Schema(example = "65500", description = "객실 가격")
@@ -23,10 +26,15 @@ public class RoomItem {
     private String inTime;
     @Schema(example = "12:00:00", description = "체크아웃 시간")
     private String outTime;
-    private List<Integer> service;
+
+    // 서비스
+    private List<Integer> serviceList;
 
     // 이미지
     private List<MultipartFile> roomImg;
     @JsonIgnore
     private List<String> roomImgName;
+
+    @JsonIgnore
+    private long roomId;
 }

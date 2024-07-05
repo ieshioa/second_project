@@ -4,7 +4,7 @@ import com.green.glampick.dto.object.ReviewListItem;
 import com.green.glampick.dto.object.glamping.GlampingDetailReviewItem;
 import com.green.glampick.dto.object.glamping.GlampingListItem;
 import com.green.glampick.dto.object.glamping.GlampingRoomListItem;
-import com.green.glampick.dto.request.GlampingSearchRequestDto;
+import com.green.glampick.dto.request.glamping.GlampingSearchRequestDto;
 import com.green.glampick.dto.ResponseDto;
 import com.green.glampick.dto.request.glamping.GetFavoriteRequestDto;
 import com.green.glampick.dto.request.glamping.GetInfoRequestDto;
@@ -21,6 +21,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
@@ -35,6 +36,7 @@ public class GlampingServiceImpl implements GlampingService {
     private final AuthenticationFacade facade;
 // 민지 =================================================================================================================
     @Override
+    @Transactional
     public ResponseEntity<? super GetSearchGlampingListResponseDto> searchGlamping(GlampingSearchRequestDto req) {
         // 필요한 데이터가 모두 입력되었는지
         try {
@@ -55,20 +57,33 @@ public class GlampingServiceImpl implements GlampingService {
             return GetSearchGlampingListResponseDto.wrongDate();
         }
 
-//        // 검색어와 일치하는 글램핑장이 존재하나?
-//        // existGlamp : 일치하는 글램핑장 pk
-//        List<Long> existGlamp = mapper.existGlamp(req.getRegion(), req.getSearchWord());
-//        if (existGlamp.size() == 1) {
-//            return GetSearchGlampingListResponseDto.existGlamp(existGlamp.get(0));
-//        }
+        // 검색어와 일치하는 글램핑장이 존재하나?
+        // List : 일치하는 글램핑장 pk
+        if (req.getSearchWord() != null) {
+            List<Long> existGlampLike = mapper.existGlampLike(req.getRegion(), req.getSearchWord());
+            if(existGlampLike != null) {  // 지역이 일치하고 검색어가 포함된 것이 하나만 있다면
+                List<Long> existGlamp = mapper.existGlamp(req.getRegion(), req.getSearchWord());
+                if (existGlamp.size() == 1) {       // 그 하나의 검색어와 완벽히 일치하는 글램핑장이 존재한다면
+                    return GetSearchGlampingListResponseDto.existGlamp(existGlamp.get(0));  // 바로 상세보기 페이지로 갈 수 있게 pk를 리턴한다
+                }
+            }
+        }
+
+        List<Integer> filter = req.getFilter();
+        if(filter != null) {
+            req.setFilterSize(filter.size());
+        }
+
+        if(req.getSortType() < 0) {     // default 1
+            req.setSortType(1);
+        }
 
         List<GlampingListItem> result = mapper.searchGlampList(req);
         if(result == null || result.isEmpty()) {
             return GetSearchGlampingListResponseDto.isNull();
         }
 
-
-        int searchCount = 1;
+        int searchCount = mapper.searchCount(req);
 
         return GetSearchGlampingListResponseDto.success(searchCount, result);
     }
@@ -77,6 +92,7 @@ public class GlampingServiceImpl implements GlampingService {
 
 // 강국 =================================================================================================================
     @Override
+    @Transactional
     public ResponseEntity<? super GetFavoriteGlampingResponseDto> favoriteGlamping(GetFavoriteRequestDto p) {
         //p.setUserId(facade.getLoginUserId());
         p.setUserId(1);

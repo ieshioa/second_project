@@ -15,14 +15,24 @@ import java.util.Map;
 
 public interface LoginService {
 
+    //  최초 실행 시, 초기화를 한번만 진행  //
     void init();
 
+    //  이메일 회원가입 처리  //
     ResponseEntity<? super PostSignUpResponseDto> signUpUser(SignUpRequestDto dto);
+
+    //  이메일 로그인 처리  //
     ResponseEntity<? super PostSignInResponseDto> signInUser(HttpServletResponse res, SignInRequestDto dto);
+
+    //  AccessToken 불러오기  //
     ResponseEntity<? super GetAccessTokenResponseDto> getAccessToken(HttpServletRequest req);
 
+    //  휴대폰 인증 문자 보내기  //
     ResponseEntity<? super PostSmsSendResponseDto> sendOne(String userPhone);
+
+    //  휴대폰 인증코드 체크하기  //
     ResponseEntity<? super PostSmsCheckResponseDto> checkPhone(String userPhone, int phoneKey);
 
+    //  6자리의 랜덤 숫자코드를 생성  //
     int createKey();
 }

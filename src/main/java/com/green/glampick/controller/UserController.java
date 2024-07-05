@@ -9,6 +9,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springdoc.core.annotations.ParameterObject;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 @Slf4j
@@ -28,10 +29,10 @@ public class UserController {
         return service.getBook(dto);
     }
 
-    @PatchMapping("/book")// 예약 내역 취소하기
+    @PostMapping("/book-cancel")// 예약 내역 취소하기
     @Operation(summary = "예약 취소", description = "<strong></strong>" +
             "<p></p>")
-    public ResponseEntity<?super PatchBookResponseDto> cancelBook(@RequestBody PatchBookRequestDto dto) {
+    public ResponseEntity<?super CancelBookResponseDto> cancelBook(@RequestBody CancelBookRequestDto dto) {
         return service.cancelBook(dto);
     }
 
@@ -46,16 +47,17 @@ public class UserController {
 
     @DeleteMapping("/delete")// 리뷰 삭제
     @Operation(summary = "리뷰 삭제", description = "<strong></strong>" +
-            "<p></p>")
-    public ResponseEntity<?super DeleteReviewResponseDto> deleteReview(@RequestParam("review_id") int reviewId) {
+            "<p> review_id = 리뷰 pk ex) 1 </p>")//
+    public ResponseEntity<?super DeleteReviewResponseDto> deleteReview(@RequestParam("review_id") long reviewId) {
         return service.deleteReview(reviewId);
+
     }
 
     @GetMapping("/review")// 리뷰 불러오기
     @Operation(summary = "리뷰 불러오기", description = "<strong></strong>" +
-            "<p></p>")
-    public ResponseEntity<?super GetReviewResponseDto> getReview(@ParameterObject @ModelAttribute GetReviewRequestDto email) {
-        return service.getReview(email);
+            "<p> review_id = 리뷰 pk ex) 1 </p>")
+    public ResponseEntity<?super GetReviewResponseDto> getReview(@ParameterObject @ModelAttribute GetReviewRequestDto dto) {
+        return service.getReview(dto);
     }
 
     @GetMapping("/favorite-glamping")// 관심 글램핑 불러오기
@@ -74,15 +76,15 @@ public class UserController {
     @GetMapping("")// 유저 정보 불러오기
     @Operation(summary = "유저 정보 불러오기", description = "<strong></strong>" +
             "<p></p>")
-    public ResponseEntity<?super GetUserResponseDto> getUser(@ParameterObject @ModelAttribute GetUserRequestDto email) {
-        return service.getUser(email);
+    public ResponseEntity<?super GetUserResponseDto> getUser(@ParameterObject GetUserRequestDto dto) {
+        return service.getUser(dto);
     }
 
     @PatchMapping("")// 유저 정보 수정하기
     @Operation(summary = "유저 정보 수정하기", description = "<strong></strong>" +
             "<p></p>")
-    public ResponseEntity<?super UpdateUserResponseDto> updateUser(@RequestBody UpdateUserRequestDto email) {
-        return service.updateUser(email);
+    public ResponseEntity<?super UpdateUserResponseDto> updateUser(@RequestBody UpdateUserRequestDto dto) {
+        return service.updateUser(dto);
     }
 
     @DeleteMapping("")// 회원탈퇴

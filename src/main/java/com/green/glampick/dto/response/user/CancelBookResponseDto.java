@@ -6,9 +6,9 @@ import com.green.glampick.dto.ResponseDto;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
-public class PatchBookResponseDto extends ResponseDto {
+public class CancelBookResponseDto extends ResponseDto {
 
-    private PatchBookResponseDto() {
+    private CancelBookResponseDto() {
         super(ResponseCode.SUCCESS, ResponseMessage.SUCCESS);
     }
 

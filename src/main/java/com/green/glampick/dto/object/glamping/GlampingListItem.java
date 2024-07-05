@@ -29,5 +29,4 @@ public class GlampingListItem {
     @Schema(example = "65,000", description = "글램핑장의 예약 가격")
     private int price;
 
-
 }

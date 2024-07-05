@@ -12,9 +12,10 @@ import java.time.LocalDateTime;
 public class PostReviewRequestDto {
 
     @JsonIgnore private long userId;
-    private long reservationId;
+    private long glamp_id;
     private String reviewContent;
     private long reviewStarPoint;
+    private long roomId;
 
 
 }

@@ -7,6 +7,8 @@ import lombok.Setter;
 @Getter
 @Setter
 public class PopularGlampingItem {
+    @Schema(example = "1", description = "글램핑 PK")
+    private long glampId;
     @Schema(example = "뉴욕 카라반", description = "글램핑장의 이름")
     private String glampingName;
     @Schema(example = "경북", description = "글램핑장의 위치")
