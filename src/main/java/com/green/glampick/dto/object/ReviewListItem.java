@@ -1,5 +1,6 @@
 package com.green.glampick.dto.object;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 
@@ -7,6 +8,9 @@ import java.util.List;
 
 @Data
 public class ReviewListItem {
+    @JsonIgnore
+    private long reviewId;
+
     @Schema(example = "d7c01900-24d2-4a9d-a86f-f7057173a0cb.jpeg", description = "유저프로필이미지")
     private String userProfileImage;
 
@@ -26,6 +30,4 @@ public class ReviewListItem {
     private String ownerReviewContent;
 
     private List<String> reviewImages;
-    private List<String> roomNames;
-
 }

@@ -6,8 +6,9 @@ import lombok.Data;
 
 @Data
 public class ReviewInfoRequestDto {
- @Schema(example = "35", description = "글램핑PK")
+ @Schema(example = "1", description = "글램핑PK")
  private long glampId;
  @JsonIgnore
  private long userId;
+
 }
