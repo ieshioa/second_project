@@ -53,13 +53,13 @@ public class UserServiceImpl implements UserService {
         return null;
     }
 
-    @Override
+    @Override// 리뷰 작성
     public ResponseEntity<? super PostReviewResponseDto> postReview(PostReviewRequestDto dto) {
 
         try {
-            long reservationId = dto.getReservationId();
-            String reviewContent = dto.getReviewContent();
-            long reviewStarPoint = dto.getReviewStarPoint();
+//            long reservationId = dto.getReservationId();
+//            String reviewContent = dto.getReviewContent();
+//            long reviewStarPoint = dto.getReviewStarPoint();
 
             ReviewEntity reviewEntity = new ReviewEntity(dto);
 
@@ -74,7 +74,7 @@ public class UserServiceImpl implements UserService {
 
     }
 
-    @Override
+    @Override // 리뷰 삭제
     public ResponseEntity<? super DeleteReviewResponseDto> deleteReview(long reviewId) {
 
         ReviewEntity reviewEntity = new ReviewEntity();
@@ -82,10 +82,8 @@ public class UserServiceImpl implements UserService {
             reviewRepository.findById(reviewId);
             if (reviewId == 0) {
                 return DeleteReviewResponseDto.noExistedReview();
-            }else if (reviewId == reviewId){
-                reviewRepository.deleteById(reviewId);
             }
-
+                reviewRepository.deleteById(reviewId);
 
         } catch (Exception e) {
             e.printStackTrace();

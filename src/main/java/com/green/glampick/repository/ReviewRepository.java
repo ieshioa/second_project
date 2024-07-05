@@ -9,13 +9,11 @@ import org.springframework.stereotype.Repository;
 public interface ReviewRepository extends JpaRepository<ReviewEntity, Long> {
 
     boolean existsByUserId(long userId);
-    boolean existsByReservationId(long reservationId);
+    boolean existsByGlampId(long glampId);
     boolean existsByReviewContent(String reviewContent);
     boolean existsByReviewStarPoint(long reviewStarPoint);
     boolean existsByCreatedAt(String createdAt);
 
-    /*@Transactional
-    void DeleteReviewResponseDto(long reviewId);*/
 
 
 }
