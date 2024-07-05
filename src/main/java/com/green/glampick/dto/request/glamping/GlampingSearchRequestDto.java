@@ -15,7 +15,7 @@ import static com.green.glampick.common.GlobalConst.SEARCH_PAGING_SIZE;
 public class GlampingSearchRequestDto extends Paging {
 
     public GlampingSearchRequestDto(Integer page) {
-        super(page == null ? 1 : page, SEARCH_PAGING_SIZE);
+        super(page, SEARCH_PAGING_SIZE);
     }
 
     @Schema(example = "경북", description = "지역")

@@ -1,13 +1,10 @@
 package com.green.glampick.controller;
 
-import com.green.glampick.dto.request.GlampingPostRequestDto;
+import com.green.glampick.dto.request.owner.GlampingPostRequestDto;
 import com.green.glampick.dto.request.ReviewPatchRequestDto;
 import com.green.glampick.dto.request.ReviewPostRequestDto;
-import com.green.glampick.dto.response.glamping.GetGlampingReviewInfoResponseDto;
-import com.green.glampick.dto.response.owner.GetOwnerBookListResponseDto;
-import com.green.glampick.dto.response.owner.PatchOwnerReviewInfoResponseDto;
-import com.green.glampick.dto.response.owner.PostGlampingInfoResponseDto;
-import com.green.glampick.dto.response.owner.PostOwnerReviewInfoResponseDto;
+import com.green.glampick.dto.request.owner.RoomPostRequestDto;
+import com.green.glampick.dto.response.owner.*;
 import com.green.glampick.service.OwnerService;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
@@ -19,6 +16,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+
 import java.util.List;
 
 
@@ -57,6 +55,29 @@ public class OwnerController {
         return service.postGlampingInfo(req, glampImg);
     }
 
+    @PostMapping("room")
+    @Operation(summary = "객실 정보 등록", description =
+            "<p> <strong> 선택입력 : extraCharge(추가요금), room.service[] </strong> </p>" +
+                    "<p> <strong> 나머지 모든 데이터는 필수 입력입니다. </strong> </p>" +
+                    "<p> 사진 업로드를 위해 테스트는 포스트맨에서 해주세요 ~ </p>" +
+                    "<p> <strong> 시간 입력 형식 = 시:분:초  ex) 12:00:00 </strong> </p>"
+    )
+    @ApiResponse(
+            description =
+                    "<p> <strong> ResponseCode 응답 코드 </strong> </p> " +
+                            "<p> SU(200) : 글램핑 등록 성공 </p> " +
+                            "<p> VF(400) : 입력되지 않은 데이터가 존재 </p> " +
+                            "<p> DBE(500) : 데이터베이스 서버 오류 </p> ",
+            responseCode = "200",
+            content = @Content(
+                    mediaType = "application/json",
+                    schema = @Schema(implementation = PostRoomInfoResponseDto.class)
+            )
+    )
+    public ResponseEntity<? super PostRoomInfoResponseDto> postRoomInfo(@RequestPart RoomPostRequestDto req
+            , @RequestPart List<MultipartFile> roomImg ) {
+        return service.postRoomInfo(req, roomImg);
+    }
 
     @GetMapping("book/{glamp_id}")
     @Operation(summary = "글램핑 예약 내역 불러오기", description =
