@@ -16,6 +16,6 @@ public interface UserService {
     //     ResponseEntity<?super PostReviewResponseDto> getCoupon(String email);//쿠폰 불러오기
     ResponseEntity<?super GetUserResponseDto> getUser(GetUserRequestDto email);//유저 정보 불러오기
     ResponseEntity<?super UpdateUserResponseDto> updateUser(UpdateUserRequestDto email);//유저 정보 수정하기
-    ResponseEntity<?super DeleteUserResponseDto> deleteUser(int userId);//회원 탈퇴
+    ResponseEntity<?super DeleteUserResponseDto> deleteUser(long userId);//회원 탈퇴
 
 }
