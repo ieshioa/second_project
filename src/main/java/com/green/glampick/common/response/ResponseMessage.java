@@ -25,10 +25,6 @@ public interface ResponseMessage {
 
     String AAA = "로그인된 유저 정보를 불러오지 못했습니다.";
     String GGG = "파일 업로드 과정에서 오류가 생겼습니다.";
-  
-
-  
-
 
 
     // HTTP Status 401 UNAUTHORIZED

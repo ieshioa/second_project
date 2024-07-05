@@ -112,16 +112,25 @@ public class OwnerServiceImpl implements OwnerService {
             return PostGlampingInfoResponseDto.success(glampId);
         }
 
-
-
-
-
-
-
         return null;
     }
 
+    public ResponseEntity<? super GetOwnerBookListResponseDto> getGlampReservation(long glampId) {
+        return null;
+    }
+
+
 // 강국 =================================================================================================================
+    @Override
+    public ResponseEntity<? super PostOwnerReviewInfoResponseDto> postReview(ReviewPostRequestDto p) {
+        return null;
+    }
+
+    @Override
+    public ResponseEntity<? super PatchOwnerReviewInfoResponseDto> patchReview(ReviewPatchRequestDto p) {
+        return null;
+    }
+
 
 
 // 민지 에러처리 =========================================================================================================
@@ -212,23 +221,6 @@ public class OwnerServiceImpl implements OwnerService {
             isNull(room.getInTime());
             isNull(room.getOutTime());
         }
-    }
-
-//    @Override
-//    public ResponseEntity<? super GetOwnerBookListResponseDto> getGlampReservation(long glampId) {
-//        return null;
-//    }
-
-
-// 강국 =================================================================================================================
-    @Override
-    public ResponseEntity<? super PostOwnerReviewInfoResponseDto> postReview(ReviewPostRequestDto p) {
-        return null;
-    }
-
-    @Override
-    public ResponseEntity<? super PatchOwnerReviewInfoResponseDto> patchReview(ReviewPatchRequestDto p) {
-        return null;
     }
 
 }

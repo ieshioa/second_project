@@ -16,7 +16,7 @@ public interface UserService {
     ResponseEntity<?super PostReviewResponseDto> postReview(PostReviewRequestDto dto);
 
     //  마이페이지 - 리뷰 삭제하기  //
-    ResponseEntity<?super DeleteReviewResponseDto> deleteReview(int email);
+    ResponseEntity<?super DeleteReviewResponseDto> deleteReview(long reviewId);
 
     //  마이페이지 - 리뷰 불러오기  //
     ResponseEntity<?super GetReviewResponseDto> getReview(GetReviewRequestDto email);
@@ -31,6 +31,6 @@ public interface UserService {
     ResponseEntity<?super UpdateUserResponseDto> updateUser(UpdateUserRequestDto dto);
 
     //  마이페이지 - 회원 탈퇴  //
-    ResponseEntity<?super DeleteUserResponseDto> deleteUser(int userId);
+    ResponseEntity<?super DeleteUserResponseDto> deleteUser(long userId);
 
 }

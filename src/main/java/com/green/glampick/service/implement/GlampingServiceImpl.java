@@ -4,7 +4,6 @@ import com.green.glampick.dto.object.ReviewListItem;
 import com.green.glampick.dto.object.glamping.GlampingDetailReviewItem;
 import com.green.glampick.dto.object.glamping.GlampingListItem;
 import com.green.glampick.dto.object.glamping.GlampingRoomListItem;
-import com.green.glampick.dto.request.GlampingSearchRequestDto;
 import com.green.glampick.dto.request.glamping.GlampingSearchRequestDto;
 import com.green.glampick.dto.ResponseDto;
 import com.green.glampick.dto.request.glamping.GetFavoriteRequestDto;

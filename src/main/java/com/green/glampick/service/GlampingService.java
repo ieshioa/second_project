@@ -12,7 +12,6 @@ import org.springframework.http.ResponseEntity;
 
 public interface GlampingService {
 
-
     ResponseEntity<? super GetSearchGlampingListResponseDto> searchGlamping(GlampingSearchRequestDto searchReq);
     ResponseEntity<? super GetFavoriteGlampingResponseDto> favoriteGlamping(GetFavoriteRequestDto p);
     ResponseEntity<? super GetGlampingInformationResponseDto> getInfoGlampingDetail(GetInfoRequestDto p);
