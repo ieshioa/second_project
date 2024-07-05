@@ -34,14 +34,14 @@ public class UserServiceImpl implements UserService {
     private final AuthenticationFacade authenticationFacade;
     private final PasswordEncoder passwordEncoder;
 
-
+    //  마이페이지 - 예약 내역 불러오기  //
     @Override
     public ResponseEntity<? super GetBookResponseDto> getBook(GetBookRequestDto dto) {
+
         long loggedInUserId = authenticationFacade.getLoginUserId();
-
         if (loggedInUserId == 0) { return GetBookResponseDto.noPermission(); }
-
         dto.setUserId(authenticationFacade.getLoginUserId());
+
 
         List<GetBookResultSet> resultSets;
 
@@ -59,13 +59,20 @@ public class UserServiceImpl implements UserService {
         return GetBookResponseDto.success(resultSets);
     }
 
+    //  마이페이지 - 예약 취소하기  //
     @Override
     public ResponseEntity<? super CancelBookResponseDto> cancelBook(CancelBookRequestDto dto) {
+
+        long loggedInUserId = authenticationFacade.getLoginUserId();
+        if (loggedInUserId == 0) { return CancelBookResponseDto.noPermission(); }
         dto.setUserId(authenticationFacade.getLoginUserId());
+
+
+        Optional<ReservationBeforeEntity> optionalBeforeEntity = Optional.empty();
 
         try {
 
-            Optional<ReservationBeforeEntity> optionalBeforeEntity = reservationRepository.findById(dto.getReservationId());
+            optionalBeforeEntity = reservationRepository.findById(dto.getReservationId());
 
             // Entity 로 가져온 데이터가 없다면, 존재하지 않는 예약내역에 대한 응답을 반환한다.
             if (optionalBeforeEntity.isEmpty()) { return CancelBookResponseDto.noExistedBook(); }
@@ -93,6 +100,7 @@ public class UserServiceImpl implements UserService {
         return CancelBookResponseDto.success();
     }
 
+    //  마이페이지 - 리뷰 작성하기  //
     @Override
     public ResponseEntity<? super PostReviewResponseDto> postReview(PostReviewRequestDto dto) {
 
@@ -108,21 +116,25 @@ public class UserServiceImpl implements UserService {
 
     }
 
+    //  마이페이지 - 리뷰 삭제하기  //
     @Override
     public ResponseEntity<? super DeleteReviewResponseDto> deleteReview(int email) {
         return null;
     }
 
+    //  마이페이지 - 리뷰 불러오기  //
     @Override
     public ResponseEntity<? super GetReviewResponseDto> getReview(GetReviewRequestDto email) {
         return null;
     }
 
+    //  마이페이지 - 관심 글램핑 불러오기  //
     @Override
     public ResponseEntity<? super GetFavoriteGlampingListResponseDto> getFavoriteGlamping(GetFavoriteGlampingRequestDto email) {
         return null;
     }
 
+    //  마이페이지 - 내 정보 불러오기  //
     @Override
     public ResponseEntity<? super GetUserResponseDto> getUser(GetUserRequestDto dto) {
 
@@ -142,6 +154,7 @@ public class UserServiceImpl implements UserService {
 
     }
 
+    //  마이페이지 - 내 정보 수정하기  //
     @Override
     public ResponseEntity<? super UpdateUserResponseDto> updateUser(UpdateUserRequestDto dto) {
         dto.setUserId(authenticationFacade.getLoginUserId());
@@ -167,6 +180,7 @@ public class UserServiceImpl implements UserService {
         return UpdateUserResponseDto.success();
     }
 
+    //  마이페이지 - 회원 탈퇴  //
     @Override
     public ResponseEntity<? super DeleteUserResponseDto> deleteUser(int userId) {
         return null;
