@@ -1,6 +1,6 @@
 package com.green.glampick.service;
 
-import com.green.glampick.dto.request.GlampingSearchRequestDto;
+import com.green.glampick.dto.request.glamping.GlampingSearchRequestDto;
 import com.green.glampick.dto.request.glamping.GetFavoriteRequestDto;
 import com.green.glampick.dto.request.glamping.GetInfoRequestDto;
 import com.green.glampick.dto.request.glamping.ReviewInfoRequestDto;

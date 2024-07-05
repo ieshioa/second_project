@@ -1,4 +1,4 @@
-package com.green.glampick.dto.request;
+package com.green.glampick.dto.request.glamping;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.green.glampick.common.Paging;
@@ -15,10 +15,10 @@ import static com.green.glampick.common.GlobalConst.SEARCH_PAGING_SIZE;
 public class GlampingSearchRequestDto extends Paging {
 
     public GlampingSearchRequestDto(Integer page) {
-        super(page, SEARCH_PAGING_SIZE);
+        super(page == null ? 1 : page, SEARCH_PAGING_SIZE);
     }
 
-    @Schema(example = "대구", description = "지역")
+    @Schema(example = "경북", description = "지역")
     private String region;
     @Schema(example = "2024-06-28", description = "체크인")
     private String inDate;

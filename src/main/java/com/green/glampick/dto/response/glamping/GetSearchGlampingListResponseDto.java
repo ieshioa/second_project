@@ -32,6 +32,11 @@ public class GetSearchGlampingListResponseDto extends ResponseDto {
         return ResponseEntity.status(HttpStatus.OK).body(result);
     }
 
+    public static ResponseEntity<ResponseDto> existGlamp(long glamId) {
+        ResponseDto result = new ResponseDto(ResponseCode.SUCCESS, String.valueOf(glamId));
+        return ResponseEntity.status(HttpStatus.OK).body(result);
+    }
+
     public static ResponseEntity<ResponseDto> validationFailed(String errorMsg) {
         ResponseDto result = new ResponseDto(ResponseCode.VALIDATION_FAILED, errorMsg);
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(result);

@@ -8,7 +8,7 @@ import com.green.glampick.dto.response.glamping.GetGlampingReviewInfoResponseDto
 import com.green.glampick.dto.response.glamping.GetSearchGlampingListResponseDto;
 import com.green.glampick.dto.response.glamping.favorite.GetFavoriteGlampingResponseDto;
 import com.green.glampick.service.GlampingService;
-import com.green.glampick.dto.request.GlampingSearchRequestDto;
+import com.green.glampick.dto.request.glamping.GlampingSearchRequestDto;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -32,8 +32,13 @@ public class GlampingController {
 // 민지 =================================================================================================================
     @GetMapping("search")
     @Operation(summary = "글램핑 검색 결과 가져오기", description =
-            "<p></p><strong> searchWord : 선택 입력 </strong> <p></p>" +
-                    "<strong> 나머지 : 필수 입력 </strong> ")
+            "<p> <strong> 필수입력 데이터 </strong> </p>" +
+                    "<p> <strong> region : 지역이름 </strong> </p> " +
+                    "<p> <strong> inDate : 체크인 날짜 </strong> </p> " +
+                    "<p> <strong> ourDate : 체크아웃 날짜 </strong>  </p>" +
+                    "<p> <strong> people : 인원수 </strong> </p> " +
+                    "<p> 나머지는 선택입력 </p> " +
+                     " <p> sortType, page 는 default 1 </p>" )
     @ApiResponse(
             description =
                     "<p> <strong> ResponseCode 응답 코드 </strong> </p> " +
@@ -48,8 +53,6 @@ public class GlampingController {
     )
     public ResponseEntity<? super GetSearchGlampingListResponseDto> searchGlamping(@ParameterObject @ModelAttribute GlampingSearchRequestDto searchReq) {
         return service.searchGlamping(searchReq);
-//    public ResultGet searchGlamping(@ParameterObject @ModelAttribute GlampingSearchRequestDto searchReq) {
-//        return service.searchGlamping(searchReq);
     }
 
 

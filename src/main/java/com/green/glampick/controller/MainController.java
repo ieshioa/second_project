@@ -23,8 +23,8 @@ public class MainController {
 
     @GetMapping
     @Operation(summary = "인기 글램핑 리스트", description =
-            "<p> popular : 인기순 top3 </p>" +
-                    "<p> withPet : 반려동물 동반 top3 </p>" +
+                    "<p> popular : 인기순 top3 </p>" +
+                    "<p> petFriendly : 반려동물 동반 top3 </p>" +
                     "<p> mountainView : 마운틴 뷰 top3 </p>"
     )
     @ApiResponse(

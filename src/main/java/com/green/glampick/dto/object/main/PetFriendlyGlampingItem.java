@@ -6,7 +6,7 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class WithPetGlampingItem {
+public class PetFriendlyGlampingItem {
     @Schema(example = "뉴욕 카라반", description = "글램핑장의 이름")
     private String glampingName;
     @Schema(example = "경북", description = "글램핑장의 위치")
