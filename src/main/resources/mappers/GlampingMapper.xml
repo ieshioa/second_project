@@ -29,7 +29,7 @@
         FROM 		glamping
         WHERE 		glamp_id = #{glampId}
     </select>
-    <!-- 룸 객실 정보  -->
+    <!-- 객실 정보  -->
     <select id="selRoomInfo">
         SELECT 		    room_name AS roomName,
                         room_price AS roomPrice,
@@ -41,11 +41,23 @@
         FROM  		    room
         WHERE 		    glamp_id = #{glampId}
     </select>
+    <!-- 객실 사진 -->
+    <select id="selRoomPics">
+        SELECT          room_image_name AS room
+        FROM 			room_image
+        WHERE           room_id = #{roomId}
+    </select>
+    <!-- 글램핑의 객실 모든 이름 -->
+    <select id="selRoomNames">
+        SELECT 	    room_name
+        FROM 		room
+        WHERE 	    glamp_id = #{glampId}
+    </select>
 
     <!-- 글램핑 상세 페이지 리뷰 데이터 -->
     <select id="selReviewInfoInGlamping">
         SELECT		    B.user_name AS userName,
-                        A.review_content AS content
+        A.review_content AS content
         FROM			review A
         INNER JOIN      user B
         ON 			    A.user_id = B.user_id
@@ -57,15 +69,11 @@
         FROM review
         WHERE glamp_id = 1;
     </select>
-    <!-- 객실 사진 -->
-    <select id="selRoomPics">
-        SELECT          room_image_name AS room
-        FROM 			room_image
-        WHERE           room_id = #{roomId}
-    </select>
-
+    <!-- 리뷰페이지 리뷰정보  -->
     <select id="selReviewInfo">
-        SELECT              B.user_profile_image AS userProfileImage,
+        SELECT              A.review_id AS reviewId,
+                            A.glamp_id AS glampId,
+                            B.user_profile_image AS userProfileImage,
                             B.user_name AS userNickName,
                             A.review_star_point AS starPoint,
                             A.created_at AS createdAt,
@@ -75,6 +83,22 @@
         INNER JOIN 		    user B
         ON                  A.user_id = B.user_id
         WHERE 			    A.glamp_id = #{glampId}
+    </select>
+    <!-- 리뷰 이미지 -->
+    <select id="selReviewImage">
+        SELECT	    review_image_name
+        FROM		review_image
+        WHERE 	    review_id = #{reviewId}
+    </select>
+
+    <select id="selRoomService">
+        SELECT	    service_title
+        FROM		service
+        WHERE 	    service_id IN   (
+                                    SELECT	service_id
+                                    FROM 		room_service
+                                    WHERE 	room_id = #{roomId}
+                                    )
     </select>
 <!--  민지 ===================================================================  -->
 

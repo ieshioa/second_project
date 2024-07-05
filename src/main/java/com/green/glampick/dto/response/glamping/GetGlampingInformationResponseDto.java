@@ -13,6 +13,7 @@ import lombok.ToString;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
+import java.util.HashSet;
 import java.util.List;
 
 
@@ -42,8 +43,8 @@ public class GetGlampingInformationResponseDto extends ResponseDto {
         @Schema(example = "1329명", description = "리뷰 평가자 숫자")
         private int countReviewUsers;
 
+        private HashSet<String> roomService;
         private List<GlampingDetailReviewItem> reviewItems;
-
         private List<GlampingRoomListItem> roomItems;
 
 

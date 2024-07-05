@@ -5,23 +5,20 @@ import com.green.glampick.common.response.ResponseMessage;
 import com.green.glampick.dto.ResponseDto;
 import com.green.glampick.dto.object.ReviewListItem;
 import io.swagger.v3.oas.annotations.media.Schema;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
+import java.util.HashSet;
 import java.util.List;
 
 @Getter
 @Setter
 @Builder
 public class GetGlampingReviewInfoResponseDto extends ResponseDto {
-    @Schema(example = "4.7", description = "평균 별점")
-    private double avgStarPoint;
 
-    List<ReviewListItem> reviewListItems;
-
+    private List<ReviewListItem> reviewListItems;
+    private List<String> roomNames;
     private GetGlampingReviewInfoResponseDto() {
         super(ResponseCode.SUCCESS, ResponseMessage.SUCCESS);
     }
@@ -31,5 +28,11 @@ public class GetGlampingReviewInfoResponseDto extends ResponseDto {
         return ResponseEntity.status(HttpStatus.OK).body(result);
     }
 
+    public GetGlampingReviewInfoResponseDto(List<ReviewListItem> reviewListItems, List<String> roomNames) {
 
+        super(ResponseCode.SUCCESS, ResponseMessage.SUCCESS);
+        this.reviewListItems = reviewListItems;
+        this.roomNames = roomNames;
+
+    }
 }

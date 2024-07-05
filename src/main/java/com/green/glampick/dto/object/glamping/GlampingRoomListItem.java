@@ -8,6 +8,7 @@ import java.util.List;
 public class GlampingRoomListItem {
 
     private List<String> roomPics;
+    private List<String> roomServices;
 
     @Schema(example = "5", description = "객실 pk")
     private long roomId;
@@ -23,4 +24,5 @@ public class GlampingRoomListItem {
     private String checkInTime;
     @Schema(example = "23:00", description = "체크아웃 시간")
     private String checkOutTime;
+
 }

@@ -18,16 +18,20 @@ public interface GlampingMapper {
     List<GlampingListItem>  searchGlampList(GlampingSearchRequestDto req);
     List<Long> existGlamp(String region, String searchWord);
     // 강국
+    // 관심등록
     int deleteFavorite(GetFavoriteRequestDto p);
-
     int insertFavorite(GetFavoriteRequestDto p);
+    //글램핑 상세정보
+    GetGlampingInformationResponseDto selGlampingInfo(GetInfoRequestDto p); //글램핑정보
+    List<GlampingRoomListItem> selRoomInfo(GetInfoRequestDto p); //객실정보
+    List<String> selRoomPics(long roomId);//객실이미지
+    List<GlampingDetailReviewItem> selReviewInfoInGlamping(long glampId);//리뷰정보
+    int selCount(long glampId);//리뷰유저수
 
-    GetGlampingInformationResponseDto selGlampingInfo(GetInfoRequestDto p);
-    List<GlampingRoomListItem> selRoomInfo(GetInfoRequestDto p);
-    List<GlampingDetailReviewItem> selReviewInfoInGlamping(long glampId);
+    List<String> selRoomService(long roomId);
+    //리뷰
+    List<ReviewListItem> selReviewInfo(long glampId); // 리뷰페이지 리뷰정보
+    List<String> selReviewImage(long reviewId); // 리뷰 이미지
+    List<String> selRoomNames(long glampId); // 글랭핑 보유 객실이름들
 
-    List<String> selRoomPics(long roomId);
-    int selCount(long glampId);
-
-    List<ReviewListItem> selReviewInfo(long glampId);
 }

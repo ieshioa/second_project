@@ -24,6 +24,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.HashSet;
 import java.util.List;
 
 @Slf4j
@@ -84,12 +85,9 @@ public class GlampingServiceImpl implements GlampingService {
             int result = mapper.deleteFavorite(p);
             if (result == 0) {
                 // 관심등록
-                int insResult = mapper.insertFavorite(p);
-                System.out.println(insResult);
-                System.out.println("result -> " + result);
+                mapper.insertFavorite(p);
                 return GetFavoriteGlampingResponseDto.success(result);
             } else {
-                System.out.println("result -> " + result);
                 return GetFavoriteGlampingResponseDto.success(result);
             }
         } catch (Exception e) {
@@ -105,33 +103,53 @@ public class GlampingServiceImpl implements GlampingService {
         List<GlampingRoomListItem> rooms = mapper.selRoomInfo(p);   // 글램핑 상세페이지 객실 정보 리스트
         List<GlampingDetailReviewItem> reviews = mapper.selReviewInfoInGlamping(p.getGlampId()); // 글램핑 상세페이지 리뷰 리스트
         int userCount = mapper.selCount(p.getGlampId()); // 리뷰 유저수
+        HashSet<String> hashServices = new HashSet<>();
 
+        // 객실 이미지 & 서비스 가져오기
+        for (GlampingRoomListItem item : rooms) {
+            //객실 이미지 세팅
+            List<String> inputImageList = mapper.selRoomPics(item.getRoomId());
+            item.setRoomPics(inputImageList);
+            //객실 서비스 세팅
+            item.setRoomServices(mapper.selRoomService(item.getRoomId()));
+
+            List<String> roomServices = item.getRoomServices();
+
+
+            for (String s : roomServices) {
+                if (!roomServices.isEmpty()) {
+                    hashServices.add(s);
+                }
+            }
+
+        }
+
+        glampInfoDto.setRoomService(hashServices);
         // dto 데이터 세팅
         glampInfoDto.setCountReviewUsers(userCount);
         glampInfoDto.setReviewItems(reviews);
         glampInfoDto.setRoomItems(rooms);
-
-        for (GlampingRoomListItem room : rooms) {
-            List<String> inputPicsList = mapper.selRoomPics(room.getRoomId());
-            room.setRoomPics(inputPicsList);
-        }
-
         return new ResponseEntity<>(glampInfoDto,HttpStatus.OK) ;
     }
     @Override
     public ResponseEntity<? super GetGlampingReviewInfoResponseDto> getInfoReviewList(ReviewInfoRequestDto p) {
-        //리뷰 불러오기
 
 
-
-//        GetGlampingReviewInfoResponseDto.builder().reviewListItems().build();
-
+        // Data Get
         List<ReviewListItem> reviews = mapper.selReviewInfo(p.getGlampId());
-//        private List<String> reviewImages;
-//        private List<String> roomNames;
+        List<String> roomNameList = mapper.selRoomNames(p.getGlampId());
 
+        //input ResponseDto
+        GetGlampingReviewInfoResponseDto dto = GetGlampingReviewInfoResponseDto.builder()
+                .reviewListItems(reviews).roomNames(roomNameList).build();
 
-        return null;
+        //리뷰사진 가져오기
+        for (ReviewListItem item : reviews) {
+            List<String> inputImageList = mapper.selReviewImage(item.getReviewId());
+            item.setReviewImages(inputImageList);
+        }
+
+        return new ResponseEntity<>(dto, HttpStatus.OK);
     }
 
 // 민지 에러체크 =========================================================================================================
