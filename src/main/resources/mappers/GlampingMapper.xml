@@ -101,11 +101,64 @@
                     WHERE glamp_id = A.glamp_id
                             AND (#{people} >= room_num_people  AND room_max_people >= #{people})
             )
+        WHERE A.region = #{region}
         <if test="searchWord != null and searchWord != ''">
-            WHERE A.glamp_name like '%${searchWord}%'
+            AND A.glamp_name like '%${searchWord}%'
         </if>
         <include refid="sort"/>
         LIMIT #{startIdx}, #{size}
+    </select>
+
+    <select id="searchCount">
+        SELECT COUNT(DISTINCT A.glamp_id)
+        FROM glamping A
+        LEFT JOIN (
+        SELECT glamp_id, room_id
+        FROM reservation_before
+        WHERE (check_in_date >= #{outDate}
+        OR #{inDate} >= check_out_date )
+        AND room_id IS NOT NULL
+        ) B
+        ON A.glamp_id = B.glamp_id
+        <if test="filterSize != 0">
+            JOIN (
+            SELECT A.glamp_id
+            FROM room A
+            JOIN room_service B ON A.room_id = B.room_id
+            WHERE B.service_id IN
+            <foreach item="filterId" collection="filter" open="(" separator="," close=")">
+                #{filterId}
+            </foreach>
+            GROUP BY A.glamp_id
+            HAVING COUNT(DISTINCT B.service_id) = #{filterSize}
+            ) C
+            ON A.glamp_id = C.glamp_id
+        </if>
+        JOIN room D
+        ON A.glamp_id = D.glamp_id
+        AND D.room_price = ( SELECT MIN(room_price)
+        FROM room
+        WHERE glamp_id = A.glamp_id
+        AND (#{people} >= room_num_people  AND room_max_people >= #{people})
+        )
+        WHERE A.region = #{region}
+        <if test="searchWord != null and searchWord != ''">
+            AND A.glamp_name like '%${searchWord}%'
+        </if>
+    </select>
+
+    <select id="existGlamp" >
+        SELECT glamp_id
+        FROM glamping
+        WHERE region = #{region}
+            and glamp_name = #{searchWord}
+    </select>
+
+    <select id="existGlampLike">
+        SELECT glamp_id
+        FROM glamping
+        WHERE region = #{region}
+        and glamp_name like '%${searchWord}%'
     </select>
 
 </mapper>

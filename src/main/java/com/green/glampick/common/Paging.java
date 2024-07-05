@@ -13,7 +13,7 @@ public class Paging {
     @Schema(example = "1", description = "선택한 page")
     private int page; //페이지 값
 
-    @Schema(example = "5", description = "페이지 당 게시글 수")
+    @JsonIgnore
     private int size; //페이지 당 레코드 수
 
     @JsonIgnore
