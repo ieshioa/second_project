@@ -63,8 +63,8 @@ public class UserController {
     @GetMapping("/favorite-glamping")// 관심 글램핑 불러오기
     @Operation(summary = "관심 글램핑 불러오기", description = "<strong></strong>" +
             "<p></p>")
-    public ResponseEntity<?super GetFavoriteGlampingListResponseDto> getFavoriteGlamping(@ParameterObject @ModelAttribute GetFavoriteGlampingRequestDto email) {
-        return service.getFavoriteGlamping(email);
+    public ResponseEntity<?super GetFavoriteGlampingListResponseDto> getFavoriteGlamping(@ParameterObject @ModelAttribute GetFavoriteGlampingRequestDto dto) {
+        return service.getFavoriteGlamping(dto);
     }
 
 //    @GetMapping("/coupon")// 쿠폰 불러오기

@@ -7,12 +7,10 @@ import com.green.glampick.entity.ReservationBeforeEntity;
 import com.green.glampick.entity.ReservationCancelEntity;
 import com.green.glampick.entity.ReviewEntity;
 import com.green.glampick.entity.UserEntity;
-import com.green.glampick.repository.ReservationRepository;
-import com.green.glampick.repository.ReviewRepository;
-import com.green.glampick.repository.UserRepository;
+import com.green.glampick.repository.*;
 import com.green.glampick.repository.resultset.GetBookResultSet;
+import com.green.glampick.repository.resultset.GetFavoriteGlampingResultSet;
 import com.green.glampick.repository.resultset.GetUserReviewResultSet;
-import com.green.glampick.repository.ReservationCancelRepository;
 import com.green.glampick.security.AuthenticationFacade;
 import com.green.glampick.service.UserService;
 import lombok.RequiredArgsConstructor;
@@ -34,6 +32,7 @@ public class UserServiceImpl implements UserService {
     private final ReviewRepository reviewRepository;
     private final AuthenticationFacade authenticationFacade;
     private final PasswordEncoder passwordEncoder;
+    private final FavoriteGlampingRepository favoriteGlampingRepository;
 
     //  마이페이지 - 예약 내역 불러오기  //
     @Override
@@ -159,9 +158,20 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override //관심글램핑 불러오기
-    public ResponseEntity<? super GetFavoriteGlampingListResponseDto> getFavoriteGlamping
-            (GetFavoriteGlampingRequestDto email) {
-        return null;
+    public ResponseEntity<? super GetFavoriteGlampingListResponseDto> getFavoriteGlamping(GetFavoriteGlampingRequestDto dto) {
+        dto.setGlampId(dto.getGlampId());
+        List<GetFavoriteGlampingResultSet> resultSets;
+
+        try {
+            resultSets = favoriteGlampingRepository.getFavoriteGlamping(dto.getGlampId());
+            if(resultSets == null){
+                return GetFavoriteGlampingListResponseDto.noExistedGlamp();
+            }
+        }catch (Exception e){
+            e.printStackTrace();
+            return ResponseDto.databaseError();
+        }
+        return GetFavoriteGlampingListResponseDto.success(resultSets);
     }
 
     //  마이페이지 - 내 정보 불러오기  //
