@@ -3,4 +3,57 @@
         "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.green.glampick.mapper.OwnerMapper">
 
+<!-- 민지 ================================================= -->
+    <insert id="insertGlamping" useGeneratedKeys="true" keyProperty="glampId">
+        INSERT INTO glamping
+        SET user_id = #{userId}
+            , glamp_name = #{glampName}
+            , glamp_location = #{glampLocation}
+            , region = #{region}
+            , extra_charge = #{extraCharge}
+            , glamp_intro = #{intro}
+            , info_basic = #{basic}
+            , info_parking = #{parking}
+            , info_notice = #{notice}
+            , glamp_image = #{glampingImg}
+    </insert>
+
+    <insert id="insertRoom" keyProperty="roomId" useGeneratedKeys="true">
+        INSERT INTO room
+        SET glamp_id = #{glampId}
+            , glamp_name = #{roomName}
+            , glamp_location = #{price}
+            , region = #{peopleNum}
+            , extra_charge = #{peopleMax}
+            , glamp_intro = #{inTime}
+            , info_basic = #{outTime}
+    </insert>
+
+    <insert id="insertRoomImg">
+        INSERT INTO room_image
+        ( room_id, room_image_name )
+        VALUES
+        <foreach collection="roomImgName" item="img" separator=",">
+            ( #{roomId}, #{img} )
+        </foreach>
+    </insert>
+
+    <insert id="insertRoomService">
+        INSERT INTO room_service
+        ( room_id, service_id )
+        VALUES
+        <foreach collection="serviceList" item="service" separator=",">
+            ( #{roomId}, #{service} )
+        </foreach>
+    </insert>
+
+
+
+
+
+
+<!-- 강국 ================================================= -->
+
+
+
 </mapper>
