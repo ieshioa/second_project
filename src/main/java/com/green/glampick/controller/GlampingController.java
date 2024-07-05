@@ -66,6 +66,7 @@ public class GlampingController {
                                 "<p> [글램핑 정보]" +
                                 "<p> glampId: 글램핑 PK</p>" +
                                 "<p> glampName:  글램핑장 이름 </p>" +
+                                "<p> glampPic: 글램핑 사진 </p>" +
                                 "<p> starPointAvg: 별점 </p>" +
                                 "<p> glampLocation: 글램핑장 주소</p>" +
                                 "<p> glampIntro: 글램핑 소개글</p>" +
@@ -91,7 +92,7 @@ public class GlampingController {
                                 schema = @Schema(implementation = GetGlampingInformationResponseDto.class)
                         ))})
 @GetMapping("info")
-public ResponseEntity<? super GetGlampingInformationResponseDto> getInfoGlampingDetail(@ParameterObject @RequestParam GetInfoRequestDto p) {
+public ResponseEntity<? super GetGlampingInformationResponseDto> getInfoGlampingDetail(@ParameterObject @ModelAttribute GetInfoRequestDto p) {
     return service.getInfoGlampingDetail(p);
 }
 
@@ -118,9 +119,7 @@ public ResponseEntity<? super GetGlampingInformationResponseDto> getInfoGlamping
             responses = {
                     @ApiResponse(
                             responseCode = "200",
-                            description = "성공에 대한 반환 값 입니다."
-                            +
-                            "<p> </p>" +
+                            description = "성공에 대한 반환 값 입니다." +
                             "<p> avgStarPoint: 글램핑 전체 평점 </p>" +
                             "<p> [객실 정보]" +
                             "<p> userProfileImage: 유저 프사 </p>" +

@@ -9,6 +9,4 @@ public class GlampingDetailReviewItem {
     private String userName;
     @Schema(example = "진짜 너무너무 좋은 숙소였어요~!", description = "리뷰 내용")
     private String content;
-    @Schema(example = "1329명", description = "리뷰 평가자 숫자")
-    private int countReviewUsers;
 }
