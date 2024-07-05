@@ -8,7 +8,9 @@ import com.green.glampick.entity.ReviewEntity;
 import com.green.glampick.entity.UserEntity;
 import com.green.glampick.repository.ReservationRepository;
 import com.green.glampick.repository.ReviewRepository;
+import com.green.glampick.repository.UserRepository;
 import com.green.glampick.repository.resultset.GetBookResultSet;
+import com.green.glampick.repository.resultset.GetUserReviewResultSet;
 import com.green.glampick.security.AuthenticationFacade;
 import com.green.glampick.service.UserService;
 import lombok.RequiredArgsConstructor;
@@ -27,10 +29,11 @@ public class UserServiceImpl implements UserService {
     private final ReservationRepository reservationRepository;
     private final ReviewRepository reviewRepository;
     private final AuthenticationFacade authenticationFacade;
+    private final UserRepository userRepository;
 
 
 
-    @Override
+    @Override //예약 불러오기
     public ResponseEntity<? super GetBookResponseDto> getBook(GetBookRequestDto dto) {
         dto.setUserId(authenticationFacade.getLoginUserId());
 
@@ -48,7 +51,7 @@ public class UserServiceImpl implements UserService {
         return GetBookResponseDto.success(resultSets);
     }
 
-    @Override
+    @Override // 예약 취소하기
     public ResponseEntity<? super PatchBookResponseDto> cancelBook(PatchBookRequestDto dto) {
         return null;
     }
@@ -93,12 +96,25 @@ public class UserServiceImpl implements UserService {
         return DeleteReviewResponseDto.success();
     }
 
-    @Override
-    public ResponseEntity<? super GetReviewResponseDto> getReview(GetReviewRequestDto email) {
-        return null;
+    @Override // 리뷰 불러오기
+    public ResponseEntity<? super GetReviewResponseDto> getReview(GetReviewRequestDto dto) {
+        dto.setUserId(dto.getUserId());
+
+        List<GetUserReviewResultSet> resultSets;
+
+        try {
+            resultSets = reviewRepository.getReview(dto.getUserId());
+            if (resultSets == null) {
+                return GetReviewResponseDto.noExistedReview();
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseDto.databaseError();
+        }
+        return GetReviewResponseDto.success(resultSets);
     }
 
-    @Override
+    @Override //관심글램핑 불러오기
     public ResponseEntity<? super GetFavoriteGlampingListResponseDto> getFavoriteGlamping
             (GetFavoriteGlampingRequestDto email) {
         return null;
@@ -114,8 +130,18 @@ public class UserServiceImpl implements UserService {
         return null;
     }
 
-    @Override
-    public ResponseEntity<? super DeleteUserResponseDto> deleteUser(int userId) {
-        return null;
+    @Override// 회원 탈퇴
+    public ResponseEntity<? super DeleteUserResponseDto> deleteUser(long userId) {
+        UserEntity userEntity = new UserEntity();
+        try {
+            userRepository.findById(userId);
+            if (userId == 0){
+                return DeleteUserResponseDto.noExistedUser();
+            }
+            userRepository.deleteById(userId);
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+        return DeleteUserResponseDto.success();
     }
 }
