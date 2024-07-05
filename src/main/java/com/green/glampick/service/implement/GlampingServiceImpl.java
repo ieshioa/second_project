@@ -113,21 +113,17 @@ public class GlampingServiceImpl implements GlampingService {
     }
     @Override
     public ResponseEntity<? super GetGlampingInformationResponseDto> getInfoGlampingDetail(GetInfoRequestDto p) {
-        //글램핑 정보 불러오기
-        GetGlampingInformationResponseDto glampInfoDto = mapper.selGlampingInfo(p);
 
+        GetGlampingInformationResponseDto glampInfoDto = mapper.selGlampingInfo(p); //글램핑 정보 불러오기
         List<GlampingRoomListItem> rooms = mapper.selRoomInfo(p);   // 글램핑 상세페이지 객실 정보 리스트
         List<GlampingDetailReviewItem> reviews = mapper.selReviewInfoInGlamping(p.getGlampId()); // 글램핑 상세페이지 리뷰 리스트
         int userCount = mapper.selCount(p.getGlampId()); // 리뷰 유저수
         HashSet<String> hashServices = new HashSet<>();
 
+
         // 객실 이미지 & 서비스 가져오기
         for (GlampingRoomListItem item : rooms) {
-            //객실 이미지 세팅
-            List<String> inputImageList = mapper.selRoomPics(item.getRoomId());
-            item.setRoomPics(inputImageList);
-            //객실 서비스 세팅
-            item.setRoomServices(mapper.selRoomService(item.getRoomId()));
+            item.setRoomServices(mapper.selRoomService(item.getRoomId())); //객실 서비스 세팅
 
             List<String> roomServices = item.getRoomServices();
 

@@ -24,6 +24,4 @@ public class Paging {
         this.size = size == null ? 10 : size;
         this.startIdx = (this.page - 1) * this.size;
     }
-
-
 }

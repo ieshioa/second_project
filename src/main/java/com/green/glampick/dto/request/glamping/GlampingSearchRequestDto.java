@@ -8,14 +8,14 @@ import lombok.Setter;
 
 import java.util.List;
 
-import static com.green.glampick.common.GlobalConst.SEARCH_PAGING_SIZE;
+import static com.green.glampick.common.GlobalConst.PAGING_SIZE;
 
 @Getter
 @Setter
 public class GlampingSearchRequestDto extends Paging {
 
     public GlampingSearchRequestDto(Integer page) {
-        super(page == null ? 1 : page, SEARCH_PAGING_SIZE);
+        super(page, PAGING_SIZE);
     }
 
     @Schema(example = "경북", description = "지역")
