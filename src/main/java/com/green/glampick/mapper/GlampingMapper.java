@@ -27,8 +27,7 @@ public interface GlampingMapper {
     List<String> selRoomPics(long roomId);//객실이미지
     List<GlampingDetailReviewItem> selReviewInfoInGlamping(long glampId);//리뷰정보
     int selCount(long glampId);//리뷰유저수
-
-    List<String> selRoomService(long roomId);
+    List<String> selRoomService(long roomId); // 룸서스
     //리뷰
     List<ReviewListItem> selReviewInfo(long glampId); // 리뷰페이지 리뷰정보
     List<String> selReviewImage(long reviewId); // 리뷰 이미지

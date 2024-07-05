@@ -115,7 +115,6 @@ public class GlampingServiceImpl implements GlampingService {
 
             List<String> roomServices = item.getRoomServices();
 
-
             for (String s : roomServices) {
                 if (!roomServices.isEmpty()) {
                     hashServices.add(s);
