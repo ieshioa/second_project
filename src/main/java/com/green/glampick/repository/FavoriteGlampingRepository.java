@@ -49,3 +49,22 @@ public interface FavoriteGlampingRepository extends JpaRepository<GlampFavoriteE
 //GROUP BY A.glamp_id
 //HAVING MIN(B.room_price)
 //AND A.glamp_id = 4
+
+
+
+//SELECT A.glamp_image
+//, A.glamp_location
+//, A.glamp_name
+//, A.star_point_avg
+//, B.room_price
+//, count(C.review_content) AS '댓글'
+//        , A.glamp_id
+//, B.room_name
+//FROM glamping A
+//JOIN room B
+//ON A.glamp_id = B.glamp_id
+//JOIN review C
+//ON B.room_id = C.room_id
+//GROUP BY A.glamp_id
+//HAVING MIN(B.room_price)
+//AND A.glamp_id = 2
