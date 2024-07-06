@@ -22,7 +22,7 @@ public interface UserService {
     ResponseEntity<?super GetReviewResponseDto> getReview(GetReviewRequestDto dto);
 
     //  마이페이지 - 관심 글램핑 불러오기  //
-    ResponseEntity<?super GetFavoriteGlampingListResponseDto> getFavoriteGlamping(GetFavoriteGlampingRequestDto dto);
+    ResponseEntity<?super GetFavoriteGlampingResponseDto> getFavoriteGlamping(GetFavoriteGlampingRequestDto dto);
 
     //  마이페이지 - 내 정보 불러오기  //
     ResponseEntity<?super GetUserResponseDto> getUser(GetUserRequestDto dto);

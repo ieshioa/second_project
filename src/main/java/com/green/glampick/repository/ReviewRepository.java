@@ -40,7 +40,7 @@ public interface ReviewRepository extends JpaRepository<ReviewEntity, Long> {
             "ON A.glamp_id = C.glamp_id " +
             "JOIN room D " +
             "ON A.room_id = D.room_id " +
-            "WHERE A.user_id = 1 " +
+            "WHERE A.user_id = :userId  " +
             "ORDER BY A.created_at DESC ",
             nativeQuery = true
     )

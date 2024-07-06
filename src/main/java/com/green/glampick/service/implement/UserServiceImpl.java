@@ -158,20 +158,20 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override //관심글램핑 불러오기
-    public ResponseEntity<? super GetFavoriteGlampingListResponseDto> getFavoriteGlamping(GetFavoriteGlampingRequestDto dto) {
+    public ResponseEntity<? super GetFavoriteGlampingResponseDto> getFavoriteGlamping(GetFavoriteGlampingRequestDto dto) {
         dto.setGlampId(dto.getGlampId());
         List<GetFavoriteGlampingResultSet> resultSets;
 
         try {
             resultSets = favoriteGlampingRepository.getFavoriteGlamping(dto.getGlampId());
             if(resultSets == null){
-                return GetFavoriteGlampingListResponseDto.noExistedGlamp();
+                return GetFavoriteGlampingResponseDto.noExistedGlamp();
             }
         }catch (Exception e){
             e.printStackTrace();
             return ResponseDto.databaseError();
         }
-        return GetFavoriteGlampingListResponseDto.success(resultSets);
+        return GetFavoriteGlampingResponseDto.success(resultSets);
     }
 
     //  마이페이지 - 내 정보 불러오기  //

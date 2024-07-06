@@ -1,14 +1,14 @@
 package com.green.glampick.repository.resultset;
 
 
-
 public interface GetFavoriteGlampingResultSet {
-     long getGlampId();
-     String getGlampingName();
-     String getRegion();
-     int getStarPoint();
-     int getReviewCount();
-     int getPrice();
-     String getGlampingImg();
+    String getGlampImage();
+    String getGlampLocation();
+    String getGlampName();
+    String getStarPointAvg();
+    String getRoomPrice();
+    String getReviewContent();
+    long getGlampId();
+    String getRoomName();
 
 }

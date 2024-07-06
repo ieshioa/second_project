@@ -9,7 +9,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springdoc.core.annotations.ParameterObject;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 @Slf4j
@@ -63,7 +62,7 @@ public class UserController {
     @GetMapping("/favorite-glamping")// 관심 글램핑 불러오기
     @Operation(summary = "관심 글램핑 불러오기", description = "<strong></strong>" +
             "<p></p>")
-    public ResponseEntity<?super GetFavoriteGlampingListResponseDto> getFavoriteGlamping(@ParameterObject @ModelAttribute GetFavoriteGlampingRequestDto dto) {
+    public ResponseEntity<?super GetFavoriteGlampingResponseDto> getFavoriteGlamping(@ParameterObject @ModelAttribute GetFavoriteGlampingRequestDto dto) {
         return service.getFavoriteGlamping(dto);
     }
 

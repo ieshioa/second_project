@@ -14,7 +14,7 @@ import java.util.List;
 
 @Setter
 @Getter
-public class GetFavoriteGlampingListResponseDto extends ResponseDto {
+public class GetFavoriteGlampingResponseDto extends ResponseDto {
 
 //    private long glampId;
 //    private String glampingName;
@@ -26,13 +26,13 @@ public class GetFavoriteGlampingListResponseDto extends ResponseDto {
 
     private List<GetFavoriteGlampingResultSet> favoritelist;
 
-    private GetFavoriteGlampingListResponseDto(List<GetFavoriteGlampingResultSet> favoritelist) {
+    private GetFavoriteGlampingResponseDto(List<GetFavoriteGlampingResultSet> favoritelist) {
         super(ResponseCode.SUCCESS, ResponseMessage.SUCCESS);
         this.favoritelist = favoritelist;
     }
 
     public static ResponseEntity<ResponseDto> success(List<GetFavoriteGlampingResultSet> favoritelist) {
-        GetFavoriteGlampingListResponseDto result = new GetFavoriteGlampingListResponseDto(favoritelist);
+        GetFavoriteGlampingResponseDto result = new GetFavoriteGlampingResponseDto(favoritelist);
         return ResponseEntity.status(HttpStatus.OK).body(result);
     }
 
