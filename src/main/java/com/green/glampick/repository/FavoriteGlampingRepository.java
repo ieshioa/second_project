@@ -54,6 +54,46 @@ public interface FavoriteGlampingRepository extends JpaRepository<GlampFavoriteE
 //GROUP BY A.glamp_id
 //HAVING  D.user_id = 1
 
+// 관심 글램핑 댓글수 실패
+//SELECT A.glamp_image  AS glampImage
+//, A.glamp_location  AS glampLocation
+//, A.glamp_name  AS glampName
+//, A.star_point_avg  AS starPointAvg
+//, B.room_price AS roomPrice
+//, count(C.review_content) AS reviewContent
+//, A.glamp_id  AS glampId
+//, B.room_name  AS roomName
+//, D.user_id
+//FROM glamping A
+//JOIN room B
+//ON A.glamp_id = B.glamp_id
+//JOIN review C
+//ON B.room_id = C.room_id
+//JOIN glamp_favorite D
+//ON D.glamp_id = A.glamp_id
+//GROUP BY A.glamp_id
+//HAVING MIN(B.room_price)
+//-- AND D.user_id = 1
+//and D.user_id = 1
+
+// 댓글 수
+//SELECT A.glamp_image AS glampImage
+//, A.glamp_location AS glampLocation
+//, A.glamp_name AS glampName
+//, A.star_point_avg AS starPointAvg
+//, B.room_price AS roomPrice
+//, count(C.review_content) AS reviewContent
+//, A.glamp_id AS glampId
+//, B.room_name AS roomName
+//FROM glamping A
+//JOIN room B
+//ON A.glamp_id = B.glamp_id
+//JOIN review C
+//ON B.room_id = C.room_id
+//GROUP BY A.glamp_id
+//HAVING A.glamp_id = 2
+//ORDER BY C.created_at DESC
+
 
 
 
