@@ -12,6 +12,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Getter
 @Setter
@@ -23,6 +24,7 @@ public class PostReviewResponseDto extends ResponseDto {
     private long reviewStarPoint;
     private String createdAt;
     private long roomId;
+//    private List<String> reviewPics;
 
     private PostReviewResponseDto(ReviewEntity reviewEntity) {
         super(ResponseCode.SUCCESS, ResponseMessage.SUCCESS);
@@ -32,6 +34,7 @@ public class PostReviewResponseDto extends ResponseDto {
         this.reviewStarPoint = reviewEntity.getReviewStarPoint();
         this.createdAt = reviewEntity.getCreatedAt();
         this.roomId = reviewEntity.getRoomId();
+//        this.reviewPics = reviewEntity.getr
     }
     //
 
