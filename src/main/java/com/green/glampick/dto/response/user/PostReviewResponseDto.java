@@ -10,6 +10,7 @@ import lombok.Setter;
 import org.hibernate.annotations.CreationTimestamp;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -18,16 +19,18 @@ import java.util.List;
 @Setter
 public class PostReviewResponseDto extends ResponseDto {
 
+    private long reviewId;
     private long userId;
     private long glampId;
     private String reviewContent;
     private long reviewStarPoint;
     private String createdAt;
     private long roomId;
-//    private List<String> reviewPics;
+    private List<MultipartFile> reviewImageEntityList;
 
     private PostReviewResponseDto(ReviewEntity reviewEntity) {
         super(ResponseCode.SUCCESS, ResponseMessage.SUCCESS);
+        this.reviewId = reviewEntity.getReviewId();
         this.glampId = reviewEntity.getGlampId();
         this.userId = reviewEntity.getUserId();
         this.reviewContent = reviewEntity.getReviewContent();
@@ -35,6 +38,7 @@ public class PostReviewResponseDto extends ResponseDto {
         this.createdAt = reviewEntity.getCreatedAt();
         this.roomId = reviewEntity.getRoomId();
 //        this.reviewPics = reviewEntity.getr
+
     }
     //
 

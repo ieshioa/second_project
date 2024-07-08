@@ -22,6 +22,8 @@ public interface ReviewRepository extends JpaRepository<ReviewEntity, Long> {
 
     boolean existsByCreatedAt(String createdAt);
 
+    ReviewEntity findByReviewId(long reviewId);
+
 
     @Query(
             value =
