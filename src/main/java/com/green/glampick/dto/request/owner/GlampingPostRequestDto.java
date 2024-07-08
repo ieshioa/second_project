@@ -1,7 +1,6 @@
-package com.green.glampick.dto.request;
+package com.green.glampick.dto.request.owner;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.green.glampick.dto.object.glamping.RoomItem;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Getter;
 import lombok.Setter;
@@ -34,14 +33,8 @@ public class GlampingPostRequestDto {
     // 이미지
     @JsonIgnore
     private String glampingImg;
-
-    // 객실 정보
-    private List<RoomItem> roomItems;
-
-    // insert하면서 pk 얻어와서 room insert 할 때 쓰기
+    // 이미지 업로드를 위한 pk
     @JsonIgnore
     private long glampId;
-
-
 
 }

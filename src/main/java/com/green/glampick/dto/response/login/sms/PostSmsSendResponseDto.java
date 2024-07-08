@@ -30,7 +30,7 @@ public class PostSmsSendResponseDto extends ResponseDto{
     }
 
     public static ResponseEntity<ResponseDto> nullEmptyEmail() {
-        ResponseDto result = new ResponseDto(ResponseCode.NOT_EMPTY_EMAIL, ResponseMessage.NOT_EMPTY_EMAIL);
+        ResponseDto result = new ResponseDto(ResponseCode.EMPTY_EMAIL, ResponseMessage.EMPTY_EMAIL);
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(result);
     }
 

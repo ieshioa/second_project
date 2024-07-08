@@ -1,4 +1,4 @@
-package com.green.glampick.dto.response.owner;
+package com.green.glampick.dto.response.owner.get;
 
 import com.green.glampick.common.response.ResponseCode;
 import com.green.glampick.common.response.ResponseMessage;
