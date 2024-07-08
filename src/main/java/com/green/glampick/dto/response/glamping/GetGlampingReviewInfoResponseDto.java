@@ -16,9 +16,9 @@ import java.util.List;
 @Setter
 @Builder
 public class GetGlampingReviewInfoResponseDto extends ResponseDto {
-
     private List<ReviewListItem> reviewListItems;
     private List<String> roomNames;
+    private List<String> allReviewImage;
     private GetGlampingReviewInfoResponseDto() {
         super(ResponseCode.SUCCESS, ResponseMessage.SUCCESS);
     }
@@ -28,11 +28,13 @@ public class GetGlampingReviewInfoResponseDto extends ResponseDto {
         return ResponseEntity.status(HttpStatus.OK).body(result);
     }
 
-    public GetGlampingReviewInfoResponseDto(List<ReviewListItem> reviewListItems, List<String> roomNames) {
+    public GetGlampingReviewInfoResponseDto(List<ReviewListItem> reviewListItems, List<String> roomNames, List<String> allReviewImage) {
 
         super(ResponseCode.SUCCESS, ResponseMessage.SUCCESS);
         this.reviewListItems = reviewListItems;
         this.roomNames = roomNames;
+        this.allReviewImage = allReviewImage;
 
     }
+
 }

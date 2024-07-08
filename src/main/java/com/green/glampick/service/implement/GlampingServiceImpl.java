@@ -25,6 +25,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 
@@ -113,24 +114,19 @@ public class GlampingServiceImpl implements GlampingService {
     }
     @Override
     public ResponseEntity<? super GetGlampingInformationResponseDto> getInfoGlampingDetail(GetInfoRequestDto p) {
-        //글램핑 정보 불러오기
-        GetGlampingInformationResponseDto glampInfoDto = mapper.selGlampingInfo(p);
 
+        GetGlampingInformationResponseDto glampInfoDto = mapper.selGlampingInfo(p); //글램핑 정보 불러오기
         List<GlampingRoomListItem> rooms = mapper.selRoomInfo(p);   // 글램핑 상세페이지 객실 정보 리스트
         List<GlampingDetailReviewItem> reviews = mapper.selReviewInfoInGlamping(p.getGlampId()); // 글램핑 상세페이지 리뷰 리스트
         int userCount = mapper.selCount(p.getGlampId()); // 리뷰 유저수
         HashSet<String> hashServices = new HashSet<>();
 
+
         // 객실 이미지 & 서비스 가져오기
         for (GlampingRoomListItem item : rooms) {
-            //객실 이미지 세팅
-            List<String> inputImageList = mapper.selRoomPics(item.getRoomId());
-            item.setRoomPics(inputImageList);
-            //객실 서비스 세팅
-            item.setRoomServices(mapper.selRoomService(item.getRoomId()));
+            item.setRoomServices(mapper.selRoomService(item.getRoomId())); //객실 서비스 세팅
 
             List<String> roomServices = item.getRoomServices();
-
 
             for (String s : roomServices) {
                 if (!roomServices.isEmpty()) {
@@ -154,16 +150,22 @@ public class GlampingServiceImpl implements GlampingService {
         // Data Get
         List<ReviewListItem> reviews = mapper.selReviewInfo(p.getGlampId());
         List<String> roomNameList = mapper.selRoomNames(p.getGlampId());
+        List<String> reviewImage = new ArrayList<>();
+
+        //리뷰사진 가져오기
+        for (int i = 0; i < reviews.size(); i++) {
+            List<String> inputImageList = mapper.selReviewImage(reviews.get(i).getReviewId());
+            reviews.get(i).setReviewImages(inputImageList);
+
+            /*
+                String imgage = reviews.get(i).getReviewImages().get(i);
+                reviewImage.add(imgage);
+            */
+        }
 
         //input ResponseDto
         GetGlampingReviewInfoResponseDto dto = GetGlampingReviewInfoResponseDto.builder()
-                .reviewListItems(reviews).roomNames(roomNameList).build();
-
-        //리뷰사진 가져오기
-        for (ReviewListItem item : reviews) {
-            List<String> inputImageList = mapper.selReviewImage(item.getReviewId());
-            item.setReviewImages(inputImageList);
-        }
+                .reviewListItems(reviews).roomNames(roomNameList).allReviewImage(reviewImage).build();
 
         return new ResponseEntity<>(dto, HttpStatus.OK);
     }
