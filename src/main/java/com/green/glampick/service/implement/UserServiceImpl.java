@@ -159,11 +159,11 @@ public class UserServiceImpl implements UserService {
 
     @Override //관심글램핑 불러오기
     public ResponseEntity<? super GetFavoriteGlampingResponseDto> getFavoriteGlamping(GetFavoriteGlampingRequestDto dto) {
-        dto.setGlampId(dto.getGlampId());
+        dto.setUserId(dto.getUserId());
         List<GetFavoriteGlampingResultSet> resultSets;
 
         try {
-            resultSets = favoriteGlampingRepository.getFavoriteGlamping(dto.getGlampId());
+            resultSets = favoriteGlampingRepository.getFavoriteGlamping(dto.getUserId());
             if(resultSets == null){
                 return GetFavoriteGlampingResponseDto.noExistedGlamp();
             }

@@ -16,13 +16,7 @@ import java.util.List;
 @Getter
 public class GetFavoriteGlampingResponseDto extends ResponseDto {
 
-//    private long glampId;
-//    private String glampingName;
-//    private String region;
-//    private int starPoint;
-//    private int reviewCount;
-//    private int price;
-//    private String glampingImg;
+
 
     private List<GetFavoriteGlampingResultSet> favoritelist;
 

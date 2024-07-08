@@ -8,6 +8,6 @@ import lombok.Setter;
 @Setter
 public class GetFavoriteGlampingRequestDto {
 
-    private long glampId;
+    private long userId;
 
 }

@@ -5,10 +5,9 @@ public interface GetFavoriteGlampingResultSet {
     String getGlampImage();
     String getGlampLocation();
     String getGlampName();
-    String getStarPointAvg();
-    String getRoomPrice();
-    String getReviewContent();
+    String getStarPoint();
+    String getPrice();
+    String getReviewCount();
     long getGlampId();
-    String getRoomName();
 
 }

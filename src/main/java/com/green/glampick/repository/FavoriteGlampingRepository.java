@@ -14,26 +14,27 @@ public interface FavoriteGlampingRepository extends JpaRepository<GlampFavoriteE
 
     @Query(
             value =
-            "SELECT A.glamp_image AS glampImage " +
-            ", A.glamp_location AS glampLocation " +
+            "SELECT A.glamp_id AS glampId " +
             ", A.glamp_name AS glampName " +
-            ", A.star_point_avg AS starPointAvg " +
-            ", B.room_price AS roomPrice " +
-            ", count(C.review_content) AS reviewContent " +
-            ", A.glamp_id AS glampId " +
-            ", B.room_name AS roomName " +
+            ", A.glamp_location  AS glampLocation " +
+            ", A.star_point_avg AS starPoint " +
+            ", A.review_count AS reviewCount " +
+            ", B.room_price AS price " +
+            ", A.glamp_image AS glampImage " +
+            ", C.user_id " +
             "FROM glamping A " +
             "JOIN room B " +
             "ON A.glamp_id = B.glamp_id " +
-            "JOIN review C " +
-            "ON B.room_id = C.room_id " +
-            "GROUP BY A.glamp_id " +
-            "HAVING MIN(B.room_price) " +
-            "AND A.glamp_id = :glampId  " +
-            "ORDER BY C.created_at DESC ",
+            "JOIN glamp_favorite C " +
+            "ON A.glamp_id = C.glamp_id " +
+            "WHERE C.user_id = 1 " +
+            "AND B.room_price = ( SELECT MIN(room_price) " +
+                                "FROM room " +
+                                "WHERE glamp_id = A.glamp_id ) " +
+                                "ORDER BY recommend_score DESC ",
             nativeQuery = true
     )
-            List<GetFavoriteGlampingResultSet>getFavoriteGlamping(Long glampId);
+    List<GetFavoriteGlampingResultSet> getFavoriteGlamping(Long glampId);
 }
 //SELECT A.glamp_image  AS glampImage
 //, A.glamp_location  AS glampLocation
