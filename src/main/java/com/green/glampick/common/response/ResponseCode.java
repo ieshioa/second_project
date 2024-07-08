@@ -8,7 +8,7 @@ public interface ResponseCode {
 
     // HTTP Status 400
     String VALIDATION_FAILED = "VF";
-    String NOT_EMPTY_EMAIL = "NE";
+    String EMPTY_EMAIL = "EE";
     String EXPIRED_CODE = "EF";
     String INVALID_CODE = "IC";
     String DUPLICATE_EMAIL = "DE";
@@ -23,8 +23,8 @@ public interface ResponseCode {
     String WRONG_PERSONNEL = "WP";
     String WRONG_DATE = "WD";
 
-    String AAA = "A";
-    String GGG = "A";
+    String CANT_FIND_USER = "CU";
+    String FILE_UPLOAD_ERROR = "FE";
 
     // HTTP Status 401
     String SIGN_IN_FAILED = "SF";

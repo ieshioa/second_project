@@ -5,6 +5,10 @@ import com.green.glampick.dto.request.ReviewPatchRequestDto;
 import com.green.glampick.dto.request.ReviewPostRequestDto;
 import com.green.glampick.dto.request.owner.RoomPostRequestDto;
 import com.green.glampick.dto.response.owner.*;
+import com.green.glampick.dto.response.owner.get.GetOwnerBookListResponseDto;
+import com.green.glampick.dto.response.owner.post.PostGlampingInfoResponseDto;
+import com.green.glampick.dto.response.owner.post.PostRoomInfoResponseDto;
+import com.green.glampick.dto.response.owner.put.PutGlampingInfoResponseDto;
 import com.green.glampick.service.OwnerService;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
@@ -29,54 +33,68 @@ public class OwnerController {
 
     private final OwnerService service;
 
-// 민지 =================================================================================================================
+    // tag : 민지
+    // create - 글램핑
     @PostMapping("glamping")
     @Operation(summary = "글램핑 정보 등록", description =
-            "<p> <strong> 선택입력 : extraCharge(추가요금), room.service[] </strong> </p>" +
-            "<p> <strong> 나머지 모든 데이터는 필수 입력입니다. </strong> </p>" +
-                    "<p> 사진 업로드를 위해 테스트는 포스트맨에서 해주세요 ~ </p>" +
-                    "<p> <strong> 시간 입력 형식 = 시:분:초  ex) 12:00:00 </strong> </p>"
-    )
-    @ApiResponse(
-            description =
+            "<p> <strong> 선택입력 : extraCharge(기준 인원 외 추가 인원당 요금) </strong> </p>" +
+                    "<p> <strong> 나머지 모든 데이터는 필수 입력입니다. </strong> </p>" +
+                    "<p> 사진 업로드를 위해 테스트는 포스트맨에서 해주세요 ~ </p>")
+    @ApiResponse(description =
                     "<p> <strong> ResponseCode 응답 코드 </strong> </p> " +
                             "<p> SU(200) : 글램핑 등록 성공 </p> " +
                             "<p> VF(400) : 입력되지 않은 데이터가 존재 </p> " +
-                            "<p> DL(400) : 위치 정보 중복됨 </p> " +
+                            "<p> CU(400) : jwt 오류 </p> " +
+                            "<p> FE(400) : 이미지 업로드 오류 </p> " +
                             "<p> DBE(500) : 데이터베이스 서버 오류 </p> ",
             responseCode = "200",
             content = @Content(
                     mediaType = "application/json",
-                    schema = @Schema(implementation = PostGlampingInfoResponseDto.class)
-            )
-    )
-    public ResponseEntity<? super PostGlampingInfoResponseDto> postGlampingInfo(@RequestPart GlampingPostRequestDto req
-                                        , @RequestPart MultipartFile glampImg ) {
+                    schema = @Schema(implementation = PostGlampingInfoResponseDto.class)))
+    public ResponseEntity<? super PostGlampingInfoResponseDto> createGlamping(@RequestPart GlampingPostRequestDto req
+            , @RequestPart MultipartFile glampImg) {
         return service.postGlampingInfo(req, glampImg);
     }
 
+    // create - 객실
     @PostMapping("room")
     @Operation(summary = "객실 정보 등록", description =
-            "<p> <strong> 선택입력 : extraCharge(추가요금), room.service[] </strong> </p>" +
+            "<p> <strong> 선택입력 : service[] </strong> </p>" +
                     "<p> <strong> 나머지 모든 데이터는 필수 입력입니다. </strong> </p>" +
                     "<p> 사진 업로드를 위해 테스트는 포스트맨에서 해주세요 ~ </p>" +
-                    "<p> <strong> 시간 입력 형식 = 시:분:초  ex) 12:00:00 </strong> </p>"
-    )
-    @ApiResponse(
-            description =
-                    "<p> <strong> ResponseCode 응답 코드 </strong> </p> " +
-                            "<p> SU(200) : 글램핑 등록 성공 </p> " +
-                            "<p> VF(400) : 입력되지 않은 데이터가 존재 </p> " +
-                            "<p> DBE(500) : 데이터베이스 서버 오류 </p> ",
+                    "<p> <strong> 시간 입력 형식 = 시:분:초  ex) 12:00:00 </strong> </p>")
+    @ApiResponse(description =
+            "<p> <strong> ResponseCode 응답 코드 </strong> </p> " +
+                    "<p> SU(200) : 글램핑 등록 성공 </p> " +
+                    "<p> VF(400) : 입력되지 않은 데이터가 존재 </p> " +
+                    "<p> FE(400) : 이미지 업로드 오류 </p> " +
+                    "<p> DBE(500) : 데이터베이스 서버 오류 </p> ",
             responseCode = "200",
             content = @Content(
                     mediaType = "application/json",
-                    schema = @Schema(implementation = PostRoomInfoResponseDto.class)
-            )
-    )
-    public ResponseEntity<? super PostRoomInfoResponseDto> postRoomInfo(@RequestPart RoomPostRequestDto req
-            , @RequestPart List<MultipartFile> roomImg ) {
+                    schema = @Schema(implementation = PostRoomInfoResponseDto.class)))
+    public ResponseEntity<? super PostRoomInfoResponseDto> createRoom(@RequestPart RoomPostRequestDto req
+            , @RequestPart List<MultipartFile> roomImg) {
         return service.postRoomInfo(req, roomImg);
+    }
+
+    // update - 글램핑
+    @PutMapping("glamping")
+    @Operation(summary = "글램핑 정보 수정", description =
+            "<p> <strong> 선택입력 : extraCharge(기준 인원 외 추가 인원당 요금) </strong> </p>" +
+                    "<p> <strong> 나머지 모든 데이터는 필수 입력입니다. </strong> </p>")
+    @ApiResponse(description =
+            "<p> <strong> ResponseCode 응답 코드 </strong> </p> " +
+                    "<p> SU(200) : 정보 수정 성공 </p> " +
+                    "<p> VF(400) : 입력되지 않은 데이터가 존재 </p> " +
+                    "<p> CU(400) : jwt 오류 </p> " +
+                    "<p> DBE(500) : 데이터베이스 서버 오류 </p> ",
+            responseCode = "200",
+            content = @Content(
+                    mediaType = "application/json",
+                    schema = @Schema(implementation = PutGlampingInfoResponseDto.class)))
+    public ResponseEntity<? super PutGlampingInfoResponseDto> updateGlamping(@RequestBody GlampingPostRequestDto req, @RequestBody long glampId) {
+        return service.updateGlampingInfo(req, glampId);
     }
 
     @GetMapping("book/{glamp_id}")
@@ -84,39 +102,35 @@ public class OwnerController {
             "<strong> <p> glamp_id (글램핑 PK) 는 필수입력입니다 </p> </strong>" +
                     "<p> before : 이용 전 / 중 </p>" +
                     "<p> complete : 이용 완 </p>" +
-                    "<p> cancel : 취소 </p>"
-    )
-    @ApiResponse(
-            description =
-                    "<p> <strong> ResponseCode 응답 코드 </strong> </p> " +
-                            "<p> SU(200) : 예약 내역 불러오기 성공 </p> " +
-                            "<p> RN(200) : 예약 내역 없음 </p> " +
-                            "<p> VF(400) : 글램핑 PK가 입력되지 않음 </p> " +
-                            "<p> DBE(500) : 데이터베이스 서버 오류 </p> ",
+                    "<p> cancel : 취소 </p>")
+    @ApiResponse(description =
+            "<p> <strong> ResponseCode 응답 코드 </strong> </p> " +
+                    "<p> SU(200) : 예약 내역 불러오기 성공 </p> " +
+                    "<p> RN(200) : 예약 내역 없음 </p> " +
+                    "<p> VF(400) : 글램핑 PK가 입력되지 않음 </p> " +
+                    "<p> DBE(500) : 데이터베이스 서버 오류 </p> ",
             responseCode = "200",
             content = @Content(
                     mediaType = "application/json",
-                    schema = @Schema(implementation = GetOwnerBookListResponseDto.class)
-            )
-    )
+                    schema = @Schema(implementation = GetOwnerBookListResponseDto.class)))
     public ResponseEntity<? super GetOwnerBookListResponseDto> getGlampReservation(@PathVariable("glamp_id") long glampId) {
         return service.getGlampReservation(glampId);
     }
 
 
-// 강국 =================================================================================================================
+    // tag : 강국
     @Operation(summary = "리뷰 답글 작성하기",
             description =
                     "<strong> 변수명 </strong> glampId : 글램프 PK <p>  ex)35 </p>" +
-                    "<strong> 변수명 </strong> reviewId : 리뷰 PK <p>  ex)21 </p>" +
-                    "<strong> 변수명 </strong> userId : 유저 PK <p>  ex)13 </p>" +
-                    "<strong> 변수명 </strong> review_owner_content : 사장님 작성 리뷰 내용 <p>  ex)잘 이용하셨쎄요? </p>",
+                            "<strong> 변수명 </strong> reviewId : 리뷰 PK <p>  ex)21 </p>" +
+                            "<strong> 변수명 </strong> userId : 유저 PK <p>  ex)13 </p>" +
+                            "<strong> 변수명 </strong> review_owner_content : 사장님 작성 리뷰 내용 <p>  ex)잘 이용하셨쎄요? </p>",
             responses = {
                     @ApiResponse(
                             responseCode = "200",
                             description =
                                     "성공에 대한 반환 값 입니다." +
-                                    " <p> userId : 유저 PK <p>  ex)13 </p>",
+                                            " <p> userId : 유저 PK <p>  ex)13 </p>",
                             content = @Content(
                                     mediaType = "application/json",
                                     schema = @Schema(implementation = PostOwnerReviewInfoResponseDto.class)
@@ -128,7 +142,7 @@ public class OwnerController {
 
     @Operation(summary = "예약정보 취소 처리 하기",
             description =
-                    "<strong> 변수명 </strong> reservationId : 예약 PK <p>  ex)21 </p>" ,
+                    "<strong> 변수명 </strong> reservationId : 예약 PK <p>  ex)21 </p>",
             responses = {
                     @ApiResponse(
                             responseCode = "200",

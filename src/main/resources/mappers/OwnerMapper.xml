@@ -59,6 +59,19 @@
         WHERE glamp_location = #{location}
     </select>
 
+    <update id="updateGlampingInfo">
+        UPDATE glamping
+        SET  glamp_name = #{glampName}
+            , glamp_location = #{glampLocation}
+            , region = #{region}
+            , extra_charge = #{extraCharge}
+            , glamp_intro = #{intro}
+            , info_basic = #{basic}
+            , info_parking = #{parking}
+            , info_notice = #{notice}
+        WHERE glamp_id = #{glampId}
+        AND user_id = #{userId}
+    </update>
 <!-- 강국 ================================================= -->
 
 

@@ -35,7 +35,7 @@ public class RoomPostRequestDto {
     private List<String> roomImgName;
 
     // 서비스
-    private List<Integer> serviceList;
+    private List<Integer> service;
 
 
 

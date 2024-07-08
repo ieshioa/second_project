@@ -13,5 +13,6 @@ public interface OwnerMapper {
     void insertRoomService(RoomPostRequestDto req);
     Long hasExistingGlamping(long userId);
     Long existingLocation(String location);
+    int updateGlampingInfo(GlampingPostRequestDto req);
     // 강국
 }

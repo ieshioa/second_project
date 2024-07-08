@@ -6,6 +6,10 @@ import com.green.glampick.dto.request.ReviewPatchRequestDto;
 import com.green.glampick.dto.request.ReviewPostRequestDto;
 import com.green.glampick.dto.request.owner.RoomPostRequestDto;
 import com.green.glampick.dto.response.owner.*;
+import com.green.glampick.dto.response.owner.get.GetOwnerBookListResponseDto;
+import com.green.glampick.dto.response.owner.post.PostGlampingInfoResponseDto;
+import com.green.glampick.dto.response.owner.post.PostRoomInfoResponseDto;
+import com.green.glampick.dto.response.owner.put.PutGlampingInfoResponseDto;
 import com.green.glampick.mapper.OwnerMapper;
 import com.green.glampick.security.AuthenticationFacade;
 import com.green.glampick.service.OwnerService;
@@ -31,20 +35,21 @@ public class OwnerServiceImpl implements OwnerService {
 
 // 민지 =================================================================================================================
 
-    @Override
     @Transactional
     public ResponseEntity<? super PostGlampingInfoResponseDto> postGlampingInfo(GlampingPostRequestDto req
-                        , MultipartFile glampImg) {
+            , MultipartFile glampImg) {
         // 유저 PK 불러오기
         req.setUserId(authenticationFacade.getLoginUserId());
-     //   req.setUserId(8);
-        if(req.getUserId() <= 0) {
+        if (req.getUserId() <= 0) {
             return PostGlampingInfoResponseDto.validateUserId();
         }
 
-        // VALIDATION_FAILED
+        // 데이터가 올바르게 들어있는지 확인
         try {
-            postGlampValidate(req, glampImg);
+            postGlampValidate(req);
+            if (glampImg == null || glampImg.isEmpty()) {    // 글램핑 이미지
+                throw new RuntimeException("사진을 업로드해주세요.");
+            }
         } catch (Exception e) {
             String msg = e.getMessage();
             return PostGlampingInfoResponseDto.validationFailed(msg);
@@ -78,13 +83,12 @@ public class OwnerServiceImpl implements OwnerService {
         return PostGlampingInfoResponseDto.success(glampId);
     }
 
-    @Override
     @Transactional
     public ResponseEntity<? super PostRoomInfoResponseDto> postRoomInfo(RoomPostRequestDto req
-            , List<MultipartFile> img) {
+            , List<MultipartFile> image) {
         // 모든 정보가 올바른가?
         try {
-            postRoomValidate(req, img);
+            postRoomValidate(req, image);
         } catch (Exception e) {
             String msg = e.getMessage();
             return PostRoomInfoResponseDto.validationFailed(msg);
@@ -102,11 +106,11 @@ public class OwnerServiceImpl implements OwnerService {
         // room 파일명 생성 및 저장
         try {
             List<String> roomImg = new ArrayList<>();
-            for (MultipartFile image : img) {
-                String imgName = customFileUtils.makeRandomFileName(image);
+            for (MultipartFile file : image) {
+                String imgName = customFileUtils.makeRandomFileName(file);
                 roomImg.add(imgName);
                 String target = String.format("%s/%s", roomPath, imgName);
-                customFileUtils.transferTo(image, target);
+                customFileUtils.transferTo(file, target);
             }
             req.setRoomImgName(roomImg);
         } catch (Exception e) {
@@ -116,16 +120,48 @@ public class OwnerServiceImpl implements OwnerService {
         // 룸 이미지 / 룸 서비스 insert
         try {
             mapper.insertRoomImg(req);
-            if(req.getServiceList() != null) {
+            if (req.getService() != null) {
                 mapper.insertRoomService(req);
             }
         } catch (Exception e) {
             e.printStackTrace();
             return PostRoomInfoResponseDto.databaseError();
         }
-
         return PostRoomInfoResponseDto.success(roomId);
+    }
 
+    @Transactional
+    public ResponseEntity<? super PutGlampingInfoResponseDto> updateGlampingInfo(GlampingPostRequestDto req, long glampId) {
+        // 유저 PK 불러오기
+//        req.setUserId(authenticationFacade.getLoginUserId());
+        req.setUserId(8);
+        if (req.getUserId() <= 0) {
+            return PutGlampingInfoResponseDto.validateUserId();
+        }
+
+        if(glampId <= 0) {
+            return PutGlampingInfoResponseDto.validateGlampId();
+        }
+        req.setGlampId(glampId);
+
+        // req 에 데이터가 올바르게 들어있는지 확인
+        try {
+            postGlampValidate(req);
+        } catch (Exception e) {
+            String msg = e.getMessage();
+            return PutGlampingInfoResponseDto.validationFailed(msg);
+        }
+        int affectedRow;
+        try {
+            affectedRow = mapper.updateGlampingInfo(req);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return PutGlampingInfoResponseDto.databaseError();
+        }
+        if(affectedRow == 0) {
+            return PutGlampingInfoResponseDto.noAffectedRow();
+        }
+        return PutGlampingInfoResponseDto.success();
     }
 
     public ResponseEntity<? super GetOwnerBookListResponseDto> getGlampReservation(long glampId) {
@@ -133,7 +169,7 @@ public class OwnerServiceImpl implements OwnerService {
     }
 
 
-// 강국 =================================================================================================================
+    // 강국 =================================================================================================================
     @Override
     public ResponseEntity<? super PostOwnerReviewInfoResponseDto> postReview(ReviewPostRequestDto p) {
         return null;
@@ -145,26 +181,19 @@ public class OwnerServiceImpl implements OwnerService {
     }
 
 
-
-// 민지 에러처리 =========================================================================================================
-    private void postGlampValidate(GlampingPostRequestDto req
-            , MultipartFile glampImg) {
+    // 민지 에러처리 =========================================================================================================
+    private void postGlampValidate(GlampingPostRequestDto req) {
 
         // 유저가 이미 글램핑장을 가지고 있는가?
         Long hasExistingGlamping = mapper.hasExistingGlamping(req.getUserId()); // 0 = 가진 글램핑장 없음
-        if(hasExistingGlamping != null && hasExistingGlamping != 0) {
+        if (hasExistingGlamping != null && hasExistingGlamping != 0) {
             throw new RuntimeException("이미 회원님의 계정에 등록된 글램핑 정보가 있습니다.");
         }
 
         // 글램핑 위치가 중복되지 않는가?
         Long existingLocation = mapper.existingLocation(req.getGlampLocation()); // 0 = 중복 없음
-        if(existingLocation != null && existingLocation != 0) {
+        if (existingLocation != null && existingLocation != 0) {
             throw new RuntimeException("이미 같은 위치에 등록된 글램핑장이 존재합니다.");
-        }
-
-        // 이미지가 들어가있는가?
-        if(glampImg == null || glampImg.isEmpty()) {    // 글램핑 이미지
-            throw new RuntimeException("사진을 업로드해주세요.");
         }
 
         // 정보가 모두 입력되었는가?
@@ -173,7 +202,7 @@ public class OwnerServiceImpl implements OwnerService {
 
     private void postRoomValidate(RoomPostRequestDto req, List<MultipartFile> img) {
         // 이미지가 들어가있는가?
-        if(img == null || img.isEmpty()) {    // 글램핑 이미지
+        if (img == null || img.isEmpty()) {    // 글램핑 이미지
             throw new RuntimeException("사진을 업로드해주세요.");
         }
 
@@ -186,36 +215,38 @@ public class OwnerServiceImpl implements OwnerService {
         }
 
         // 바르게 들어갔나?
-        if(req.getPrice() <= 0) {
+        if (req.getPrice() <= 0) {
             throw new RuntimeException("객실의 가격 정보가 잘못되었습니다.");
         }
-        if(req.getPeopleNum() < MIN_PEOPLE || req.getPeopleNum() > MAX_PEOPLE) {
+        if (req.getPeopleNum() < MIN_PEOPLE || req.getPeopleNum() > MAX_PEOPLE) {
             throw new RuntimeException("객실의 인원 정보가 잘못되었습니다.");
         }
-        if(req.getPeopleMax() < MIN_PEOPLE || req.getPeopleMax() > MAX_PEOPLE) {
+        if (req.getPeopleMax() < MIN_PEOPLE || req.getPeopleMax() > MAX_PEOPLE) {
             throw new RuntimeException("객실의 인원 정보가 잘못되었습니다.");
         }
-        if((req.getPeopleMax() - req.getPeopleNum()) < 0) {
+        if ((req.getPeopleMax() - req.getPeopleNum()) < 0) {
             throw new RuntimeException("최대 인원은 기준 인원보다 작을 수 없습니다.");
         }
     }
 
+    private void isNull(String text) {
+        if (text == null || text.isEmpty()) {
+            throw new RuntimeException("모든 정보를 입력해주세요.");
+        }
+    }
 
-    private void isNull (String text) {
-        if(text == null || text.isEmpty()){
+    private void isNull(int value) {
+        if (value <= 0) {
             throw new RuntimeException("모든 정보를 입력해주세요.");
         }
     }
-    private void isNull (int value) {
-        if(value <= 0 ){
+
+    private void isNull(long value) {
+        if (value <= 0) {
             throw new RuntimeException("모든 정보를 입력해주세요.");
         }
     }
-    private void isNull (long value) {
-        if(value <= 0 ){
-            throw new RuntimeException("모든 정보를 입력해주세요.");
-        }
-    }
+
     private void glampingPostNullCheck(GlampingPostRequestDto req) {
         isNull(req.getGlampName());
         isNull(req.getGlampLocation());
@@ -225,6 +256,7 @@ public class OwnerServiceImpl implements OwnerService {
         isNull(req.getParking());
         isNull(req.getNotice());
     }
+
     private void roomPostNullCheck(RoomPostRequestDto req) {
         isNull(req.getRoomName());
         isNull(req.getInTime());
