@@ -25,6 +25,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 
@@ -149,16 +150,22 @@ public class GlampingServiceImpl implements GlampingService {
         // Data Get
         List<ReviewListItem> reviews = mapper.selReviewInfo(p.getGlampId());
         List<String> roomNameList = mapper.selRoomNames(p.getGlampId());
+        List<String> reviewImage = new ArrayList<>();
+
+        //리뷰사진 가져오기
+        for (int i = 0; i < reviews.size(); i++) {
+            List<String> inputImageList = mapper.selReviewImage(reviews.get(i).getReviewId());
+            reviews.get(i).setReviewImages(inputImageList);
+
+            /*
+                String imgage = reviews.get(i).getReviewImages().get(i);
+                reviewImage.add(imgage);
+            */
+        }
 
         //input ResponseDto
         GetGlampingReviewInfoResponseDto dto = GetGlampingReviewInfoResponseDto.builder()
-                .reviewListItems(reviews).roomNames(roomNameList).build();
-
-        //리뷰사진 가져오기
-        for (ReviewListItem item : reviews) {
-            List<String> inputImageList = mapper.selReviewImage(item.getReviewId());
-            item.setReviewImages(inputImageList);
-        }
+                .reviewListItems(reviews).roomNames(roomNameList).allReviewImage(reviewImage).build();
 
         return new ResponseEntity<>(dto, HttpStatus.OK);
     }
