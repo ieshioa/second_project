@@ -47,7 +47,7 @@
         </foreach>
     </insert>
 
-    <select id="hasExistingGlamping">
+    <select id="hasGlamping">
         SELECT glamp_id
         FROM glamping
         WHERE user_id = #{userId}
@@ -72,6 +72,29 @@
         WHERE glamp_id = #{glampId}
         AND user_id = #{userId}
     </update>
+
+    <update id="updateRoomInfo">
+        UPDATE room
+        SET glamp_id = #{glampId}
+            , room_name = #{roomName}
+            , room_price = #{price}
+            , room_num_people = #{peopleNum}
+            , room_max_people = #{peopleMax}
+            , check_in_time = #{inTime}
+            , check_out_time = #{outTime}
+    </update>
+
+    <select id="selService">
+        SELECT service_id
+        FROM room_service
+        WHERE room_id = #{roomId}
+    </select>
+
+    <delete id="delService">
+        DELETE FROM room_service
+        WHERE room_id = #{roomId}
+    </delete>
+
 <!-- 강국 ================================================= -->
 
 

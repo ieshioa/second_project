@@ -20,6 +20,7 @@ public interface ResponseMessage {
     String NOT_EXISTED_GLAMP = "존재하지 않는 글랭핑 입니다.";
     String NOT_EXISTED_PAYMENT = "존재하지 않는 결제정보 입니다.";
 
+
     String WRONG_PERSONNEL = "인원 정보가 잘못 입력되었습니다.";
     String WRONG_DATE = "날짜 정보가 잘못 입력되었습니다.";
 
