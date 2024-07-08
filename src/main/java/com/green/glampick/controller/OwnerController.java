@@ -33,7 +33,7 @@ public class OwnerController {
 
     private final OwnerService service;
 
-    // tag : 민지
+// 민지 =================================================================================================================
     // create - 글램핑
     @PostMapping("glamping")
     @Operation(summary = "글램핑 정보 등록", description =
@@ -118,7 +118,7 @@ public class OwnerController {
     }
 
 
-    // tag : 강국
+// 강국 =================================================================================================================
     @Operation(summary = "리뷰 답글 작성하기",
             description =
                     "<strong> 변수명 </strong> glampId : 글램프 PK <p>  ex)35 </p>" +
