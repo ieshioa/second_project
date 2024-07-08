@@ -21,12 +21,12 @@
     <insert id="insertRoom" keyProperty="roomId" useGeneratedKeys="true">
         INSERT INTO room
         SET glamp_id = #{glampId}
-            , glamp_name = #{roomName}
-            , glamp_location = #{price}
-            , region = #{peopleNum}
-            , extra_charge = #{peopleMax}
-            , glamp_intro = #{inTime}
-            , info_basic = #{outTime}
+            , room_name = #{roomName}
+            , room_price = #{price}
+            , room_num_people = #{peopleNum}
+            , room_max_people = #{peopleMax}
+            , check_in_time = #{inTime}
+            , check_out_time = #{outTime}
     </insert>
 
     <insert id="insertRoomImg">
@@ -47,6 +47,31 @@
         </foreach>
     </insert>
 
+    <select id="hasExistingGlamping">
+        SELECT glamp_id
+        FROM glamping
+        WHERE user_id = #{userId}
+    </select>
+
+    <select id="existingLocation">
+        SELECT glamp_id
+        FROM glamping
+        WHERE glamp_location = #{location}
+    </select>
+
+    <update id="updateGlampingInfo">
+        UPDATE glamping
+        SET  glamp_name = #{glampName}
+            , glamp_location = #{glampLocation}
+            , region = #{region}
+            , extra_charge = #{extraCharge}
+            , glamp_intro = #{intro}
+            , info_basic = #{basic}
+            , info_parking = #{parking}
+            , info_notice = #{notice}
+        WHERE glamp_id = #{glampId}
+        AND user_id = #{userId}
+    </update>
 <!-- 강국 ================================================= -->
 
 

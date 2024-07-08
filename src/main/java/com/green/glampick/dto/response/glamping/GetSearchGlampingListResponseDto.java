@@ -42,11 +42,6 @@ public class GetSearchGlampingListResponseDto extends ResponseDto {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(result);
     }
 
-    public static ResponseEntity<ResponseDto> existGlamp() {
-        ResponseDto result = new ResponseDto(ResponseCode.RESULT_IS_NULL, ResponseMessage.RESULT_IS_NULL);
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(result);
-    }
-
     public static ResponseEntity<ResponseDto> wrongPersonnel() {
         ResponseDto result = new ResponseDto(ResponseCode.WRONG_PERSONNEL, ResponseMessage.WRONG_PERSONNEL);
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(result);

@@ -1,4 +1,4 @@
-package com.green.glampick.dto.object.glamping;
+package com.green.glampick.dto.request.owner;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -10,10 +10,13 @@ import java.util.List;
 
 @Getter
 @Setter
-public class RoomItem {
-    @JsonIgnore
-    private long glampId;
+public class RoomPostRequestDto {
 
+    @JsonIgnore
+    private long roomId;
+
+    @Schema(example = "1", description = "글램핑 PK")
+    private long glampId;
     @Schema(example = "카라반 102호", description = "객실 이름")
     private String roomName;
     @Schema(example = "65500", description = "객실 가격")
@@ -27,14 +30,14 @@ public class RoomItem {
     @Schema(example = "12:00:00", description = "체크아웃 시간")
     private String outTime;
 
-    // 서비스
-    private List<Integer> serviceList;
-
     // 이미지
-    private List<MultipartFile> roomImg;
     @JsonIgnore
     private List<String> roomImgName;
 
-    @JsonIgnore
-    private long roomId;
+    // 서비스
+    private List<Integer> service;
+
+
+
+
 }
