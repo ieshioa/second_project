@@ -1,5 +1,6 @@
 package com.green.glampick.service.implement;
 
+import com.green.glampick.common.GlobalConst;
 import com.green.glampick.dto.object.ReviewListItem;
 import com.green.glampick.dto.object.glamping.GlampingDetailReviewItem;
 import com.green.glampick.dto.object.glamping.GlampingListItem;
@@ -11,6 +12,7 @@ import com.green.glampick.dto.request.glamping.GetInfoRequestDto;
 import com.green.glampick.dto.request.glamping.ReviewInfoRequestDto;
 import com.green.glampick.dto.response.glamping.GetGlampingInformationResponseDto;
 import com.green.glampick.dto.response.glamping.GetGlampingReviewInfoResponseDto;
+import com.green.glampick.dto.response.glamping.GetMoreRoomItemResponseDto;
 import com.green.glampick.dto.response.glamping.GetSearchGlampingListResponseDto;
 import com.green.glampick.dto.response.glamping.favorite.GetFavoriteGlampingResponseDto;
 import com.green.glampick.mapper.GlampingMapper;
@@ -114,34 +116,64 @@ public class GlampingServiceImpl implements GlampingService {
     }
     @Override
     public ResponseEntity<? super GetGlampingInformationResponseDto> getInfoGlampingDetail(GetInfoRequestDto p) {
+        log.info("p: {}", p);
+        //글램핑 정보,객실 정보 리스트, 리뷰 리스트, 리뷰 유저수
+        GetGlampingInformationResponseDto glampInfoDto = mapper.selGlampingInfo(p);
+        List<GlampingRoomListItem> rooms = mapper.selRoomInfo(p);
+        List<GlampingDetailReviewItem> reviews = mapper.selReviewInfoInGlamping(p.getGlampId());
+        int userCount = mapper.selCount(p.getGlampId());
 
-        GetGlampingInformationResponseDto glampInfoDto = mapper.selGlampingInfo(p); //글램핑 정보 불러오기
-        List<GlampingRoomListItem> rooms = mapper.selRoomInfo(p);   // 글램핑 상세페이지 객실 정보 리스트
-        List<GlampingDetailReviewItem> reviews = mapper.selReviewInfoInGlamping(p.getGlampId()); // 글램핑 상세페이지 리뷰 리스트
-        int userCount = mapper.selCount(p.getGlampId()); // 리뷰 유저수
+        //중복데이터 방지를 위한 HashSet
         HashSet<String> hashServices = new HashSet<>();
 
 
-        // 객실 이미지 & 서비스 가져오기
+        //  서비스 가져오기
         for (GlampingRoomListItem item : rooms) {
-            item.setRoomServices(mapper.selRoomService(item.getRoomId())); //객실 서비스 세팅
+            item.setRoomServices(mapper.selRoomService(item.getRoomId()));
 
             List<String> roomServices = item.getRoomServices();
-
+            //데이터 중복 방지
             for (String s : roomServices) {
                 if (!roomServices.isEmpty()) {
                     hashServices.add(s);
                 }
             }
-
         }
 
-        glampInfoDto.setRoomService(hashServices);
         // dto 데이터 세팅
+        glampInfoDto.setRoomService(hashServices);
         glampInfoDto.setCountReviewUsers(userCount);
         glampInfoDto.setReviewItems(reviews);
         glampInfoDto.setRoomItems(rooms);
+
         return new ResponseEntity<>(glampInfoDto,HttpStatus.OK) ;
+    }
+    @Override
+    public ResponseEntity<? super GetMoreRoomItemResponseDto> getInfoMoreDetailsRoom(GetInfoRequestDto p) {
+        // 객실 정보 리스트
+        List<GlampingRoomListItem> rooms = mapper.selRoomInfo(p);
+
+        // 추가 객실 정보 리스트
+        rooms.subList(0, GlobalConst.PAGING_SIZE).clear();
+        HashSet<String> hashServices = new HashSet<>();
+
+        //객실 서비스 세팅
+        for (GlampingRoomListItem item : rooms) {
+            item.setRoomServices(mapper.selRoomService(item.getRoomId()));
+
+            List<String> roomServices = item.getRoomServices();
+            //서비스 중복 데이터 방지
+            for (String s : roomServices) {
+                if (!roomServices.isEmpty()) {
+                    hashServices.add(s);
+                }
+            }
+        }
+
+
+        GetMoreRoomItemResponseDto glampInfoDto = GetMoreRoomItemResponseDto.builder().roomItems(rooms).build();
+
+        return new ResponseEntity<>(glampInfoDto,HttpStatus.OK);
     }
     @Override
     public ResponseEntity<? super GetGlampingReviewInfoResponseDto> getInfoReviewList(ReviewInfoRequestDto p) {
@@ -157,10 +189,12 @@ public class GlampingServiceImpl implements GlampingService {
             List<String> inputImageList = mapper.selReviewImage(reviews.get(i).getReviewId());
             reviews.get(i).setReviewImages(inputImageList);
 
-            /*
-                String imgage = reviews.get(i).getReviewImages().get(i);
-                reviewImage.add(imgage);
-            */
+            for (String imageItem : reviews.get(i).getReviewImages()) {
+                if (!reviews.get(i).getReviewImages().isEmpty()) {
+                    reviewImage.add(imageItem);
+                }
+            }
+
         }
 
         //input ResponseDto

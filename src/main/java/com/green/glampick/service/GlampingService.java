@@ -6,6 +6,7 @@ import com.green.glampick.dto.request.glamping.GetInfoRequestDto;
 import com.green.glampick.dto.request.glamping.ReviewInfoRequestDto;
 import com.green.glampick.dto.response.glamping.GetGlampingInformationResponseDto;
 import com.green.glampick.dto.response.glamping.GetGlampingReviewInfoResponseDto;
+import com.green.glampick.dto.response.glamping.GetMoreRoomItemResponseDto;
 import com.green.glampick.dto.response.glamping.GetSearchGlampingListResponseDto;
 import com.green.glampick.dto.response.glamping.favorite.GetFavoriteGlampingResponseDto;
 import org.springframework.http.ResponseEntity;
@@ -16,6 +17,7 @@ public interface GlampingService {
     ResponseEntity<? super GetFavoriteGlampingResponseDto> favoriteGlamping(GetFavoriteRequestDto p);
     ResponseEntity<? super GetGlampingInformationResponseDto> getInfoGlampingDetail(GetInfoRequestDto p);
 
+    public ResponseEntity<? super GetMoreRoomItemResponseDto> getInfoMoreDetailsRoom(GetInfoRequestDto p);
     ResponseEntity<? super GetGlampingReviewInfoResponseDto> getInfoReviewList(ReviewInfoRequestDto p);
 
 }
