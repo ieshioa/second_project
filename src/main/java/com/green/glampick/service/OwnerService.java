@@ -25,7 +25,7 @@ public interface OwnerService {
     ResponseEntity<? super PutGlampingInfoResponseDto> updateGlampingInfo(GlampingPutRequestDto req);
     ResponseEntity<? super PutRoomInfoResponseDto> updateRoomInfo(RoomPutRequestDto p);
 
-    ResponseEntity<? super GetOwnerBookListResponseDto> getGlampReservation(long glampId);
+    ResponseEntity<? super GetOwnerBookListResponseDto> getGlampReservation(Long glampId);
 
     ResponseEntity<? super PostOwnerReviewInfoResponseDto> postReview(ReviewPostRequestDto p);
     ResponseEntity<? super PatchOwnerReviewInfoResponseDto> patchReview(ReviewPatchRequestDto p);

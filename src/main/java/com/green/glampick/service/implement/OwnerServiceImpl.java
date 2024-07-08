@@ -1,6 +1,9 @@
 package com.green.glampick.service.implement;
 
 import com.green.glampick.common.CustomFileUtils;
+import com.green.glampick.dto.object.owner.BookBeforeItem;
+import com.green.glampick.dto.object.owner.BookCancelItem;
+import com.green.glampick.dto.object.owner.BookCompleteItem;
 import com.green.glampick.dto.request.owner.GlampingPostRequestDto;
 import com.green.glampick.dto.request.ReviewPatchRequestDto;
 import com.green.glampick.dto.request.ReviewPostRequestDto;
@@ -207,8 +210,23 @@ public class OwnerServiceImpl implements OwnerService {
         return PutRoomInfoResponseDto.success();
     }
 
-    public ResponseEntity<? super GetOwnerBookListResponseDto> getGlampReservation(long glampId) {
-        return null;
+    public ResponseEntity<? super GetOwnerBookListResponseDto> getGlampReservation(Long glampId) {
+        if (glampId == null || glampId < 0) {
+            return GetOwnerBookListResponseDto.wrongGlampId();
+        }
+        List<BookBeforeItem> before;
+        List<BookCompleteItem> complete;
+        List<BookCancelItem> cancel;
+        try {
+            before = mapper.getBookBefore(glampId);
+            complete = mapper.getBookComplete(glampId);
+            cancel = mapper.getBookCancel(glampId);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return GetOwnerBookListResponseDto.databaseError();
+        }
+
+        return GetOwnerBookListResponseDto.success(before, complete, cancel);
     }
 
 

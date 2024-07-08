@@ -119,11 +119,12 @@ public class OwnerController {
         return service.updateRoomInfo(req);
     }
 
+    // read - 예약
     @GetMapping("book/{glamp_id}")
     @Operation(summary = "글램핑 예약 내역 불러오기", description =
             "<strong> <p> glamp_id (글램핑 PK) 는 필수입력입니다 </p> </strong>" +
-                    "<p> before : 이용 전 / 중 </p>" +
-                    "<p> complete : 이용 완 </p>" +
+                    "<p> before : 이용 예정  </p>" +
+                    "<p> complete : 이용 완료 </p>" +
                     "<p> cancel : 취소 </p>")
     @ApiResponse(description =
             "<p> <strong> ResponseCode 응답 코드 </strong> </p> " +
@@ -135,7 +136,7 @@ public class OwnerController {
             content = @Content(
                     mediaType = "application/json",
                     schema = @Schema(implementation = GetOwnerBookListResponseDto.class)))
-    public ResponseEntity<? super GetOwnerBookListResponseDto> getGlampReservation(@PathVariable("glamp_id") long glampId) {
+    public ResponseEntity<? super GetOwnerBookListResponseDto> getGlampReservation(@PathVariable("glamp_id") Long glampId) {
         return service.getGlampReservation(glampId);
     }
 
