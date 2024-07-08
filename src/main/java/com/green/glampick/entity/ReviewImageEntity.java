@@ -1,10 +1,15 @@
 package com.green.glampick.entity;
 
+import com.green.glampick.dto.request.user.PostReviewRequestDto;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
+import java.util.List;
+
+@Setter
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
@@ -17,6 +22,11 @@ public class ReviewImageEntity {
     private long reviewId;  //객실 ID
     private String reviewImageName;  //객실 이미지명
     private String createdAt;  //객실 이미지 등록 일자
+
+    public ReviewImageEntity(String reviewImageName, long reviewId){
+        this.reviewId = getReviewId();
+        this.reviewImageName = getReviewImageName();
+    }
 
 
 }

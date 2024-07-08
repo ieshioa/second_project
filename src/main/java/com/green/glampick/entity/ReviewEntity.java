@@ -33,6 +33,7 @@ public class ReviewEntity {
         this.glampId = dto.getGlamp_id();
         this.reviewContent = dto.getReviewContent();
         this.reviewStarPoint = dto.getReviewStarPoint();
+        this.roomId = dto.getRoomId();
     }
 
 

@@ -3,6 +3,9 @@ package com.green.glampick.service;
 import com.green.glampick.dto.request.user.*;
 import com.green.glampick.dto.response.user.*;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.util.List;
 
 public interface UserService {
 
@@ -13,7 +16,7 @@ public interface UserService {
     ResponseEntity<?super CancelBookResponseDto> cancelBook(CancelBookRequestDto dto);
 
     //  마이페이지 - 리뷰 작성하기  //
-    ResponseEntity<?super PostReviewResponseDto> postReview(PostReviewRequestDto dto);
+    ResponseEntity<?super PostReviewResponseDto> postReview(PostReviewRequestDto dto, List<MultipartFile> mf);
 
     //  마이페이지 - 리뷰 삭제하기  //
     ResponseEntity<?super DeleteReviewResponseDto> deleteReview(long reviewId);

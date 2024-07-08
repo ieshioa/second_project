@@ -10,6 +10,9 @@ import lombok.extern.slf4j.Slf4j;
 import org.springdoc.core.annotations.ParameterObject;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.util.List;
 
 @Slf4j
 @RestController
@@ -40,8 +43,8 @@ public class UserController {
             "<p> reservationId = 예약 ID ex) 1 </p>" +
             "<p> reviewContent = 리뷰 내용 ex) 정말 좋았다.</p>" +
             "<p> reviewStarPoint = 별점 ex) 3 </p>")
-    public ResponseEntity<?super PostReviewResponseDto> postReview(@RequestBody PostReviewRequestDto dto) {
-        return service.postReview(dto);
+    public ResponseEntity<?super PostReviewResponseDto> postReview(@RequestPart PostReviewRequestDto dto, @RequestPart List<MultipartFile> mf) {
+        return service.postReview(dto, mf);
     }
 
     @DeleteMapping("/delete")// 리뷰 삭제

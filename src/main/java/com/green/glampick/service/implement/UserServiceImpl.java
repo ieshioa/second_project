@@ -1,12 +1,10 @@
 package com.green.glampick.service.implement;
 
+import com.green.glampick.common.CustomFileUtils;
 import com.green.glampick.dto.ResponseDto;
 import com.green.glampick.dto.request.user.*;
 import com.green.glampick.dto.response.user.*;
-import com.green.glampick.entity.ReservationBeforeEntity;
-import com.green.glampick.entity.ReservationCancelEntity;
-import com.green.glampick.entity.ReviewEntity;
-import com.green.glampick.entity.UserEntity;
+import com.green.glampick.entity.*;
 import com.green.glampick.repository.*;
 import com.green.glampick.repository.resultset.GetBookResultSet;
 import com.green.glampick.repository.resultset.GetFavoriteGlampingResultSet;
@@ -18,7 +16,9 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -33,6 +33,7 @@ public class UserServiceImpl implements UserService {
     private final AuthenticationFacade authenticationFacade;
     private final PasswordEncoder passwordEncoder;
     private final FavoriteGlampingRepository favoriteGlampingRepository;
+    private final CustomFileUtils customFileUtils;
 
     //  마이페이지 - 예약 내역 불러오기  //
     @Override
@@ -100,15 +101,28 @@ public class UserServiceImpl implements UserService {
 
     //  마이페이지 - 리뷰 작성하기  //
     @Override
-    public ResponseEntity<? super PostReviewResponseDto> postReview(PostReviewRequestDto dto) {
+    public ResponseEntity<? super PostReviewResponseDto> postReview(PostReviewRequestDto dto, List<MultipartFile> mf) {
 
         try {
 //            long reservationId = dto.getReservationId();
 //            String reviewContent = dto.getReviewContent();
 //            long reviewStarPoint = dto.getReviewStarPoint();
+            // 파일을 저장할 폴더 경로를 생성
+            String makefoled = String.format("review/%d/%d",dto.getUserId(), dto.getReviewId());
+            // 폴더를 생성
+            customFileUtils.makeFolders(makefoled);
 
             ReviewEntity reviewEntity = new ReviewEntity(dto);
+            PostReviewPicsRequestDto postReviewPicsRequestDto = PostReviewPicsRequestDto.builder().reviewId(dto.getReviewId()).build();
+            List<MultipartFile> reviewImageList = dto.getReviewImageFiles();
+            List<ReviewImageEntity> reviewImageEntityList = new ArrayList<>();
 
+            for (MultipartFile image : reviewImageList) {
+                String saveFileName = customFileUtils.makeRandomFileName(image);
+                postReviewPicsRequestDto.getReviewPicsName().add(saveFileName);
+                String filePath = String.format("%s/%s", makefoled, saveFileName);
+                customFileUtils.transferTo(image, filePath);
+            }
 
             this.reviewRepository.save(reviewEntity);
         } catch (Exception e) {
