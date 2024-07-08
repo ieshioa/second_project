@@ -2,6 +2,7 @@ package com.green.glampick.controller;
 
 import com.green.glampick.dto.request.user.*;
 import com.green.glampick.dto.response.user.*;
+import com.green.glampick.entity.ReviewImageEntity;
 import com.green.glampick.service.UserService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -58,8 +59,8 @@ public class UserController {
     @GetMapping("/review")// 리뷰 불러오기
     @Operation(summary = "리뷰 불러오기", description = "<strong></strong>" +
             "<p> review_id = 리뷰 pk ex) 1 </p>")
-    public ResponseEntity<?super GetReviewResponseDto> getReview(@ParameterObject @ModelAttribute GetReviewRequestDto dto) {
-        return service.getReview(dto);
+    public ResponseEntity<?super GetReviewResponseDto> getReview(@ParameterObject @ModelAttribute GetReviewRequestDto dto, List<ReviewImageEntity> reviewImageEntityList) {
+        return service.getReview(dto,reviewImageEntityList);
     }
 
     @GetMapping("/favorite-glamping")// 관심 글램핑 불러오기

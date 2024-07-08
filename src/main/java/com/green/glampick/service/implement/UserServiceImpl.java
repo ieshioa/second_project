@@ -167,7 +167,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override // 리뷰 불러오기
-    public ResponseEntity<? super GetReviewResponseDto> getReview(GetReviewRequestDto dto) {
+    public ResponseEntity<? super GetReviewResponseDto> getReview(GetReviewRequestDto dto, List<ReviewImageEntity> reviewImageEntityList) {
         dto.setUserId(dto.getUserId());
 
         List<GetUserReviewResultSet> resultSets;
@@ -181,7 +181,7 @@ public class UserServiceImpl implements UserService {
             e.printStackTrace();
             return ResponseDto.databaseError();
         }
-        return GetReviewResponseDto.success(resultSets);
+        return GetReviewResponseDto.success(resultSets,reviewImageEntityList);
     }
 
     @Override //관심글램핑 불러오기

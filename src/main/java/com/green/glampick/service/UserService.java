@@ -2,6 +2,7 @@ package com.green.glampick.service;
 
 import com.green.glampick.dto.request.user.*;
 import com.green.glampick.dto.response.user.*;
+import com.green.glampick.entity.ReviewImageEntity;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -22,7 +23,7 @@ public interface UserService {
     ResponseEntity<?super DeleteReviewResponseDto> deleteReview(long reviewId);
 
     //  마이페이지 - 리뷰 불러오기  //
-    ResponseEntity<?super GetReviewResponseDto> getReview(GetReviewRequestDto dto);
+    ResponseEntity<?super GetReviewResponseDto> getReview(GetReviewRequestDto dto, List<ReviewImageEntity> reviewImageEntityList);
 
     //  마이페이지 - 관심 글램핑 불러오기  //
     ResponseEntity<?super GetFavoriteGlampingResponseDto> getFavoriteGlamping(GetFavoriteGlampingRequestDto dto);

@@ -11,4 +11,6 @@ public interface GetUserReviewResultSet {
      String getRoomName();// 글램핑 호수
      String getReviewContent(); // 리뷰
      String getReviewComment(); // 숙소 답변
+
+
 }
