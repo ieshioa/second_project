@@ -14,6 +14,7 @@ public interface ResponseCode {
     String DUPLICATE_EMAIL = "DE";
     String DUPLICATE_TEL_NUMBER = "DT";
     String DUPLICATE_NICK_NAME = "DN";
+    String DUPLICATE_BOOK = "DB";
     String NOT_EXISTED_USER = "NU";
     String NOT_EXISTED_BOOK = "NB";
     String NOT_EXISTED_REVIEW = "NR";

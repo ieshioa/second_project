@@ -14,6 +14,7 @@ public interface ResponseMessage {
     String DUPLICATE_EMAIL = "중복된 이메일 입니다.";
     String DUPLICATE_TEL_NUMBER = "중복된 전화번호 입니다.";
     String DUPLICATE_NICK_NAME = "중복된 닉네임 입니다.";
+    String DUPLICATE_BOOK = "중복된 예약입니다.";
     String NOT_EXISTED_USER = "존재하지 않는 유저 입니다.";
     String NOT_EXISTED_BOOK = "존재하지 않는 예약내역 입니다.";
     String NOT_EXISTED_REVIEW = "존재하지 않는 후기 입니다.";
