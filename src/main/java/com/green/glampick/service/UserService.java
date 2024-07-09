@@ -23,7 +23,7 @@ public interface UserService {
     ResponseEntity<?super DeleteReviewResponseDto> deleteReview(long reviewId);
 
     //  마이페이지 - 리뷰 불러오기  //
-    ResponseEntity<?super GetReviewResponseDto> getReview(GetReviewRequestDto dto, List<ReviewImageEntity> reviewImageEntityList);
+    ResponseEntity<?super GetReviewResponseDto> getReview(GetReviewRequestDto dto);
 
     //  마이페이지 - 관심 글램핑 불러오기  //
     ResponseEntity<?super GetFavoriteGlampingResponseDto> getFavoriteGlamping(GetFavoriteGlampingRequestDto dto);

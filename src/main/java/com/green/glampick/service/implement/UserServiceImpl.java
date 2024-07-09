@@ -167,22 +167,10 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override // 리뷰 불러오기
-    public ResponseEntity<? super GetReviewResponseDto> getReview(GetReviewRequestDto dto, List<ReviewImageEntity> reviewImageEntityList) {
-        dto.setUserId(dto.getUserId());
-
-        List<GetUserReviewResultSet> resultSets;
-
-        try {
-            resultSets = reviewRepository.getReview(dto.getUserId());
-            if (resultSets == null) {
-                return GetReviewResponseDto.noExistedReview();
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-            return ResponseDto.databaseError();
-        }
-        return GetReviewResponseDto.success(resultSets,reviewImageEntityList);
+    public ResponseEntity<? super GetReviewResponseDto> getReview(GetReviewRequestDto dto) {
+        return null;
     }
+
 
     @Override //관심글램핑 불러오기
     public ResponseEntity<? super GetFavoriteGlampingResponseDto> getFavoriteGlamping(GetFavoriteGlampingRequestDto dto) {

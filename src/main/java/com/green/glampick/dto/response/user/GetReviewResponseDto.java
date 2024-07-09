@@ -1,10 +1,13 @@
 package com.green.glampick.dto.response.user;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.green.glampick.common.response.ResponseCode;
 import com.green.glampick.common.response.ResponseMessage;
 import com.green.glampick.dto.ResponseDto;
+import com.green.glampick.dto.object.ReviewListItem;
 import com.green.glampick.entity.ReviewImageEntity;
 import com.green.glampick.repository.resultset.GetUserReviewResultSet;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.http.HttpStatus;
@@ -18,24 +21,12 @@ import java.util.List;
 
 public class GetReviewResponseDto extends ResponseDto {
 
-
-    private List<String> reviewimage;
-    private List<GetUserReviewResultSet> userlist;
-
-    private GetReviewResponseDto(List<GetUserReviewResultSet> userlist, List<ReviewImageEntity> reviewImageEntityList) {
+    private GetReviewResponseDto() {
         super(ResponseCode.SUCCESS, ResponseMessage.SUCCESS);
-
-        List<String> reviewimage = new ArrayList<>();
-        for (ReviewImageEntity imageEntity : reviewImageEntityList) {
-            String boardImage = imageEntity.getReviewImageName();
-            reviewimage.add(boardImage);
-        }
-        this.userlist = userlist;
     }
 
-    public static ResponseEntity<ResponseDto> success(List<GetUserReviewResultSet> userlist, List<ReviewImageEntity> reviewImageEntityList) {
-        GetReviewResponseDto result = new GetReviewResponseDto(userlist, reviewImageEntityList);
-//        ResponseDto result = new ResponseDto(ResponseCode.SUCCESS, ResponseMessage.SUCCESS);
+    public static ResponseEntity<ResponseDto> success() {
+        ResponseDto result = new ResponseDto(ResponseCode.SUCCESS, ResponseMessage.SUCCESS);
         return ResponseEntity.status(HttpStatus.OK).body(result);
     }
 
