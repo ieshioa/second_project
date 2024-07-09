@@ -9,7 +9,6 @@ import lombok.*;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-
 public class MyUser {
 
     private long userId; //로그인한 사용자의 pk값

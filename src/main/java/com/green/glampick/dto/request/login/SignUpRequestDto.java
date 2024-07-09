@@ -1,5 +1,7 @@
 package com.green.glampick.dto.request.login;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.green.glampick.security.SignInProviderType;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
@@ -11,6 +13,11 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 public class SignUpRequestDto {
+
+    @JsonIgnore private long userId;
+
+    @JsonIgnore private String providerId;
+    @JsonIgnore private SignInProviderType userSocialType;
 
     @NotBlank @Email
     private String userEmail;

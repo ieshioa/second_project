@@ -58,6 +58,7 @@ public class GlampingController {
 
 
 // 강국 =================================================================================================================
+
 @Operation(summary = "글램핑 상세 페이지",
         description = "<strong> 변수명 glampId : 글램프 PK </strong> <p>  ex)23 </p>"  +
                 "<strong> 변수명 status : 상태 코드 </strong>" +
@@ -99,6 +100,7 @@ public class GlampingController {
     public ResponseEntity<? super GetGlampingInformationResponseDto> getInfoGlampingDetail(@ParameterObject @ModelAttribute GetInfoRequestDto p) {
             return service.getInfoGlampingDetail(p);
     }
+  
     @Operation(summary = "남은 객실 리스트 출력",
             description =
                     "<strong> 변수명 glampId : 글램프 PK </strong> <p>  ex)23 </p>"  +
@@ -109,6 +111,20 @@ public class GlampingController {
                     @ApiResponse(
                             responseCode = "200",
                             description = "성공에 대한 반환 값 입니다." +
+                                    "<p> [글램핑 정보]" +
+                                    "<p> glampId: 글램핑 PK</p>" +
+                                    "<p> glampName:  글램핑장 이름 </p>" +
+                                    "<p> glampPic: 글램핑 사진 </p>" +
+                                    "<p> starPointAvg: 별점 </p>" +
+                                    "<p> glampLocation: 글램핑장 주소</p>" +
+                                    "<p> glampIntro: 글램핑 소개글</p>" +
+                                    "<p> infoBasic: 기본 정보</p>" +
+                                    "<p> infoParking: 주차장 정보</p>" +
+                                    "<p> infoNotice: 유의 사항</p>" +
+                                    "<p> [리뷰 정보] </p>" +
+                                    "<p> userName: 유저닉네임</p>" +
+                                    "<p> content: 리뷰내용</p>" +
+                                    "<p> countReviewUsers: 리뷰인원수</p>" +
                                     "<p> [객실정보] </p>" +
                                     "<p> roomPics: 객실 사진</p>" +
                                     "<p> roomId: 객실 PK</p>" +
@@ -127,6 +143,7 @@ public class GlampingController {
     public ResponseEntity<? super GetMoreRoomItemResponseDto> getInfoMoreDetailsRoom(@ParameterObject @ModelAttribute GetInfoRequestDto p) {
         return service.getInfoMoreDetailsRoom(p);
     }
+
     @GetMapping("favorite")
     @Operation(
             summary = "관심 글램핑 등록" ,
@@ -145,6 +162,7 @@ public class GlampingController {
     public ResponseEntity<? super GetFavoriteGlampingResponseDto> favoriteGlamping(@ParameterObject @ModelAttribute GetFavoriteRequestDto p) {
         return service.favoriteGlamping(p);
     }
+
     @Operation(summary = "글램핑 리뷰 페이지",
             description = "<strong> 변수명 glampId : 글램프 PK </strong> <p>  ex)35 </p>",
             responses = {
@@ -170,4 +188,5 @@ public class GlampingController {
     public ResponseEntity<? super GetGlampingReviewInfoResponseDto> getInfoReviewList(@ParameterObject @ModelAttribute ReviewInfoRequestDto p) {
         return service.getInfoReviewList(p);
     }
+
 }
