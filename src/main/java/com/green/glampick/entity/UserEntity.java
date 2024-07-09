@@ -63,4 +63,16 @@ public class UserEntity {
         this.userNickname = dto.getUserNickname();
     }
 
+    public UserEntity(long userId
+            , String providerId
+            , String userPw
+            , String userName
+            , String userProfileImage
+            ) {
+        this.userId = userId;
+        this.providerId = providerId;
+        this.userPw = userPw;
+        this.userName = userName;
+        this.userProfileImage= userProfileImage;
+    }
 }

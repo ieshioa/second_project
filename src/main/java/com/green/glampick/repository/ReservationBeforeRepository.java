@@ -9,7 +9,7 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository
-public interface ReservationRepository extends JpaRepository<ReservationBeforeEntity, Long> {
+public interface ReservationBeforeRepository extends JpaRepository<ReservationBeforeEntity, Long> {
 
     @Query(
             value =
@@ -30,4 +30,6 @@ public interface ReservationRepository extends JpaRepository<ReservationBeforeEn
             nativeQuery = true
     )
     List<GetBookResultSet> getBook(Long userId);
+
+    boolean existsByReservationId(Long reservationId);
 }

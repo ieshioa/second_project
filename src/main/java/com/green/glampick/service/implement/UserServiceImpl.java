@@ -27,7 +27,7 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
-    private final ReservationRepository reservationRepository;
+    private final ReservationBeforeRepository reservationBeforeRepository;
     private final ReservationCancelRepository reservationCancelRepository;
     private final ReviewRepository reviewRepository;
     private final AuthenticationFacade authenticationFacade;
@@ -47,7 +47,7 @@ public class UserServiceImpl implements UserService {
         List<GetBookResultSet> resultSets;
 
         try {
-            resultSets = reservationRepository.getBook(dto.getUserId());
+            resultSets = reservationBeforeRepository.getBook(dto.getUserId());
             if (resultSets == null) {
                 return GetBookResponseDto.noExistedBook();
             }
@@ -71,7 +71,7 @@ public class UserServiceImpl implements UserService {
 
         try {
 
-            optionalBeforeEntity = reservationRepository.findById(dto.getReservationId());
+            optionalBeforeEntity = reservationBeforeRepository.findById(dto.getReservationId());
 
             // Entity 로 가져온 데이터가 없다면, 존재하지 않는 예약내역에 대한 응답을 반환한다.
             if (optionalBeforeEntity.isEmpty()) { return CancelBookResponseDto.noExistedBook(); }
@@ -89,7 +89,7 @@ public class UserServiceImpl implements UserService {
                     , beforeEntity.getCreatedAt());
 
             reservationCancelRepository.save(cancelEntity);
-            reservationRepository.delete(beforeEntity);
+            reservationBeforeRepository.delete(beforeEntity);
 
         } catch (Exception e) {
             e.printStackTrace();
