@@ -21,12 +21,22 @@ public class GetOwnerBookListResponseDto extends ResponseDto {
     private List<BookCompleteItem> complete;
     private List<BookCancelItem> cancel;
 
-    public GetOwnerBookListResponseDto() {
+    private GetOwnerBookListResponseDto(List<BookBeforeItem> before
+        , List<BookCompleteItem> complete, List<BookCancelItem> cancel) {
         super(ResponseCode.SUCCESS, ResponseMessage.SUCCESS);
+        this.before = before;
+        this.complete = complete;
+        this.cancel = cancel;
     }
 
-    public static ResponseEntity<ResponseDto> success() {
-        ResponseDto result = new ResponseDto(ResponseCode.SUCCESS, ResponseMessage.SUCCESS);
+    public static ResponseEntity<ResponseDto> success(List<BookBeforeItem> before
+            , List<BookCompleteItem> complete, List<BookCancelItem> cancel) {
+        GetOwnerBookListResponseDto result = new GetOwnerBookListResponseDto(before, complete, cancel);
         return ResponseEntity.status(HttpStatus.OK).body(result);
+    }
+
+    public static ResponseEntity<ResponseDto> wrongGlampId() {
+        ResponseDto result = new ResponseDto(ResponseCode.VALIDATION_FAILED, "글램핑Id를 올바르게 입력해주세요");
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(result);
     }
 }

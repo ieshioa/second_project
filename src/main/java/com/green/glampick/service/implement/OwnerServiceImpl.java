@@ -1,15 +1,23 @@
 package com.green.glampick.service.implement;
 
 import com.green.glampick.common.CustomFileUtils;
+import com.green.glampick.dto.object.owner.BookBeforeItem;
+import com.green.glampick.dto.object.owner.BookCancelItem;
+import com.green.glampick.dto.object.owner.BookCompleteItem;
 import com.green.glampick.dto.request.owner.GlampingPostRequestDto;
 import com.green.glampick.dto.request.ReviewPatchRequestDto;
 import com.green.glampick.dto.request.ReviewPostRequestDto;
+import com.green.glampick.dto.request.owner.GlampingPutRequestDto;
 import com.green.glampick.dto.request.owner.RoomPostRequestDto;
+import com.green.glampick.dto.request.owner.RoomPutRequestDto;
+import com.green.glampick.dto.request.owner.module.GlampingValidate;
+import com.green.glampick.dto.request.owner.module.RoomValidate;
 import com.green.glampick.dto.response.owner.*;
 import com.green.glampick.dto.response.owner.get.GetOwnerBookListResponseDto;
 import com.green.glampick.dto.response.owner.post.PostGlampingInfoResponseDto;
 import com.green.glampick.dto.response.owner.post.PostRoomInfoResponseDto;
 import com.green.glampick.dto.response.owner.put.PutGlampingInfoResponseDto;
+import com.green.glampick.dto.response.owner.put.PutRoomInfoResponseDto;
 import com.green.glampick.mapper.OwnerMapper;
 import com.green.glampick.security.AuthenticationFacade;
 import com.green.glampick.service.OwnerService;
@@ -39,17 +47,29 @@ public class OwnerServiceImpl implements OwnerService {
     public ResponseEntity<? super PostGlampingInfoResponseDto> postGlampingInfo(GlampingPostRequestDto req
             , MultipartFile glampImg) {
         // 유저 PK 불러오기
-        req.setUserId(authenticationFacade.getLoginUserId());
-        if (req.getUserId() <= 0) {
+        try {
+//            req.setUserId(authenticationFacade.getLoginUserId());
+            req.setUserId(100);
+            if (req.getUserId() <= 0) {
+                throw new RuntimeException();
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
             return PostGlampingInfoResponseDto.validateUserId();
         }
 
-        // 데이터가 올바르게 들어있는지 확인
+        // GlampingValidate
         try {
-            postGlampValidate(req);
-            if (glampImg == null || glampImg.isEmpty()) {    // 글램핑 이미지
-                throw new RuntimeException("사진을 업로드해주세요.");
-            }
+            // 글램핑을 이미 가지고 있는가? (hasGlamping = 유저가 가진 글램핑장 PK)
+            Long hasGlamping = mapper.hasGlamping(req.getUserId());
+            GlampingValidate.hasGlamping(hasGlamping);
+            // 이미지가 들어있는가?
+            GlampingValidate.imgExist(glampImg);
+            // 글램핑 위치가 중복되는가? (existingLocation = 위치가 동일한 글램핑장 PK)
+            Long existingLocation = mapper.existingLocation(req.getGlampLocation());
+            GlampingValidate.existingLocation(existingLocation);
+            // 필요한 데이터가 모두 입력되었는가?
+            GlampingValidate.isNull(req);
         } catch (Exception e) {
             String msg = e.getMessage();
             return PostGlampingInfoResponseDto.validationFailed(msg);
@@ -86,22 +106,23 @@ public class OwnerServiceImpl implements OwnerService {
     @Transactional
     public ResponseEntity<? super PostRoomInfoResponseDto> postRoomInfo(RoomPostRequestDto req
             , List<MultipartFile> image) {
-        // 모든 정보가 올바른가?
+        // RoomValidate
         try {
-            postRoomValidate(req, image);
+            RoomValidate.imgExist(image);   // 이미지가 들어있는가?
+            RoomValidate.isNull(req);    // 필요한 데이터가 모두 입력되었는가?
+            RoomValidate.personnel(req.getPeopleNum(), req.getPeopleMax());  // 인원 정보가 올바른가?
+            RoomValidate.timeValidator(req.getInTime());   // 시간 형식이 올바른가?
+            RoomValidate.timeValidator(req.getOutTime());
         } catch (Exception e) {
             String msg = e.getMessage();
             return PostRoomInfoResponseDto.validationFailed(msg);
         }
 
-        long glampId = req.getGlampId();
-        req.setGlampId(glampId);
+        req.setGlampId(req.getGlampId());
         mapper.insertRoom(req);  // room 테이블 insert
 
-        long roomId = req.getRoomId();
-
         // 폴더 만들기
-        String roomPath = String.format("/glamping/%s/room/%s", glampId, roomId);
+        String roomPath = String.format("/glamping/%s/room/%s", req.getGlampId(), req.getRoomId());
         customFileUtils.makeFolders(roomPath);
         // room 파일명 생성 및 저장
         try {
@@ -127,45 +148,85 @@ public class OwnerServiceImpl implements OwnerService {
             e.printStackTrace();
             return PostRoomInfoResponseDto.databaseError();
         }
-        return PostRoomInfoResponseDto.success(roomId);
+        return PostRoomInfoResponseDto.success(req.getRoomId());
     }
 
     @Transactional
-    public ResponseEntity<? super PutGlampingInfoResponseDto> updateGlampingInfo(GlampingPostRequestDto req, long glampId) {
+    public ResponseEntity<? super PutGlampingInfoResponseDto> updateGlampingInfo(GlampingPutRequestDto p) {
+        GlampingPostRequestDto req = p.getRequestDto();
         // 유저 PK 불러오기
 //        req.setUserId(authenticationFacade.getLoginUserId());
-        req.setUserId(8);
+        req.setUserId(100);
         if (req.getUserId() <= 0) {
             return PutGlampingInfoResponseDto.validateUserId();
         }
 
-        if(glampId <= 0) {
-            return PutGlampingInfoResponseDto.validateGlampId();
-        }
-        req.setGlampId(glampId);
-
-        // req 에 데이터가 올바르게 들어있는지 확인
+        // GlampingValidate
         try {
-            postGlampValidate(req);
+            // 글램핑 Id가 올바른가?
+            GlampingValidate.isNull(p.getGlampId());
+            req.setGlampId(p.getGlampId());
+            // 필요한 데이터가 모두 입력되었는가?
+            GlampingValidate.isNull(req);
+            // 글램핑 위치가 중복되는가? (existingLocation = 위치가 동일한 글램핑장 PK)
+            Long existingLocation = mapper.existingLocation(req.getGlampLocation());
+            GlampingValidate.locationUpdate(existingLocation, req.getGlampId());
         } catch (Exception e) {
             String msg = e.getMessage();
             return PutGlampingInfoResponseDto.validationFailed(msg);
         }
-        int affectedRow;
-        try {
-            affectedRow = mapper.updateGlampingInfo(req);
-        } catch (Exception e) {
-            e.printStackTrace();
-            return PutGlampingInfoResponseDto.databaseError();
-        }
-        if(affectedRow == 0) {
-            return PutGlampingInfoResponseDto.noAffectedRow();
-        }
+        mapper.updateGlampingInfo(req);
         return PutGlampingInfoResponseDto.success();
     }
 
-    public ResponseEntity<? super GetOwnerBookListResponseDto> getGlampReservation(long glampId) {
-        return null;
+    @Transactional
+    public ResponseEntity<? super PutRoomInfoResponseDto> updateRoomInfo(RoomPutRequestDto p) {
+        RoomPostRequestDto req = p.getRequestDto();
+        // RoomValidate
+        try {
+            GlampingValidate.isNull(p.getRoomId()); // 룸 Id가 올바른가?
+            req.setRoomId(p.getRoomId());
+            RoomValidate.isNull(req);    // 필요한 데이터가 모두 입력되었는가?
+            RoomValidate.personnel(req.getPeopleNum(), req.getPeopleMax());  // 인원 정보가 올바른가?
+            RoomValidate.timeValidator(req.getInTime());   // 시간 형식이 올바른가?
+            RoomValidate.timeValidator(req.getOutTime());
+        } catch (Exception e) {
+            String msg = e.getMessage();
+            return PutRoomInfoResponseDto.validationFailed(msg);
+        }
+        // 정보 업데이트
+        mapper.updateRoomInfo(req);
+        // 서비스 업데이트
+        List<Integer> service = mapper.selService(req.getRoomId());
+        if (service != req.getService()) {
+            if(service != null) {
+                mapper.delService(req.getRoomId());
+            }
+            if(req.getService() != null) {
+                mapper.insertRoomService(req.getRoomId(), req.getService());
+            }
+        }
+
+        return PutRoomInfoResponseDto.success();
+    }
+
+    public ResponseEntity<? super GetOwnerBookListResponseDto> getGlampReservation(Long glampId) {
+        if (glampId == null || glampId < 0) {
+            return GetOwnerBookListResponseDto.wrongGlampId();
+        }
+        List<BookBeforeItem> before;
+        List<BookCompleteItem> complete;
+        List<BookCancelItem> cancel;
+        try {
+            before = mapper.getBookBefore(glampId);
+            complete = mapper.getBookComplete(glampId);
+            cancel = mapper.getBookCancel(glampId);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return GetOwnerBookListResponseDto.databaseError();
+        }
+
+        return GetOwnerBookListResponseDto.success(before, complete, cancel);
     }
 
 
@@ -180,91 +241,5 @@ public class OwnerServiceImpl implements OwnerService {
         return null;
     }
 
-
-    // 민지 에러처리 =========================================================================================================
-    private void postGlampValidate(GlampingPostRequestDto req) {
-
-        // 유저가 이미 글램핑장을 가지고 있는가?
-        Long hasExistingGlamping = mapper.hasExistingGlamping(req.getUserId()); // 0 = 가진 글램핑장 없음
-        if (hasExistingGlamping != null && hasExistingGlamping != 0) {
-            throw new RuntimeException("이미 회원님의 계정에 등록된 글램핑 정보가 있습니다.");
-        }
-
-        // 글램핑 위치가 중복되지 않는가?
-        Long existingLocation = mapper.existingLocation(req.getGlampLocation()); // 0 = 중복 없음
-        if (existingLocation != null && existingLocation != 0) {
-            throw new RuntimeException("이미 같은 위치에 등록된 글램핑장이 존재합니다.");
-        }
-
-        // 정보가 모두 입력되었는가?
-        glampingPostNullCheck(req);
-    }
-
-    private void postRoomValidate(RoomPostRequestDto req, List<MultipartFile> img) {
-        // 이미지가 들어가있는가?
-        if (img == null || img.isEmpty()) {    // 글램핑 이미지
-            throw new RuntimeException("사진을 업로드해주세요.");
-        }
-
-        // 정보가 모두 입력되었는가?
-        try {
-            roomPostNullCheck(req);
-        } catch (Exception e) {
-            String msg = e.getMessage();
-            throw new RuntimeException(msg);
-        }
-
-        // 바르게 들어갔나?
-        if (req.getPrice() <= 0) {
-            throw new RuntimeException("객실의 가격 정보가 잘못되었습니다.");
-        }
-        if (req.getPeopleNum() < MIN_PEOPLE || req.getPeopleNum() > MAX_PEOPLE) {
-            throw new RuntimeException("객실의 인원 정보가 잘못되었습니다.");
-        }
-        if (req.getPeopleMax() < MIN_PEOPLE || req.getPeopleMax() > MAX_PEOPLE) {
-            throw new RuntimeException("객실의 인원 정보가 잘못되었습니다.");
-        }
-        if ((req.getPeopleMax() - req.getPeopleNum()) < 0) {
-            throw new RuntimeException("최대 인원은 기준 인원보다 작을 수 없습니다.");
-        }
-    }
-
-    private void isNull(String text) {
-        if (text == null || text.isEmpty()) {
-            throw new RuntimeException("모든 정보를 입력해주세요.");
-        }
-    }
-
-    private void isNull(int value) {
-        if (value <= 0) {
-            throw new RuntimeException("모든 정보를 입력해주세요.");
-        }
-    }
-
-    private void isNull(long value) {
-        if (value <= 0) {
-            throw new RuntimeException("모든 정보를 입력해주세요.");
-        }
-    }
-
-    private void glampingPostNullCheck(GlampingPostRequestDto req) {
-        isNull(req.getGlampName());
-        isNull(req.getGlampLocation());
-        isNull(req.getRegion());
-        isNull(req.getIntro());
-        isNull(req.getBasic());
-        isNull(req.getParking());
-        isNull(req.getNotice());
-    }
-
-    private void roomPostNullCheck(RoomPostRequestDto req) {
-        isNull(req.getRoomName());
-        isNull(req.getInTime());
-        isNull(req.getOutTime());
-        isNull(req.getGlampId());
-        isNull(req.getPrice());
-        isNull(req.getPeopleNum());
-        isNull(req.getPeopleMax());
-    }
 
 }

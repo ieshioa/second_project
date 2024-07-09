@@ -146,26 +146,34 @@ public class LoginServiceImpl implements LoginService {
     @Override
     public ResponseEntity<? super GetAccessTokenResponseDto> getAccessToken(HttpServletRequest req) {
 
-        //  req 에서 "refresh-token" 이름의 쿠키를 가져와서 cookie 에 저장하며, cookie 가 없다면 예외를 발생한다.  //
-        Cookie cookie = cookieUtils.getCookie(req, "refresh-token");
-        if(cookie == null) { throw new RuntimeException(); }
+        try {
 
-        //  RefreshToken 이 유효한지 확인하고, 유효하지 않다면 예외를 발생한다.  //
-        String refreshToken = cookie.getValue();
-        if(!jwtTokenProvider.isValidateToken(refreshToken)) { throw new RuntimeException(); }
+            //  req 에서 "refresh-token" 이름의 쿠키를 가져와서 cookie 에 저장하며, cookie 가 없다면 예외를 발생한다.  //
+            Cookie cookie = cookieUtils.getCookie(req, "refresh-token");
+            if(cookie == null) { throw new RuntimeException(); }
 
-        //  RefreshToken 에서 사용자의 세부 정보를 가져오고, 해당 정보를 통해서 MyUser 객체를 가져온다.  //
-        UserDetails auth = jwtTokenProvider.getUserDetailsFromToken(refreshToken);
-        MyUser myUser = ((MyUserDetail)auth).getMyUser();
+            //  RefreshToken 이 유효한지 확인하고, 유효하지 않다면 예외를 발생한다.  //
+            String refreshToken = cookie.getValue();
+            if(!jwtTokenProvider.isValidateToken(refreshToken)) { throw new RuntimeException(); }
 
-        //  위에서 가져온 MyUser 정보가 담긴 AccessToken 을 가져온다.  //
-        String accessToken = jwtTokenProvider.generateAccessToken(myUser);
+            //  RefreshToken 에서 사용자의 세부 정보를 가져오고, 해당 정보를 통해서 MyUser 객체를 가져온다.  //
+            UserDetails auth = jwtTokenProvider.getUserDetailsFromToken(refreshToken);
+            MyUser myUser = ((MyUserDetail)auth).getMyUser();
 
-        //  Map 객체에 AccessToken 을 추가한다. (키는 AccessToken, 값은 accessToken)  //
-        Map map = new HashMap();
-        map.put("accessToken", accessToken);
+            //  위에서 가져온 MyUser 정보가 담긴 AccessToken 을 가져온다.  //
+            String accessToken = jwtTokenProvider.generateAccessToken(myUser);
 
-        return GetAccessTokenResponseDto.success(map);
+            //  Map 객체에 AccessToken 을 추가한다. (키는 AccessToken, 값은 accessToken)  //
+            Map map = new HashMap();
+            map.put("accessToken", accessToken);
+
+            return GetAccessTokenResponseDto.success(map);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseDto.databaseError();
+        }
+
     }
 
     //  휴대폰 인증 문자 보내기  //
