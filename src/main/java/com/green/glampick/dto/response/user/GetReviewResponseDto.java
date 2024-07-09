@@ -5,6 +5,7 @@ import com.green.glampick.common.response.ResponseCode;
 import com.green.glampick.common.response.ResponseMessage;
 import com.green.glampick.dto.ResponseDto;
 import com.green.glampick.dto.object.ReviewListItem;
+import com.green.glampick.dto.object.UserReviewListItem;
 import com.green.glampick.entity.ReviewImageEntity;
 import com.green.glampick.repository.resultset.GetUserReviewResultSet;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -21,12 +22,15 @@ import java.util.List;
 
 public class GetReviewResponseDto extends ResponseDto {
 
-    private GetReviewResponseDto() {
+    List<UserReviewListItem> reviewListItems;
+
+    private GetReviewResponseDto(List<UserReviewListItem> reviewListItems) {
         super(ResponseCode.SUCCESS, ResponseMessage.SUCCESS);
+        this.reviewListItems = reviewListItems;
     }
 
-    public static ResponseEntity<ResponseDto> success() {
-        ResponseDto result = new ResponseDto(ResponseCode.SUCCESS, ResponseMessage.SUCCESS);
+    public static ResponseEntity<GetReviewResponseDto> success(List<UserReviewListItem> reviewListItems) {
+        GetReviewResponseDto result = new GetReviewResponseDto(reviewListItems);
         return ResponseEntity.status(HttpStatus.OK).body(result);
     }
 

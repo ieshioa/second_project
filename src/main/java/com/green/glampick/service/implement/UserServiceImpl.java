@@ -2,6 +2,8 @@ package com.green.glampick.service.implement;
 
 import com.green.glampick.common.CustomFileUtils;
 import com.green.glampick.dto.ResponseDto;
+import com.green.glampick.dto.object.ReviewListItem;
+import com.green.glampick.dto.object.UserReviewListItem;
 import com.green.glampick.dto.request.user.*;
 import com.green.glampick.dto.response.user.*;
 import com.green.glampick.entity.*;
@@ -21,6 +23,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Slf4j
 @Service
@@ -138,6 +141,7 @@ public class UserServiceImpl implements UserService {
                 reviewImageEntityList.add(reviewImageEntity);
             }
             this.reviewImageRepository.saveAll(reviewImageEntityList);
+
         } catch (Exception e) {
             e.printStackTrace();
             return ResponseDto.databaseError();
@@ -168,7 +172,54 @@ public class UserServiceImpl implements UserService {
 
     @Override // 리뷰 불러오기
     public ResponseEntity<? super GetReviewResponseDto> getReview(GetReviewRequestDto dto) {
-        return null;
+
+        long loggedInUserId = authenticationFacade.getLoginUserId();
+        if (loggedInUserId == 0) { return GetBookResponseDto.noPermission(); }
+        dto.setUserId(loggedInUserId);
+
+        List<GetUserReviewResultSet> resultSetList = null;
+        List<ReviewImageEntity> imageEntities = new ArrayList<>();
+
+        try {
+
+
+            resultSetList = reviewRepository.getReview(dto.getUserId());
+            List<Long> reviewIds = resultSetList.stream()
+                    .map(GetUserReviewResultSet::getReviewId)
+                    .collect(Collectors.toList());
+
+            imageEntities = reviewImageRepository.findByReviewIdIn(reviewIds);
+
+            List<UserReviewListItem> reviewListItems = new ArrayList<>();
+
+            for (GetUserReviewResultSet resultSet : resultSetList) {
+                UserReviewListItem reviewListItem = new UserReviewListItem();
+                reviewListItem.setUserProfileImage(resultSet.getUserProfileImage());
+                reviewListItem.setUserNickName(resultSet.getUserNickname());
+                reviewListItem.setStarPoint(resultSet.getReviewStarPoint());
+                reviewListItem.setCreatedAt(resultSet.getCreatedAt().toString());
+                reviewListItem.setUserReviewContent(resultSet.getReviewContent());
+                reviewListItem.setOwnerReviewContent(resultSet.getOwnerReviewComment());
+                reviewListItem.setGlampName(resultSet.getGlampName());
+                reviewListItem.setRoomName(resultSet.getRoomName());
+
+                String basePath = String.format("review/%d/%d", loggedInUserId, resultSet.getReviewId());
+                List<String> imageUrls = imageEntities.stream()
+                        .filter(entity -> entity.getReviewId() == resultSet.getReviewId())
+                        .map(entity -> String.format("%s/%s", basePath, entity.getReviewImageName())) // 경로를 파일명으로 구성
+                        .collect(Collectors.toList());
+                reviewListItem.setReviewImages(imageUrls);
+
+                reviewListItems.add(reviewListItem);
+            }
+
+            return GetReviewResponseDto.success(reviewListItems);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseDto.databaseError();
+        }
+
     }
 
 

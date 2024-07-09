@@ -18,11 +18,9 @@ public class PostReviewRequestDto {
     @JsonIgnore private long reviewId;
     private long glamp_id;
     private String reviewContent;
-    private long reviewStarPoint;
+    private int reviewStarPoint;
     private long roomId;
+
     private List<MultipartFile> ReviewImageFiles = new ArrayList<>();
-
-
-
 
 }
