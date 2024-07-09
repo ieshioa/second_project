@@ -126,7 +126,6 @@ public class GlampingServiceImpl implements GlampingService {
         //중복데이터 방지를 위한 HashSet
         HashSet<String> hashServices = new HashSet<>();
 
-
         //  서비스 가져오기
         for (GlampingRoomListItem item : rooms) {
             item.setRoomServices(mapper.selRoomService(item.getRoomId()));
@@ -177,24 +176,19 @@ public class GlampingServiceImpl implements GlampingService {
     }
     @Override
     public ResponseEntity<? super GetGlampingReviewInfoResponseDto> getInfoReviewList(ReviewInfoRequestDto p) {
-
-
+        System.out.println("p :" + p.getPage() + " " + p.getSize());
+        System.out.println("p :" + p.getStartIdx());
         // Data Get
-        List<ReviewListItem> reviews = mapper.selReviewInfo(p.getGlampId());
+        List<ReviewListItem> reviews = mapper.selReviewInfo(p);
+
+
         List<String> roomNameList = mapper.selRoomNames(p.getGlampId());
-        List<String> reviewImage = new ArrayList<>();
+        List<String> reviewImage = mapper.allReviewImage(p.getGlampId());
 
         //리뷰사진 가져오기
-        for (int i = 0; i < reviews.size(); i++) {
+        for(int i = 0; i < reviews.size(); i++) {
             List<String> inputImageList = mapper.selReviewImage(reviews.get(i).getReviewId());
             reviews.get(i).setReviewImages(inputImageList);
-
-            for (String imageItem : reviews.get(i).getReviewImages()) {
-                if (!reviews.get(i).getReviewImages().isEmpty()) {
-                    reviewImage.add(imageItem);
-                }
-            }
-
         }
 
         //input ResponseDto

@@ -59,7 +59,10 @@ public class GlampingController {
 
 // 강국 =================================================================================================================
 @Operation(summary = "글램핑 상세 페이지",
-        description = "<strong> 변수명 glampId : 글램프 PK </strong> <p>  ex)23 </p>",
+        description = "<strong> 변수명 glampId : 글램프 PK </strong> <p>  ex)23 </p>"  +
+                "<strong> 변수명 status : 상태 코드 </strong>" +
+                "<p> 0 -> 처음 5개보기 </p> " +
+                "<p> 1 -> 남은 객실리스트 출력 </p>",
         responses = {
                 @ApiResponse(
                         responseCode = "200",
@@ -96,6 +99,30 @@ public class GlampingController {
     public ResponseEntity<? super GetGlampingInformationResponseDto> getInfoGlampingDetail(@ParameterObject @ModelAttribute GetInfoRequestDto p) {
             return service.getInfoGlampingDetail(p);
     }
+    @Operation(summary = "남은 객실 리스트 출력",
+            description =
+                    "<strong> 변수명 glampId : 글램프 PK </strong> <p>  ex)23 </p>"  +
+                    "<strong> 변수명 status : 상태 코드 </strong>" +
+                            "<p> 0 -> 처음 5개보기 </p> " +
+                            "<p> 1 -> 남은 객실리스트 출력 </p>",
+            responses = {
+                    @ApiResponse(
+                            responseCode = "200",
+                            description = "성공에 대한 반환 값 입니다." +
+                                    "<p> [객실정보] </p>" +
+                                    "<p> roomPics: 객실 사진</p>" +
+                                    "<p> roomId: 객실 PK</p>" +
+                                    "<p> roomName: 객실 명</p>" +
+                                    "<p> roomPrice: 객실 가격</p>" +
+                                    "<p> roomNumPeople: 객실 기본인원 수</p>" +
+                                    "<p> roomMaxPeople: 객실 최대인원 수</p>" +
+                                    "<p> checkInTime: 체크인 시간</p>" +
+                                    "<p> checkOutTime: 체크아웃 시간</p>"
+                            ,
+                            content = @Content(
+                                    mediaType = "application/json",
+                                    schema = @Schema(implementation = GetMoreRoomItemResponseDto.class)
+                            ))})
     @GetMapping("info/moreRooms")
     public ResponseEntity<? super GetMoreRoomItemResponseDto> getInfoMoreDetailsRoom(@ParameterObject @ModelAttribute GetInfoRequestDto p) {
         return service.getInfoMoreDetailsRoom(p);

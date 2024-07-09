@@ -66,11 +66,12 @@
     <!-- 글램핑 상세 페이지 리뷰 데이터 -->
     <select id="selReviewInfoInGlamping">
         SELECT		    B.user_name AS userName,
-        A.review_content AS content
+                        A.review_content AS content
         FROM			review A
         INNER JOIN      user B
         ON 			    A.user_id = B.user_id
-        WHERE 		    glamp_id = #{glampId};
+        WHERE 		    glamp_id = #{glampId}
+        LIMIT           2;
     </select>
     <!-- 리뷰 유저수 -->
     <select id="selCount">
@@ -92,9 +93,18 @@
         INNER JOIN 		    user B
         ON                  A.user_id = B.user_id
         WHERE 			    A.glamp_id = #{glampId}
-        LIMIT               #{startIdx}, 3
+        LIMIT               #{startIdx}, #{size}
     </select>
-    <!-- 리뷰 이미지 -->
+    <!-- 모든 리뷰이미지 -->
+    <select id="allReviewImage">
+        SELECT 		    A.review_image_name
+        FROM 			review_image A
+        INNER JOIN 	    review B
+        ON 			    A.review_id = B.review_id
+        WHERE 		    glamp_id = #{glampId}
+        LIMIT           #{startIdx}, 10
+    </select>
+    <!-- 유저별 리뷰 이미지 -->
     <select id="selReviewImage">
         SELECT	    review_image_name
         FROM		review_image
