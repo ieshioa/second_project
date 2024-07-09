@@ -95,6 +95,67 @@
         WHERE room_id = #{roomId}
     </delete>
 
+    <select id="getBookBefore">
+        SELECT A.reservation_id AS reservationId
+            , book_id AS bookId
+            , A.created_at AS bookDate
+            , C.room_name AS roomName
+            , A.input_name AS name
+            , B.user_phone AS phoneNum
+            , A.personnel AS peopleNum
+            , A.check_in_date AS inDate
+            , A.check_out_date AS outDate
+            , A.pay_amount AS totalPrice
+        FROM reservation_before A
+        JOIN user B
+        ON A.user_id = B.user_id
+        JOIN room C
+        ON A.room_id = C.room_id
+        WHERE A.glamp_id = #{glampId}
+        ORDER BY A.check_in_date
+    </select>
+
+    <select id="getBookComplete">
+        SELECT A.reservation_id AS reservationId
+            , book_id AS bookId
+            , A.created_at AS bookDate
+            , C.room_name AS roomName
+            , A.input_name AS name
+            , B.user_phone AS phoneNum
+            , A.personnel AS peopleNum
+            , A.check_in_date AS inDate
+            , A.check_out_date AS outDate
+            , A.pay_amount AS totalPrice
+        FROM reservation_complete A
+        JOIN user B
+        ON A.user_id = B.user_id
+        JOIN room C
+        ON A.room_id = C.room_id
+        WHERE A.glamp_id = #{glampId}
+        ORDER BY A.check_in_date DESC
+    </select>
+
+    <select id="getBookCancel">
+        SELECT A.reservation_id AS reservationId
+            , book_id AS bookId
+            , A.created_at AS bookDate
+            , C.room_name AS roomName
+            , A.input_name AS name
+            , B.user_phone AS phoneNum
+            , A.personnel AS peopleNum
+            , A.check_in_date AS inDate
+            , A.check_out_date AS outDate
+            , A.pay_amount AS totalPrice
+            , A.comment AS comment
+        FROM reservation_cancel A
+        JOIN user B
+        ON A.user_id = B.user_id
+        JOIN room C
+        ON A.room_id = C.room_id
+        WHERE A.glamp_id = #{glampId}
+        ORDER BY A.check_in_date DESC
+    </select>
+
 <!-- 강국 ================================================= -->
 
 
