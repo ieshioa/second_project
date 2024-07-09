@@ -8,8 +8,7 @@ import lombok.Setter;
 @Getter
 public class GetReviewRequestDto {
 
+    @JsonIgnore private long reviewId;
     private long userId;
-
-
 
 }

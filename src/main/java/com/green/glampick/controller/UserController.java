@@ -2,6 +2,7 @@ package com.green.glampick.controller;
 
 import com.green.glampick.dto.request.user.*;
 import com.green.glampick.dto.response.user.*;
+import com.green.glampick.entity.ReviewImageEntity;
 import com.green.glampick.service.UserService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;

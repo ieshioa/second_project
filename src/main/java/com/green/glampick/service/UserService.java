@@ -2,6 +2,7 @@ package com.green.glampick.service;
 
 import com.green.glampick.dto.request.user.*;
 import com.green.glampick.dto.response.user.*;
+import com.green.glampick.entity.ReviewImageEntity;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.multipart.MultipartFile;
 
