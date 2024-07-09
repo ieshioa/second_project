@@ -5,31 +5,26 @@ import com.green.glampick.dto.object.ReviewListItem;
 import com.green.glampick.dto.object.glamping.GlampingDetailReviewItem;
 import com.green.glampick.dto.object.glamping.GlampingListItem;
 import com.green.glampick.dto.object.glamping.GlampingRoomListItem;
-import com.green.glampick.dto.request.glamping.GlampingSearchRequestDto;
+import com.green.glampick.dto.object.glamping.GlampingRoomNameAndImage;
+import com.green.glampick.dto.request.glamping.*;
 import com.green.glampick.dto.ResponseDto;
-import com.green.glampick.dto.request.glamping.GetFavoriteRequestDto;
-import com.green.glampick.dto.request.glamping.GetInfoRequestDto;
-import com.green.glampick.dto.request.glamping.ReviewInfoRequestDto;
-import com.green.glampick.dto.response.glamping.GetGlampingInformationResponseDto;
-import com.green.glampick.dto.response.glamping.GetGlampingReviewInfoResponseDto;
-import com.green.glampick.dto.response.glamping.GetMoreRoomItemResponseDto;
-import com.green.glampick.dto.response.glamping.GetSearchGlampingListResponseDto;
+import com.green.glampick.dto.response.glamping.*;
 import com.green.glampick.dto.response.glamping.favorite.GetFavoriteGlampingResponseDto;
 import com.green.glampick.mapper.GlampingMapper;
 import com.green.glampick.security.AuthenticationFacade;
 import com.green.glampick.service.GlampingService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springdoc.core.annotations.ParameterObject;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.bind.annotation.ModelAttribute;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
+import java.util.*;
 
 @Slf4j
 @Service
@@ -115,7 +110,7 @@ public class GlampingServiceImpl implements GlampingService {
         }
     }
     @Override
-    public ResponseEntity<? super GetGlampingInformationResponseDto> getInfoGlampingDetail(GetInfoRequestDto p) {
+    public ResponseEntity<? super GetGlampingInformationResponseDto> infoGlampingDetail(GetInfoRequestDto p) {
         log.info("p: {}", p);
         //글램핑 정보,객실 정보 리스트, 리뷰 리스트, 리뷰 유저수
         GetGlampingInformationResponseDto glampInfoDto = mapper.selGlampingInfo(p);
@@ -125,7 +120,6 @@ public class GlampingServiceImpl implements GlampingService {
 
         //중복데이터 방지를 위한 HashSet
         HashSet<String> hashServices = new HashSet<>();
-
         //  서비스 가져오기
         for (GlampingRoomListItem item : rooms) {
             item.setRoomServices(mapper.selRoomService(item.getRoomId()));
@@ -148,7 +142,7 @@ public class GlampingServiceImpl implements GlampingService {
         return new ResponseEntity<>(glampInfoDto,HttpStatus.OK) ;
     }
     @Override
-    public ResponseEntity<? super GetMoreRoomItemResponseDto> getInfoMoreDetailsRoom(GetInfoRequestDto p) {
+    public ResponseEntity<? super GetMoreRoomItemResponseDto> moreDetailsRoom(GetInfoRequestDto p) {
         // 객실 정보 리스트
         List<GlampingRoomListItem> rooms = mapper.selRoomInfo(p);
 
@@ -174,22 +168,65 @@ public class GlampingServiceImpl implements GlampingService {
         return new ResponseEntity<>(glampInfoDto,HttpStatus.OK);
     }
     @Override
-    public ResponseEntity<? super GetGlampingReviewInfoResponseDto> getInfoReviewList(ReviewInfoRequestDto p) {
+    public ResponseEntity<? super GetGlampingReviewInfoResponseDto> infoReviewList(ReviewInfoRequestDto p) {
 
         // Data Get
         List<ReviewListItem> reviews = mapper.selReviewInfo(p);
-        List<String> roomNameList = mapper.selRoomNames(p.getGlampId());
-        List<String> reviewImage = mapper.allReviewImage(p);
+        List<GlampingRoomNameAndImage> roomNameDto = mapper.selRoomNames(p.getGlampId());
+        List<String> reviewImage = mapper.thumbnailReviewImage(p);
 
         //리뷰사진 가져오기
         for(int i = 0; i < reviews.size(); i++) {
             List<String> inputImageList = mapper.selReviewImage(reviews.get(i).getReviewId());
             reviews.get(i).setReviewImages(inputImageList);
         }
+        List<String> roomNameList = new ArrayList<>();
+        for (int i = 0; i < roomNameDto.size(); i++) {
+            String roomName = roomNameDto.get(i).getRoomName();
+            roomNameList.add(roomName);
+        }
 
         //input ResponseDto
         GetGlampingReviewInfoResponseDto dto = GetGlampingReviewInfoResponseDto.builder()
                 .reviewListItems(reviews).roomNames(roomNameList).allReviewImage(reviewImage).build();
+
+        return new ResponseEntity<>(dto, HttpStatus.OK);
+    }
+
+    @Override
+    public ResponseEntity<? super GetMoreReviewImgageResponseDto> moreReviewImage(GetMoreReviewImageRequestDto p) {
+        //페이징 리뷰 이미지
+        List<String> images = mapper.allReviewImages(p);
+
+        GetMoreReviewImgageResponseDto dto = GetMoreReviewImgageResponseDto.builder().moreReviewImage(images).build();
+        return new ResponseEntity<>(dto, HttpStatus.OK);
+    }
+    public ResponseEntity<? super GetMoreRoomImageResponseDto> moreRoomImage(@ParameterObject @ModelAttribute GetMoreRoomImageRequestDto p) {
+
+        //dto 에 넣을 HashMap
+        HashMap<String, List<String>> hashMapImages = new HashMap<>();
+
+        List<GlampingRoomNameAndImage> roomNameAndImages = mapper.selRoomNameAndImages(p);
+
+        for (GlampingRoomNameAndImage item : roomNameAndImages) {
+            String roomName = item.getRoomName();
+            String roomImage = item.getRoomImages();
+
+            if (!hashMapImages.containsKey(roomName)) {
+                hashMapImages.put(roomName, new ArrayList<>());
+            }
+            hashMapImages.get(roomName).add(roomImage);
+        }
+
+        for (String roomName : hashMapImages.keySet()) {
+            System.out.println("Room Name: " + roomName);
+            List<String> imageNames = hashMapImages.get(roomName);
+            for (String imageName : imageNames) {
+                System.out.println("  Image: " + imageName);
+            }
+        }
+
+        GetMoreRoomImageResponseDto dto = GetMoreRoomImageResponseDto.builder().moreRoomImages(hashMapImages).build();
 
         return new ResponseEntity<>(dto, HttpStatus.OK);
     }

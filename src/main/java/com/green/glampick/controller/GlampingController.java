@@ -1,15 +1,9 @@
 package com.green.glampick.controller;
 
-import com.green.glampick.dto.request.glamping.GetFavoriteRequestDto;
-import com.green.glampick.dto.request.glamping.GetInfoRequestDto;
-import com.green.glampick.dto.request.glamping.ReviewInfoRequestDto;
-import com.green.glampick.dto.response.glamping.GetGlampingInformationResponseDto;
-import com.green.glampick.dto.response.glamping.GetGlampingReviewInfoResponseDto;
-import com.green.glampick.dto.response.glamping.GetMoreRoomItemResponseDto;
-import com.green.glampick.dto.response.glamping.GetSearchGlampingListResponseDto;
+import com.green.glampick.dto.request.glamping.*;
+import com.green.glampick.dto.response.glamping.*;
 import com.green.glampick.dto.response.glamping.favorite.GetFavoriteGlampingResponseDto;
 import com.green.glampick.service.GlampingService;
-import com.green.glampick.dto.request.glamping.GlampingSearchRequestDto;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -58,11 +52,10 @@ public class GlampingController {
 
 
 // 강국 =================================================================================================================
-@Operation(summary = "글램핑 상세 페이지",
+    @Operation(summary = "글램핑 상세 페이지",
         description = "<strong> 변수명 glampId : 글램프 PK </strong> <p>  ex)23 </p>"  +
-                "<strong> 변수명 status : 상태 코드 </strong>" +
-                "<p> 0 -> 처음 5개보기 </p> " +
-                "<p> 1 -> 남은 객실리스트 출력 </p>",
+                      "<strong> 변수명 status : 상태 코드 </strong>" +
+                      "<p> 0 -> 처음 5개보기 </p> " ,
         responses = {
                 @ApiResponse(
                         responseCode = "200",
@@ -95,16 +88,15 @@ public class GlampingController {
                                 mediaType = "application/json",
                                 schema = @Schema(implementation = GetGlampingInformationResponseDto.class)
                         ))})
-    @GetMapping("info")
-    public ResponseEntity<? super GetGlampingInformationResponseDto> getInfoGlampingDetail(@ParameterObject @ModelAttribute GetInfoRequestDto p) {
-            return service.getInfoGlampingDetail(p);
+    @GetMapping("info")// 글램핑 상세페이지
+    public ResponseEntity<? super GetGlampingInformationResponseDto> infoGlampingDetail(@ParameterObject @ModelAttribute GetInfoRequestDto p) {
+            return service.infoGlampingDetail(p);
     }
     @Operation(summary = "남은 객실 리스트 출력",
             description =
                     "<strong> 변수명 glampId : 글램프 PK </strong> <p>  ex)23 </p>"  +
                     "<strong> 변수명 status : 상태 코드 </strong>" +
-                            "<p> 0 -> 처음 5개보기 </p> " +
-                            "<p> 1 -> 남은 객실리스트 출력 </p>",
+                    "<p> 1 -> 남은 객실리스트 출력 </p>",
             responses = {
                     @ApiResponse(
                             responseCode = "200",
@@ -123,11 +115,11 @@ public class GlampingController {
                                     mediaType = "application/json",
                                     schema = @Schema(implementation = GetMoreRoomItemResponseDto.class)
                             ))})
-    @GetMapping("info/moreRooms")
-    public ResponseEntity<? super GetMoreRoomItemResponseDto> getInfoMoreDetailsRoom(@ParameterObject @ModelAttribute GetInfoRequestDto p) {
-        return service.getInfoMoreDetailsRoom(p);
+    @GetMapping("info/moreRooms")//객실추가보기
+    public ResponseEntity<? super GetMoreRoomItemResponseDto> moreDetailsRoom(@ParameterObject @ModelAttribute GetInfoRequestDto p) {
+        return service.moreDetailsRoom(p);
     }
-    @GetMapping("favorite")
+
     @Operation(
             summary = "관심 글램핑 등록" ,
             description = "<strong> 변수명 glampId :  글램프 PK </strong> <p>  ex)23 </p>",
@@ -142,11 +134,13 @@ public class GlampingController {
                             content = @Content(
                                     mediaType = "application/json",
                                     schema = @Schema(implementation = GetFavoriteGlampingResponseDto.class)))})
+    @GetMapping("favorite")// 관심글램핑등록
     public ResponseEntity<? super GetFavoriteGlampingResponseDto> favoriteGlamping(@ParameterObject @ModelAttribute GetFavoriteRequestDto p) {
         return service.favoriteGlamping(p);
     }
     @Operation(summary = "글램핑 리뷰 페이지",
-            description = "<strong> 변수명 glampId : 글램프 PK </strong> <p>  ex)35 </p>",
+            description = "<strong> 변수명 glampId : 글램프 PK </strong> <p>  ex)35 </p>" +
+                          "<strong> 변수명 page : 페이지 값 </strong> <p> ex) 1 </p>",
             responses = {
                     @ApiResponse(
                             responseCode = "200",
@@ -166,8 +160,44 @@ public class GlampingController {
                                     mediaType = "application/json",
                                     schema = @Schema(implementation = GetGlampingReviewInfoResponseDto.class)
                             ))})
-    @GetMapping("{glamp_id}/review")
-    public ResponseEntity<? super GetGlampingReviewInfoResponseDto> getInfoReviewList(@ParameterObject @ModelAttribute ReviewInfoRequestDto p) {
-        return service.getInfoReviewList(p);
+    @GetMapping("{glamp_id}/review")//리뷰페이지
+    public ResponseEntity<? super GetGlampingReviewInfoResponseDto> infoReviewList(@ParameterObject @ModelAttribute ReviewInfoRequestDto p) {
+        return service.infoReviewList(p);
     }
+    @Operation(summary = "리뷰 전체페이지 더보기",
+            description =
+                    "<strong> 변수명 glampId : 글램프 PK </strong> <p>  ex)35 </p>" +
+                    "<strong> 변수명 page : 페이지 값 </strong> <p> ex) 1 </p>",
+            responses = {
+                    @ApiResponse(
+                            responseCode = "200",
+                            description = "성공에 대한 반환 값 입니다." +
+                                          "<p> moreReviewImage:  유저가 올린 리뷰사진들 </p>" ,
+                            content = @Content(
+                                    mediaType = "application/json",
+                                    schema = @Schema(implementation = GetMoreReviewImgageResponseDto.class)
+                            ))})
+    @GetMapping
+    public ResponseEntity<? super GetMoreReviewImgageResponseDto> moreReviewImage(@ParameterObject @ModelAttribute GetMoreReviewImageRequestDto p) {
+        return service.moreReviewImage(p);
+    }
+
+    @Operation(summary = "객실 사진 더보기",
+            description =
+                    "<strong> 변수명 glampId : 글램프 PK </strong> <p>  ex)3 </p>" +
+                    "<strong> 변수명 page : 페이지 값 </strong> <p> ex) 1 </p>",
+            responses = {
+                    @ApiResponse(
+                            responseCode = "200",
+                            description = "성공에 대한 반환 값 입니다." +
+                                    "<p> moreReviewImage:  유저가 올린 리뷰사진들 </p>" ,
+                            content = @Content(
+                                    mediaType = "application/json",
+                                    schema = @Schema(implementation = GetMoreRoomImageResponseDto.class)
+                            ))})
+    @GetMapping("info/moreRoomImages")
+    public ResponseEntity<? super GetMoreRoomImageResponseDto> moreRoomImage(@ParameterObject @ModelAttribute GetMoreRoomImageRequestDto p) {
+        return service.moreRoomImage(p);
+    }
+
 }
