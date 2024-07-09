@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 
 public interface BookService {
 
+    //  글램핑 예약하기  //
     ResponseEntity<? super postBookResponseDto> postBook(postBookRequestDto dto);
 
 }
