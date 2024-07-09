@@ -169,21 +169,17 @@ public class GlampingServiceImpl implements GlampingService {
             }
         }
 
-
         GetMoreRoomItemResponseDto glampInfoDto = GetMoreRoomItemResponseDto.builder().roomItems(rooms).build();
 
         return new ResponseEntity<>(glampInfoDto,HttpStatus.OK);
     }
     @Override
     public ResponseEntity<? super GetGlampingReviewInfoResponseDto> getInfoReviewList(ReviewInfoRequestDto p) {
-        System.out.println("p :" + p.getPage() + " " + p.getSize());
-        System.out.println("p :" + p.getStartIdx());
+
         // Data Get
         List<ReviewListItem> reviews = mapper.selReviewInfo(p);
-
-
         List<String> roomNameList = mapper.selRoomNames(p.getGlampId());
-        List<String> reviewImage = mapper.allReviewImage(p.getGlampId());
+        List<String> reviewImage = mapper.allReviewImage(p);
 
         //리뷰사진 가져오기
         for(int i = 0; i < reviews.size(); i++) {
