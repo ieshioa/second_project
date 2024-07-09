@@ -12,6 +12,4 @@ import java.util.List;
 @Repository
 public interface ReviewImageRepository extends JpaRepository<ReviewImageEntity, Long> {
 
-    //    List<MultipartFile> postReview(PostReviewRequestDto dto, List<MultipartFile> mf);
-    List<GetUserReviewResultSet> findByReviewId(Long reviewId);
 }

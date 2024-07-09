@@ -26,10 +26,4 @@ public class ReviewImageEntity {
     @Column(updatable = false)
     private String createdAt;  //객실 이미지 등록 일자
 
-    public ReviewImageEntity(String reviewImageName, long reviewId){
-        this.reviewId = getReviewId();
-        this.reviewImageName = getReviewImageName();
-    }
-
-
 }
