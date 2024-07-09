@@ -3,12 +3,15 @@ package com.green.glampick.controller;
 import com.green.glampick.dto.request.owner.GlampingPostRequestDto;
 import com.green.glampick.dto.request.ReviewPatchRequestDto;
 import com.green.glampick.dto.request.ReviewPostRequestDto;
+import com.green.glampick.dto.request.owner.GlampingPutRequestDto;
 import com.green.glampick.dto.request.owner.RoomPostRequestDto;
+import com.green.glampick.dto.request.owner.RoomPutRequestDto;
 import com.green.glampick.dto.response.owner.*;
 import com.green.glampick.dto.response.owner.get.GetOwnerBookListResponseDto;
 import com.green.glampick.dto.response.owner.post.PostGlampingInfoResponseDto;
 import com.green.glampick.dto.response.owner.post.PostRoomInfoResponseDto;
 import com.green.glampick.dto.response.owner.put.PutGlampingInfoResponseDto;
+import com.green.glampick.dto.response.owner.put.PutRoomInfoResponseDto;
 import com.green.glampick.service.OwnerService;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
@@ -43,7 +46,7 @@ public class OwnerController {
     @ApiResponse(description =
                     "<p> <strong> ResponseCode 응답 코드 </strong> </p> " +
                             "<p> SU(200) : 글램핑 등록 성공 </p> " +
-                            "<p> VF(400) : 입력되지 않은 데이터가 존재 </p> " +
+                            "<p> VF(400) : request 데이터 입력 오류 </p> " +
                             "<p> CU(400) : jwt 오류 </p> " +
                             "<p> FE(400) : 이미지 업로드 오류 </p> " +
                             "<p> DBE(500) : 데이터베이스 서버 오류 </p> ",
@@ -66,7 +69,7 @@ public class OwnerController {
     @ApiResponse(description =
             "<p> <strong> ResponseCode 응답 코드 </strong> </p> " +
                     "<p> SU(200) : 글램핑 등록 성공 </p> " +
-                    "<p> VF(400) : 입력되지 않은 데이터가 존재 </p> " +
+                    "<p> VF(400) : request 데이터 입력 오류 </p> " +
                     "<p> FE(400) : 이미지 업로드 오류 </p> " +
                     "<p> DBE(500) : 데이터베이스 서버 오류 </p> ",
             responseCode = "200",
@@ -86,22 +89,42 @@ public class OwnerController {
     @ApiResponse(description =
             "<p> <strong> ResponseCode 응답 코드 </strong> </p> " +
                     "<p> SU(200) : 정보 수정 성공 </p> " +
-                    "<p> VF(400) : 입력되지 않은 데이터가 존재 </p> " +
+                    "<p> VF(400) : request 데이터 입력 오류 </p> " +
                     "<p> CU(400) : jwt 오류 </p> " +
                     "<p> DBE(500) : 데이터베이스 서버 오류 </p> ",
             responseCode = "200",
             content = @Content(
                     mediaType = "application/json",
                     schema = @Schema(implementation = PutGlampingInfoResponseDto.class)))
-    public ResponseEntity<? super PutGlampingInfoResponseDto> updateGlamping(@RequestBody GlampingPostRequestDto req, @RequestBody long glampId) {
-        return service.updateGlampingInfo(req, glampId);
+    public ResponseEntity<? super PutGlampingInfoResponseDto> updateGlamping(@RequestBody GlampingPutRequestDto req) {
+        return service.updateGlampingInfo(req);
     }
 
+    // update - 객실
+    @PutMapping("room")
+    @Operation(summary = "객실 정보 수정", description =
+            "<p> <strong> 선택입력 : service[] </strong> </p>" +
+                    "<p> <strong> 나머지 모든 데이터는 필수 입력입니다. </strong> </p>" +
+                    "<p> <strong> 시간 입력 형식 = 시:분:초  ex) 12:00:00 </strong> </p>")
+    @ApiResponse(description =
+            "<p> <strong> ResponseCode 응답 코드 </strong> </p> " +
+                    "<p> SU(200) : 정보 수정 성공 </p> " +
+                    "<p> VF(400) : request 데이터 입력 오류 </p> " +
+                    "<p> DBE(500) : 데이터베이스 서버 오류 </p> ",
+            responseCode = "200",
+            content = @Content(
+                    mediaType = "application/json",
+                    schema = @Schema(implementation = PutRoomInfoResponseDto.class)))
+    public ResponseEntity<? super PutRoomInfoResponseDto> updateRoom(@RequestBody RoomPutRequestDto req) {
+        return service.updateRoomInfo(req);
+    }
+
+    // read - 예약
     @GetMapping("book/{glamp_id}")
     @Operation(summary = "글램핑 예약 내역 불러오기", description =
             "<strong> <p> glamp_id (글램핑 PK) 는 필수입력입니다 </p> </strong>" +
-                    "<p> before : 이용 전 / 중 </p>" +
-                    "<p> complete : 이용 완 </p>" +
+                    "<p> before : 이용 예정  </p>" +
+                    "<p> complete : 이용 완료 </p>" +
                     "<p> cancel : 취소 </p>")
     @ApiResponse(description =
             "<p> <strong> ResponseCode 응답 코드 </strong> </p> " +
@@ -113,7 +136,7 @@ public class OwnerController {
             content = @Content(
                     mediaType = "application/json",
                     schema = @Schema(implementation = GetOwnerBookListResponseDto.class)))
-    public ResponseEntity<? super GetOwnerBookListResponseDto> getGlampReservation(@PathVariable("glamp_id") long glampId) {
+    public ResponseEntity<? super GetOwnerBookListResponseDto> getGlampReservation(@PathVariable("glamp_id") Long glampId) {
         return service.getGlampReservation(glampId);
     }
 

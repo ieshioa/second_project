@@ -27,7 +27,6 @@ public interface ResponseMessage {
     String CANT_FIND_USER = "로그인된 유저 정보를 불러오지 못했습니다.";  // "CU"
     String FILE_UPLOAD_ERROR = "파일 업로드 과정에서 오류가 생겼습니다.";  // "FE"
 
-
     // HTTP Status 401 UNAUTHORIZED
     String SIGN_IN_FAILED = "로그인에 실패하였습니다.";  // "SF"
     String AUTHORIZATION_FAILED = "인증에 실패하였습니다.";  // "AF"

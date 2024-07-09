@@ -10,10 +10,10 @@ import org.springframework.http.ResponseEntity;
 
 @Getter
 @Setter
-public class PutGlampingInfoResponseDto extends ResponseDto {
+public class PutRoomInfoResponseDto extends ResponseDto {
 
 
-    private PutGlampingInfoResponseDto() {
+    private PutRoomInfoResponseDto() {
         super(ResponseCode.SUCCESS, ResponseMessage.SUCCESS);
     }
 
@@ -21,12 +21,6 @@ public class PutGlampingInfoResponseDto extends ResponseDto {
     public static ResponseEntity<ResponseDto> success() {
         ResponseDto result = new ResponseDto(ResponseCode.SUCCESS, "수정을 완료하였습니다.");
         return ResponseEntity.status(HttpStatus.OK).body(result);
-    }
-
-    // 유저 정보 불러오기 실패 (authenticationFacade)
-    public static ResponseEntity<ResponseDto> validateUserId() {
-        ResponseDto result = new ResponseDto(ResponseCode.CANT_FIND_USER, ResponseMessage.CANT_FIND_USER);
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(result);
     }
 
     // 정보가 덜 입력됨
