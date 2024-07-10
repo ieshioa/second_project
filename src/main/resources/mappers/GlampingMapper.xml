@@ -58,11 +58,23 @@
     </select>
     <!-- 글램핑의 객실 모든 이름 -->
     <select id="selRoomNames">
-        SELECT 	    room_name
+        SELECT 	    room_id AS roomId,
+                    room_name AS roomName
         FROM 		room
         WHERE 	    glamp_id = #{glampId}
     </select>
-
+    <!-- 객실이름과 매핑되는 이미지 -->
+    <select id="selRoomNameAndImages">
+        SELECT 		    B.roomId AS roomId, B.roomName AS roomName, A.room_image_name AS roomImages
+        FROM 			room_image A
+        INNER JOIN
+        (SELECT 	    room_id AS roomId,
+                        room_name AS roomName
+        FROM 			room
+        WHERE 	        glamp_id = #{glampId}) B
+        ON 			    A.room_id = B.roomId
+        ORDER BY 	    roomId
+    </select>
     <!-- 글램핑 상세 페이지 리뷰 데이터 -->
     <select id="selReviewInfoInGlamping">
         SELECT		    B.user_name AS userName,
@@ -71,7 +83,7 @@
         INNER JOIN      user B
         ON 			    A.user_id = B.user_id
         WHERE 		    glamp_id = #{glampId}
-        LIMIT           2;
+        LIMIT           7;
     </select>
     <!-- 리뷰 유저수 -->
     <select id="selCount">
@@ -95,15 +107,25 @@
         WHERE 			    A.glamp_id = #{glampId}
         LIMIT               #{startIdx}, #{size}
     </select>
-    <!-- 모든 리뷰이미지 -->
-    <select id="allReviewImage">
+    <!-- 썸네일 리뷰이미지 -->
+    <select id="thumbnailReviewImage">
         SELECT 		    A.review_image_name
         FROM 			review_image A
         INNER JOIN 	    review B
         ON 			    A.review_id = B.review_id
         WHERE 		    glamp_id = #{glampId}
-        LIMIT           #{startIdx}, 10
+        LIMIT           9
     </select>
+    <!-- 리뷰이미지 -->
+    <select id="allReviewImages">
+        SELECT 		    A.review_image_name
+        FROM 			review_image A
+        INNER JOIN 	    review B
+        ON 			    A.review_id = B.review_id
+        WHERE 		    glamp_id = #{glampId}
+        LIMIT           #{startIdx}, #{size}
+    </select>
+
     <!-- 유저별 리뷰 이미지 -->
     <select id="selReviewImage">
         SELECT	    review_image_name

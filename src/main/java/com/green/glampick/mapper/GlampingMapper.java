@@ -3,12 +3,10 @@ package com.green.glampick.mapper;
 import com.green.glampick.dto.object.ReviewListItem;
 import com.green.glampick.dto.object.glamping.GlampingDetailReviewItem;
 import com.green.glampick.dto.object.glamping.GlampingRoomListItem;
-import com.green.glampick.dto.request.glamping.GetFavoriteRequestDto;
-import com.green.glampick.dto.request.glamping.GetInfoRequestDto;
-import com.green.glampick.dto.request.glamping.ReviewInfoRequestDto;
+import com.green.glampick.dto.object.glamping.GlampingRoomNameAndImage;
+import com.green.glampick.dto.request.glamping.*;
 import com.green.glampick.dto.response.glamping.GetGlampingInformationResponseDto;
 import com.green.glampick.dto.object.glamping.GlampingListItem;
-import com.green.glampick.dto.request.glamping.GlampingSearchRequestDto;
 import org.apache.ibatis.annotations.Mapper;
 
 import java.util.List;
@@ -32,11 +30,13 @@ public interface GlampingMapper {
     List<GlampingDetailReviewItem> selReviewInfoInGlamping(long glampId);//리뷰정보
     int selCount(long glampId);//리뷰유저수
     List<String> selRoomService(long roomId); // 룸서비스
-
+    List<GlampingRoomNameAndImage> selRoomNameAndImages(GetMoreRoomImageRequestDto p);
     //리뷰
-    List<String> allReviewImage(ReviewInfoRequestDto p); // 모든 리뷰이미지
+    List<String> thumbnailReviewImage(ReviewInfoRequestDto p); // 모든 리뷰이미지
     List<ReviewListItem> selReviewInfo(ReviewInfoRequestDto p); // 리뷰페이지 리뷰정보
     List<String> selReviewImage(long reviewId); // 리뷰 이미지
-    List<String> selRoomNames(long glampId); // 글랭핑 보유 객실이름들
+    List<GlampingRoomNameAndImage> selRoomNames(long glampId); // 글랭핑 보유 객실이름들
+
+    List<String> allReviewImages(GetMoreReviewImageRequestDto p);
 
 }
