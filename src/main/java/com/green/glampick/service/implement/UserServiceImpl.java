@@ -203,10 +203,9 @@ public class UserServiceImpl implements UserService {
                 reviewListItem.setGlampName(resultSet.getGlampName());
                 reviewListItem.setRoomName(resultSet.getRoomName());
 
-                String basePath = String.format("review/%d/%d", loggedInUserId, resultSet.getReviewId());
                 List<String> imageUrls = imageEntities.stream()
                         .filter(entity -> entity.getReviewId() == resultSet.getReviewId())
-                        .map(entity -> String.format("%s/%s", basePath, entity.getReviewImageName())) // 경로를 파일명으로 구성
+                        .map(ReviewImageEntity::getReviewImageName) // 경로를 파일명으로 구성
                         .collect(Collectors.toList());
                 reviewListItem.setReviewImages(imageUrls);
 

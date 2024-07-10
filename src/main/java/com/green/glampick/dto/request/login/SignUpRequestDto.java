@@ -29,7 +29,7 @@ public class SignUpRequestDto {
     @NotBlank @Pattern(regexp = "^[0-9]{11,13}$")
     private String userPhone;
 
-    @NotBlank
+    @NotBlank @Pattern(regexp = "^[가-힣]{1,10}$")
     private String userName;
 
     @NotBlank @Pattern(regexp = "^[a-zA-Z가-힣][a-zA-Z0-9가-힣]{2,10}$")
