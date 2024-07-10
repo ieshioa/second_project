@@ -9,6 +9,6 @@ import lombok.Setter;
 public class GetReviewRequestDto {
 
     @JsonIgnore private long reviewId;
-    private long userId;
+    @JsonIgnore private long userId;
 
 }

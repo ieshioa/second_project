@@ -18,9 +18,11 @@ public class ReviewEntity {
     private long reviewId;  // 리뷰 PK
     private long userId;  // 유저 PK
     private long glampId;  // 글램핑 PK
-    private String reviewContent;  // 리뷰내용
-    private long reviewStarPoint;  // 리뷰 별점
     private long roomId; // 룸 pk
+    private String reviewContent;  // 리뷰내용
+    private int reviewStarPoint;  // 리뷰 별점
+    private String reviewComment;
+
 
     @CreationTimestamp
     @Column(updatable = false)
