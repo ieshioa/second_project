@@ -20,6 +20,7 @@ public interface ResponseCode {
     String NOT_EXISTED_REVIEW = "NR";  // "존재하지 않는 후기 입니다."
     String NOT_EXISTED_GLAMP = "NG";  // "존재하지 않는 글랭핑 입니다."
     String NOT_EXISTED_PAYMENT = "NP";  // "존재하지 않는 결제정보 입니다."
+  
     String ALREADY_HAVING = "AH";
     String WRONG_PERSONNEL = "WP";  // "인원 정보가 잘못 입력되었습니다."
     String WRONG_DATE = "WD";  // "날짜 정보가 잘못 입력되었습니다."
@@ -29,7 +30,6 @@ public interface ResponseCode {
 
     // HTTP Status 401
     String SIGN_IN_FAILED = "SF";  // "로그인에 실패하였습니다."
-    String AUTHORIZATION_FAILED = "AF";  // "인증에 실패하였습니다."
 
     // HTTP Status 403
     String NOT_PERMISSION = "NP";  // "권한이 없습니다."

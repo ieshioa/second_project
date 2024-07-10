@@ -6,6 +6,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.annotations.CreationTimestamp;
 
 import java.util.List;
 
@@ -21,12 +22,8 @@ public class ReviewImageEntity {
     private long reviewImageId;  //객실 이미지 ID
     private long reviewId;  //객실 ID
     private String reviewImageName;  //객실 이미지명
+    @CreationTimestamp
+    @Column(updatable = false)
     private String createdAt;  //객실 이미지 등록 일자
-
-    public ReviewImageEntity(String reviewImageName, long reviewId){
-        this.reviewId = getReviewId();
-        this.reviewImageName = getReviewImageName();
-    }
-
 
 }
