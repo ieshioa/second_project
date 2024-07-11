@@ -48,8 +48,8 @@ public class OwnerServiceImpl implements OwnerService {
             , MultipartFile glampImg) {
         // 유저 PK 불러오기
         try {
-//            req.setUserId(authenticationFacade.getLoginUserId());
-            req.setUserId(100);
+            req.setUserId(authenticationFacade.getLoginUserId());
+//            req.setUserId(100);
             if (req.getUserId() <= 0) {
                 throw new RuntimeException();
             }
@@ -90,7 +90,7 @@ public class OwnerServiceImpl implements OwnerService {
         // 글램핑 대표 이미지 넣기
         try {
             // 폴더 : /glamping/{glampId}
-            String glampPath = String.format("/glamping/%s/glamp", glampId);
+            String glampPath = String.format("glamping/%s/glamp", glampId);
             customFileUtils.makeFolders(glampPath);
             // 파일을 저장한다
             String target = String.format("/%s/%s", glampPath, glmapImgName);
@@ -122,7 +122,7 @@ public class OwnerServiceImpl implements OwnerService {
         mapper.insertRoom(req);  // room 테이블 insert
 
         // 폴더 만들기
-        String roomPath = String.format("/glamping/%s/room/%s", req.getGlampId(), req.getRoomId());
+        String roomPath = String.format("glamping/%s/room/%s", req.getGlampId(), req.getRoomId());
         customFileUtils.makeFolders(roomPath);
         // room 파일명 생성 및 저장
         try {
@@ -155,8 +155,8 @@ public class OwnerServiceImpl implements OwnerService {
     public ResponseEntity<? super PutGlampingInfoResponseDto> updateGlampingInfo(GlampingPutRequestDto p) {
         GlampingPostRequestDto req = p.getRequestDto();
         // 유저 PK 불러오기
-//        req.setUserId(authenticationFacade.getLoginUserId());
-        req.setUserId(100);
+        req.setUserId(authenticationFacade.getLoginUserId());
+//        req.setUserId(100);
         if (req.getUserId() <= 0) {
             return PutGlampingInfoResponseDto.validateUserId();
         }
