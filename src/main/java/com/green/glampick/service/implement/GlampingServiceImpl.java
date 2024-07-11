@@ -154,13 +154,6 @@ public class GlampingServiceImpl implements GlampingService {
         for (GlampingRoomListItem item : rooms) {
             item.setRoomServices(mapper.selRoomService(item.getRoomId()));
 
-            List<String> roomServices = item.getRoomServices();
-            //서비스 중복 데이터 방지
-            for (String s : roomServices) {
-                if (!roomServices.isEmpty()) {
-                    hashServices.add(s);
-                }
-            }
         }
 
         GetMoreRoomItemResponseDto glampInfoDto = GetMoreRoomItemResponseDto.builder().roomItems(rooms).build();
