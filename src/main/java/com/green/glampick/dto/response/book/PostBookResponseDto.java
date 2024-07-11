@@ -6,9 +6,9 @@ import com.green.glampick.dto.ResponseDto;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
-public class postBookResponseDto extends ResponseDto {
+public class PostBookResponseDto extends ResponseDto {
 
-    private postBookResponseDto() {
+    private PostBookResponseDto() {
         super(ResponseCode.SUCCESS, ResponseMessage.SUCCESS);
     }
 
@@ -25,6 +25,11 @@ public class postBookResponseDto extends ResponseDto {
     public static ResponseEntity<ResponseDto> noPermission() {
         ResponseDto result = new ResponseDto(ResponseCode.NOT_PERMISSION, ResponseMessage.NOT_PERMISSION);
         return ResponseEntity.status(HttpStatus.FORBIDDEN).body(result);
+    }
+
+    public static ResponseEntity<ResponseDto> wrongDate() {
+        ResponseDto result = new ResponseDto(ResponseCode.WRONG_DATE, ResponseMessage.WRONG_DATE);
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(result);
     }
 
 }

@@ -2,7 +2,7 @@ package com.green.glampick.service.implement;
 
 import com.green.glampick.dto.ResponseDto;
 import com.green.glampick.dto.request.book.postBookRequestDto;
-import com.green.glampick.dto.response.book.postBookResponseDto;
+import com.green.glampick.dto.response.book.PostBookResponseDto;
 import com.green.glampick.entity.ReservationBeforeEntity;
 import com.green.glampick.repository.ReservationBeforeRepository;
 import com.green.glampick.security.AuthenticationFacade;
@@ -13,6 +13,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.Date;
 import java.util.Random;
 
@@ -25,11 +27,11 @@ public class BookServiceImpl implements BookService {
 
     //  글램핑 예약하기  //
     @Override
-    public ResponseEntity<? super postBookResponseDto> postBook(postBookRequestDto dto) {
+    public ResponseEntity<? super PostBookResponseDto> postBook(postBookRequestDto dto) {
 
         //  로그인 유저가 없다면, 권한이 없다는 응답을 보낸다.  //
         long loggedInUserId = authenticationFacade.getLoginUserId();
-        if (loggedInUserId == 0) { return postBookResponseDto.noPermission(); }
+        if (loggedInUserId == 0) { return PostBookResponseDto.noPermission(); }
 
         //  로그인 유저가 있다면, RequestDto 에 로그인 유저 PK 를 넣는다.  //
         dto.setUserId(loggedInUserId);
@@ -40,7 +42,9 @@ public class BookServiceImpl implements BookService {
             //  중복된 예약 내역이 있는지 확인하고 있다면 중복된 예약내역에 대한 응답을 보낸다.  //
             boolean existedReservation = reservationBeforeRepository.existsByReservationId
                                                                     (reservationBeforeEntity.getReservationId());
-            if (existedReservation) { return postBookResponseDto.duplicatedBook(); }
+            if (existedReservation) { return PostBookResponseDto.duplicatedBook(); }
+
+            if (checkDate(dto.getCheckInDate(), dto.getCheckOutDate())) { return PostBookResponseDto.wrongDate(); }
 
             //  현재시간을 기준으로 랜덤 13자리의 수를 생성한다.  //
             long currentTimeMillis = System.currentTimeMillis();
@@ -61,8 +65,15 @@ public class BookServiceImpl implements BookService {
             return ResponseDto.databaseError();
         }
 
-        return postBookResponseDto.success();
+        return PostBookResponseDto.success();
 
+    }
+
+    private boolean checkDate (String in, String out) {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+        LocalDate inDate = LocalDate.parse(in, formatter);
+        LocalDate outDate = LocalDate.parse(out, formatter);
+        return outDate.isBefore(inDate); // 틀리면 true
     }
 
 }

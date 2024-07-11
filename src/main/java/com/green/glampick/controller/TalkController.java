@@ -20,7 +20,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/kakao/send")
-@Tag(name = "알림톡 컨트롤러")
+@Tag(name = "알림톡 컨트롤러 (3차)")
 public class TalkController {
     private final TalkService service;
 
