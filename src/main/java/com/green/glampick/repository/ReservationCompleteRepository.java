@@ -1,27 +1,28 @@
 package com.green.glampick.repository;
 
-import com.green.glampick.entity.ReservationCancelEntity;
-import com.green.glampick.repository.resultset.GetReservationCancelResultSet;
+import com.green.glampick.entity.ReservationCompleteEntity;
+import com.green.glampick.repository.resultset.GetReservationBeforeResultSet;
 import com.green.glampick.repository.resultset.GetReservationCompleteResultSet;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
-public interface ReservationCancelRepository extends JpaRepository<ReservationCancelEntity, Long> {
+@Repository
+public interface ReservationCompleteRepository extends JpaRepository<ReservationCompleteEntity, Long> {
 
     @Query(
             value =
-                    "SELECT C. glamp_name AS glampName" +
+                    "SELECT C.glamp_name AS glampName" +
                             ", C.glamp_image AS glampImage " +
                             ", B.room_name AS roomName " +
                             ", A. check_in_date AS checkInDate " +
                             ", A. check_out_date AS checkOutDate " +
-                            ", A. comment AS comment " +
                             ", A. created_at AS createdAt " +
                             ", B. check_in_time AS checkInTime " +
                             ", B. check_out_time AS checkOutTime " +
-                            "FROM reservation_cancel A " +
+                            "FROM reservation_before A " +
                             "JOIN room B " +
                             "ON A.room_id = B.room_id " +
                             "JOIN glamping C " +
@@ -30,6 +31,6 @@ public interface ReservationCancelRepository extends JpaRepository<ReservationCa
                             "ORDER BY A.created_at DESC ",
             nativeQuery = true
     )
-    List<GetReservationCancelResultSet> getBook(Long userId);
+    List<GetReservationCompleteResultSet> getBook(Long userId);
 
 }
