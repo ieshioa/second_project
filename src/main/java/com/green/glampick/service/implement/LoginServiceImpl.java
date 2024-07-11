@@ -1,5 +1,6 @@
 package com.green.glampick.service.implement;
 
+import com.green.glampick.common.Role;
 import com.green.glampick.common.coolsms.SmsUtils;
 import com.green.glampick.common.security.AppProperties;
 import com.green.glampick.common.security.CookieUtils;
@@ -18,6 +19,7 @@ import com.green.glampick.repository.UserRepository;
 import com.green.glampick.security.AuthenticationFacade;
 import com.green.glampick.security.MyUser;
 import com.green.glampick.security.MyUserDetail;
+import com.green.glampick.security.SignInProviderType;
 import com.green.glampick.service.LoginService;
 import jakarta.annotation.PostConstruct;
 import jakarta.servlet.http.Cookie;
@@ -84,6 +86,9 @@ public class LoginServiceImpl implements LoginService {
             String encodingPw = passwordEncoder.encode(userPw);
             dto.setUserPw(encodingPw);
 
+            dto.setUserRole(Role.ROLE_USER.name());
+            dto.setUserSocialType(SignInProviderType.LOCAL.name());
+
             //  가공이 끝난 DTO 를 새로운 userEntity 객체로 생성한다.  //
             UserEntity userEntity = new UserEntity(dto);
             //  바로 위에서 만든 객체를 JPA 를 통해서 DB에 저장한다.  //
@@ -121,7 +126,7 @@ public class LoginServiceImpl implements LoginService {
             //  로그인에 성공할 경우, myUser 에 로그인한 userId 값을 넣고, 권한을 넣는다.  //
             MyUser myUser = MyUser.builder()
                     .userId(userEntity.getUserId())
-                    .role("ROLE_USER")
+                    .role(userEntity.getUserRole())
                     .build();
 
             //  myUser 에 넣은 데이터를 통해, AccessToken, RefreshToken 을 만든다.  //

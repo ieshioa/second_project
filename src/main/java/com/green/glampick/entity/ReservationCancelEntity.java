@@ -13,6 +13,7 @@ import java.time.LocalDateTime;
 @Entity(name = "reservation_cancel")
 @Table(name = "reservation_cancel")
 public class ReservationCancelEntity {
+
     //예약 테이블
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long reservationId;  //예약 ID
@@ -33,8 +34,7 @@ public class ReservationCancelEntity {
 
     private String comment;  //예약 취소 사유
 
-    @CreationTimestamp
-    @Column(nullable = false, updatable = false)
+    @CreationTimestamp @Column(nullable = false, updatable = false)
     private LocalDateTime createdAt;
 
     public ReservationCancelEntity(long userId, long glampId, long roomId, String inputName, String checkInDate

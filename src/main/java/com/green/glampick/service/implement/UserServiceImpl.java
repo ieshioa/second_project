@@ -2,15 +2,12 @@ package com.green.glampick.service.implement;
 
 import com.green.glampick.common.CustomFileUtils;
 import com.green.glampick.dto.ResponseDto;
-import com.green.glampick.dto.object.ReviewListItem;
 import com.green.glampick.dto.object.UserReviewListItem;
 import com.green.glampick.dto.request.user.*;
 import com.green.glampick.dto.response.user.*;
 import com.green.glampick.entity.*;
 import com.green.glampick.repository.*;
-import com.green.glampick.repository.resultset.GetBookResultSet;
-import com.green.glampick.repository.resultset.GetFavoriteGlampingResultSet;
-import com.green.glampick.repository.resultset.GetUserReviewResultSet;
+import com.green.glampick.repository.resultset.*;
 import com.green.glampick.security.AuthenticationFacade;
 import com.green.glampick.service.UserService;
 import lombok.RequiredArgsConstructor;
@@ -32,6 +29,7 @@ public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
     private final ReservationBeforeRepository reservationBeforeRepository;
     private final ReservationCancelRepository reservationCancelRepository;
+    private final ReservationCompleteRepository reservationCompleteRepository;
     private final ReviewRepository reviewRepository;
     private final AuthenticationFacade authenticationFacade;
     private final PasswordEncoder passwordEncoder;
@@ -44,24 +42,27 @@ public class UserServiceImpl implements UserService {
     public ResponseEntity<? super GetBookResponseDto> getBook(GetBookRequestDto dto) {
 
         long loggedInUserId = authenticationFacade.getLoginUserId();
-        if (loggedInUserId == 0) {
-            return GetBookResponseDto.noPermission();
-        }
-        dto.setUserId(authenticationFacade.getLoginUserId());
+        if (loggedInUserId == 0) { return GetBookResponseDto.noPermission(); }
+        dto.setUserId(loggedInUserId);
 
 
-        List<GetBookResultSet> resultSets;
+        List<GetReservationBeforeResultSet> reservationBeforeResultSetList;
+        List<GetReservationCancelResultSet> reservationCancelResultSetList;
+        List<GetReservationCompleteResultSet> reservationCompleteResultSetList;
 
         try {
-            resultSets = reservationBeforeRepository.getBook(dto.getUserId());
-            if (resultSets == null) {
-                return GetBookResponseDto.noExistedBook();
-            }
+
+            reservationBeforeResultSetList = reservationBeforeRepository.getBook(dto.getUserId());
+            reservationCancelResultSetList = reservationCancelRepository.getBook(dto.getUserId());
+            reservationCompleteResultSetList = reservationCompleteRepository.getBook(dto.getUserId());
+
         } catch (Exception e) {
             e.printStackTrace();
             return ResponseDto.databaseError();
         }
-        return GetBookResponseDto.success(resultSets);
+        return GetBookResponseDto.success(reservationBeforeResultSetList
+                                         , reservationCompleteResultSetList
+                                         , reservationCancelResultSetList);
     }
 
     //  마이페이지 - 예약 취소하기  //
@@ -121,9 +122,9 @@ public class UserServiceImpl implements UserService {
 
             PostReviewPicsRequestDto postReviewPicsRequestDto = PostReviewPicsRequestDto.builder().reviewId(reviewEntity.getReviewId()).build();
             // 파일을 저장할 폴더 경로를 생성
-            String makefoled = String.format("review/%d/%d", loggedInUserId, reviewEntity.getReviewId());
+            String makefolder = String.format("review/%d/%d", loggedInUserId, reviewEntity.getReviewId());
             // 폴더를 생성
-            customFileUtils.makeFolders(makefoled);
+            customFileUtils.makeFolders(makefolder);
 
         try {
 //            List<MultipartFile> reviewImageList = dto.getReviewImageFiles();
@@ -132,7 +133,7 @@ public class UserServiceImpl implements UserService {
             for (MultipartFile image : mf) {
                 String saveFileName = customFileUtils.makeRandomFileName(image);
                 postReviewPicsRequestDto.getReviewPicsName().add(saveFileName);
-                String filePath = String.format("%s/%s", makefoled, saveFileName);
+                String filePath = String.format("%s/%s", makefolder, saveFileName);
                 customFileUtils.transferTo(image, filePath);
 
                 ReviewImageEntity reviewImageEntity = new ReviewImageEntity();
@@ -224,7 +225,11 @@ public class UserServiceImpl implements UserService {
 
     @Override //관심글램핑 불러오기
     public ResponseEntity<? super GetFavoriteGlampingResponseDto> getFavoriteGlamping(GetFavoriteGlampingRequestDto dto) {
-        dto.setUserId(dto.getUserId());
+
+        long loggedInUserId = authenticationFacade.getLoginUserId();
+        if (loggedInUserId == 0) { return GetBookResponseDto.noPermission(); }
+        dto.setUserId(loggedInUserId);
+
         List<GetFavoriteGlampingResultSet> resultSets;
 
         try {
@@ -263,8 +268,9 @@ public class UserServiceImpl implements UserService {
 
     //  마이페이지 - 내 정보 수정하기  //
     @Override
-    public ResponseEntity<? super UpdateUserResponseDto> updateUser(UpdateUserRequestDto dto) {
-        dto.setUserId(authenticationFacade.getLoginUserId());
+    public ResponseEntity<? super UpdateUserResponseDto> updateUser(UpdateUserRequestDto dto, MultipartFile mf) {
+        long loggedInUserId = authenticationFacade.getLoginUserId();
+        dto.setUserId(loggedInUserId);
 
         try {
             UserEntity userEntity = userRepository.findById(dto.getUserId()).get();
@@ -272,10 +278,18 @@ public class UserServiceImpl implements UserService {
                 return UpdateUserResponseDto.noExistedUser();
             }
 
+            String path = String.format("user/%d", userEntity.getUserId());
+            customFileUtils.deleteFolder(path);
+            customFileUtils.makeFolders(path);
+            String saveFileName = customFileUtils.makeRandomFileName(mf);
+            String filePath = String.format("%s/%s", path, saveFileName);
+            customFileUtils.transferTo(mf, filePath);
+
             String userPw = dto.getUserPw();
             String encodingPw = passwordEncoder.encode(userPw);
             dto.setUserPw(encodingPw);
 
+            userEntity.setUserProfileImage(saveFileName);
             userEntity.setUserNickname(dto.getUserNickname());
             userEntity.setUserPw(dto.getUserPw());
 

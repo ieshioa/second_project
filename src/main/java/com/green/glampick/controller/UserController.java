@@ -83,11 +83,13 @@ public class UserController {
         return service.getUser(dto);
     }
 
-    @PatchMapping("")// 유저 정보 수정하기
+    @PutMapping// 유저 정보 수정하기
     @Operation(summary = "유저 정보 수정하기", description = "<strong></strong>" +
             "<p></p>")
-    public ResponseEntity<?super UpdateUserResponseDto> updateUser(@RequestBody UpdateUserRequestDto dto) {
-        return service.updateUser(dto);
+    public ResponseEntity<?super UpdateUserResponseDto> updateUser
+            (@RequestPart UpdateUserRequestDto dto, @RequestPart  MultipartFile mf)
+    {
+        return service.updateUser(dto, mf);
     }
 
     @DeleteMapping("")// 회원탈퇴

@@ -19,7 +19,7 @@ public class GetInfoRequestDto {
     public GetInfoRequestDto(int status) {
         if (status == 0) {
             size = PAGING_SIZE;
-        } else if(status == 1){
+        } else if(status == 1) {
             size = 0;
         }
     }
