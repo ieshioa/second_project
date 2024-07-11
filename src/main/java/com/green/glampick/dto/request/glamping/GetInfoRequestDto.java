@@ -15,4 +15,13 @@ public class GetInfoRequestDto {
     private int status;
     @JsonIgnore
     private int size;
+
+    public GetInfoRequestDto(int status) {
+        if (status == 0) {
+            size = PAGING_SIZE;
+        } else {
+            size = 0;
+        }
+    }
+
 }
