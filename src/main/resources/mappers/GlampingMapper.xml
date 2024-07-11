@@ -48,7 +48,11 @@
         <if test = "size != 0" >
             LIMIT 		#{size}
         </if>
-
+    </select>
+    <select id="selDate">
+        SELECT	    glamp_id AS glampId, room_id AS roomId ,check_in_date AS checkInDate,check_out_date AS checkOutDate
+        FROM		reservation_before
+        WHERE		glamp_id = #{glampId} AND room_id = #{roomId};
     </select>
     <!-- 객실 사진 -->
     <select id="selRoomPics">
