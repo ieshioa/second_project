@@ -1,6 +1,7 @@
 package com.green.glampick.service.implement;
 
 import com.green.glampick.dto.ResponseDto;
+import com.green.glampick.dto.response.login.PostSignUpResponseDto;
 import com.green.glampick.dto.response.login.mail.PostMailCheckResponseDto;
 import com.green.glampick.dto.response.login.mail.PostMailSendResponseDto;
 import com.green.glampick.repository.UserRepository;
@@ -21,6 +22,8 @@ import javax.mail.internet.MimeMessage;
 import java.util.Map;
 import java.util.Random;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 @Slf4j
 @Service
@@ -48,7 +51,7 @@ public class MailServiceImpl implements MailService {
         Random random = new Random();
         int key = 0;
         for (int i = 0; i < 6; i++) {
-            key = key * 10 + random.nextInt(10);
+            key = key * 9 + random.nextInt(10);
         }
         return key;
     }
@@ -64,6 +67,12 @@ public class MailServiceImpl implements MailService {
                 return PostMailSendResponseDto.nullEmptyEmail();
             }
 
+            //  입력받은 이메일이 정규표현식을 통하여 이메일 형식에 맞지 않으면, 이메일 형식 오류에 대한 응답을 보낸다.  //
+            String emailRegex = "^[\\w-\\.]+@([\\w-]+\\.)+[\\w-]{2,4}$";
+            Pattern patternEmail = Pattern.compile(emailRegex);
+            Matcher matcherEmail = patternEmail.matcher(userEmail);
+            if (!matcherEmail.matches()) { return PostMailSendResponseDto.invalidEmail(); }
+
             //  입력받은 이메일이 유저 테이블에 이미 있는 이메일 이라면, 중복 이메일에 대한 응답을 보낸다.  //
             boolean existedEmail = userRepository.existsByUserEmail(userEmail);
             if (existedEmail) { return PostMailSendResponseDto.duplicatedEmail(); }
@@ -73,7 +82,8 @@ public class MailServiceImpl implements MailService {
 
             //  Map 객체에 유저 이메일과 위에서 생성한 코드를 추가하고, 유효시간은 5분으로 지정한다. (5분뒤 삭제) //
             authCodeMap.put(userEmail, authCode);
-            authCodeExpiryMap.put(userEmail, System.currentTimeMillis() + 300000);
+//            authCodeExpiryMap.put(userEmail, System.currentTimeMillis() + 300000);
+            authCodeExpiryMap.put(userEmail, System.currentTimeMillis() + 30000);
 
             //  MimeMessage 객체를 만든다.  //
             MimeMessage mimeMessage = mailSender.createMimeMessage();

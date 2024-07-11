@@ -57,7 +57,6 @@ public class UserEntity {
         this.userPhone = dto.getUserPhone();
         this.userName = dto.getUserName();
         this.userNickname = dto.getUserNickname();
-        this.userProfileImage = dto.getUserProfileImage();
         this.userRole = dto.getUserRole();
         this.userSocialType = dto.getUserSocialType();
     }

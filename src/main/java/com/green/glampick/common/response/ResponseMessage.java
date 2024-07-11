@@ -9,6 +9,10 @@ public interface ResponseMessage {
     // HTTP Status 400 BAD_REQUEST
     String VALIDATION_FAILED = "모든 정보를 입력해주세요.";  // "VF"
     String EMPTY_EMAIL = "이메일이 비어 있습니다.";  // "EE"
+    String INVALID_EMAIL = "이메일 형식이 올바르지 않습니다.";  // "IE"
+    String INVALID_PASSWORD = "비밀번호 형식이 올바르지 않습니다.";  //  "IP"
+    String INVALID_NICKNAME = "닉네임 형식이 올바르지 않습니다.";  // "IN"
+    String INVALID_PHONE = "전화번호 형식이 올바르지 않습니다.";  // "IPH"
     String EXPIRED_CODE = "인증코드의 유효시간이 지났습니다.";  // "EF"
     String INVALID_CODE = "인증코드가 올바르지 않습니다.";  // "IC"
     String DUPLICATE_EMAIL = "중복된 이메일 입니다.";  // "DE"

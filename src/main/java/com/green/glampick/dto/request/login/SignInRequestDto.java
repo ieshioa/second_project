@@ -11,17 +11,9 @@ import lombok.Setter;
 @NoArgsConstructor
 public class SignInRequestDto {
 
-    @NotBlank
     private String userEmail;
-
-    @NotBlank
     private String userPw;
-
-    @JsonIgnore
-    private String providerId;
-
-    @JsonIgnore
-    private String userSocialType;
-
+    @JsonIgnore private String providerId;
+    @JsonIgnore private String userSocialType;
 
 }

@@ -37,6 +37,8 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 @Slf4j
 @Service
@@ -66,26 +68,58 @@ public class LoginServiceImpl implements LoginService {
 
         try {
 
-            //  입력받은 이메일이 유저 테이블에 이미 있는 이메일 이라면, 중복 이메일에 대한 응답을 보낸다.  //
+            //  입력받은 값이 없다면, 유효성 검사에 대한 응답을 보낸다.  //
+            if (dto.getUserEmail() == null || dto.getUserEmail().isEmpty()) { return PostSignUpResponseDto.validationFail(); }
+            if (dto.getUserPw() == null || dto.getUserPw().isEmpty()) { return PostSignUpResponseDto.validationFail(); }
+            if (dto.getUserPhone() == null || dto.getUserPhone().isEmpty()) { return PostSignUpResponseDto.validationFail(); }
+            if (dto.getUserName() == null || dto.getUserName().isEmpty()) { return PostSignUpResponseDto.validationFail(); }
+            if (dto.getUserNickname() == null || dto.getUserNickname().isEmpty()) { return PostSignUpResponseDto.validationFail(); }
+
+            //  입력받은 이메일이 정규표현식을 통하여 이메일 형식에 맞지 않으면, 이메일 형식 오류에 대한 응답을 보낸다.  //
             String userEmail = dto.getUserEmail();
+            String emailRegex = "^[\\w-\\.]+@([\\w-]+\\.)+[\\w-]{2,4}$";
+            Pattern patternEmail = Pattern.compile(emailRegex);
+            Matcher matcherEmail = patternEmail.matcher(userEmail);
+            if (!matcherEmail.matches()) { return PostSignUpResponseDto.invalidEmail(); }
+            //  입력받은 이메일이 유저 테이블에 이미 있는 이메일 이라면, 중복 이메일에 대한 응답을 보낸다.  //
             boolean existedEmail = userRepository.existsByUserEmail(userEmail);
             if (existedEmail) { return PostSignUpResponseDto.duplicatedEmail(); }
 
-            //  입력받은 닉네임이 유저 테이블에 이미 있는 닉네임 이라면, 중복 닉네임에 대한 응답을 보낸다.  //
+
+            //  입력받은 닉네임이 정규 표현식을 통하여 닉네임 형식에 맞지 않으면, 닉네임 형식 오류에 대한 응답을 보낸다.  //
             String userNickname = dto.getUserNickname();
+            String nicknameRegex = "^[a-zA-Z가-힣][a-zA-Z0-9가-힣]{2,10}$";
+            Pattern patternNickname = Pattern.compile(nicknameRegex);
+            Matcher matcherNickname = patternNickname.matcher(userNickname);
+            if (!matcherNickname.matches()) { return PostSignUpResponseDto.invalidNickname(); }
+            //  입력받은 닉네임이 유저 테이블에 이미 있는 닉네임 이라면, 중복 닉네임에 대한 응답을 보낸다.  //
             boolean existedNickname = userRepository.existsByUserNickname(userNickname);
             if (existedNickname) { return PostSignUpResponseDto.duplicatedNickname(); }
 
-            //  입력받은 전화번호가 유저 테이블에 이미 있는 전화번호 이라면, 중복 전화번호에 대한 응답을 보낸다.  //
+
+            //  입력받은 전화번호가 정규표현식을 통하여 전화번호 형식에 맞지 않으면, 전화번호 형식 오류에 대한 응답을 보낸다.  //
             String userPhone = dto.getUserPhone();
+            String phoneRegex = "^(01[016789]-?\\d{3,4}-?\\d{4})|(0[2-9][0-9]-?\\d{3,4}-?\\d{4})$";
+            Pattern patternPhone = Pattern.compile(phoneRegex);
+            Matcher matcherPhone = patternPhone.matcher(userPhone);
+            if (!matcherPhone.matches()) { return PostSignUpResponseDto.invalidPhone(); }
+            //  입력받은 전화번호가 유저 테이블에 이미 있는 전화번호 이라면, 중복 전화번호에 대한 응답을 보낸다.  //
             boolean existedPhone = userRepository.existsByUserPhone(userPhone);
             if (existedPhone) { return PostSignUpResponseDto.duplicatedPhoneNumber(); }
 
-            //  입력받은 DTO 에서 패스워드를 암호화 하여 다시 DTO UserPw 값에 넣는다.  //
+
+            //  입력받은 비밀번호가 정규표현식을 통하여 비밀번호 형식에 맞지 않으면, 비밀번호 형식 오류에 대한 응답을 보낸다.  //
             String userPw = dto.getUserPw();
+            String passwordRegex = "^(?=.*[a-z])(?=.*\\d)(?=.*[@$!%*?&])[A-Za-z\\d@$!%*?&]{8,}$";
+            Pattern patternPw = Pattern.compile(passwordRegex);
+            Matcher matcherPw = patternPw.matcher(userPw);
+            if (!matcherPw.matches()) { return PostSignUpResponseDto.invalidPassword(); }
+            //  입력받은 DTO 에서 패스워드를 암호화 하여 다시 DTO 값에 넣는다.  //
             String encodingPw = passwordEncoder.encode(userPw);
             dto.setUserPw(encodingPw);
 
+
+            //  Request 유저 권한과, 유저 소셜타입을 지정하여 DTO 값에 넣는다.
             dto.setUserRole(Role.ROLE_USER.name());
             dto.setUserSocialType(SignInProviderType.LOCAL.name());
 
@@ -111,6 +145,10 @@ public class LoginServiceImpl implements LoginService {
         String refreshToken = null;
 
         try {
+
+            //  입력받은 값이 없다면, 유효성 검사에 대한 응답을 보낸다.  //
+            if (dto.getUserEmail() == null || dto.getUserEmail().isEmpty()) { return PostSignInResponseDto.validationFail(); }
+            if (dto.getUserPw() == null || dto.getUserPw().isEmpty()) { return PostSignInResponseDto.validationFail(); }
 
             //  입력받은 이메일이 유저 테이블에 없다면, 로그인 실패에 대한 응답을 보낸다.  //
             String userEmail = dto.getUserEmail();
@@ -189,6 +227,10 @@ public class LoginServiceImpl implements LoginService {
 
         try {
 
+            String phoneRegex = "^(01[016789]-?\\d{3,4}-?\\d{4})|(0[2-9][0-9]-?\\d{3,4}-?\\d{4})$";
+            Pattern patternPhone = Pattern.compile(phoneRegex);
+            Matcher matcherPhone = patternPhone.matcher(userPhone);
+            if (!matcherPhone.matches()) { return PostSmsSendResponseDto.invalidPhone(); }
             //  받아온 유저 휴대폰 번호의 "-" 부분을 없앤다. (010-1234-5678 -> 01012345678)  //
             userPhone.replaceAll("-","");
 
