@@ -30,12 +30,6 @@ public class PostGlampingInfoResponseDto extends ResponseDto {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(result);
     }
 
-//     유저가 이미 글램핑을 가지고 있음
-    public static ResponseEntity<ResponseDto> alreadyHaving() {
-        ResponseDto result = new ResponseDto(ResponseCode.ALREADY_HAVING, "");
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(result);
-    }
-
     // 정보가 덜 입력됨
     public static ResponseEntity<ResponseDto> validationFailed(String errorMsg) {
         ResponseDto result = new ResponseDto(ResponseCode.VALIDATION_FAILED, errorMsg);

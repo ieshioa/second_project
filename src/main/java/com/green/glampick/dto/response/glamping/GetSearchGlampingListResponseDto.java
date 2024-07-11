@@ -54,7 +54,7 @@ public class GetSearchGlampingListResponseDto extends ResponseDto {
 
     public static ResponseEntity<ResponseDto> isNull() {
         ResponseDto result = new ResponseDto(ResponseCode.RESULT_IS_NULL, ResponseMessage.RESULT_IS_NULL);
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(result);
+        return ResponseEntity.status(HttpStatus.OK).body(result);
     }
 
 
