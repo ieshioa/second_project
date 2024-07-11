@@ -1,5 +1,6 @@
 package com.green.glampick.dto.request.user;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Getter;
 import lombok.Setter;
@@ -8,6 +9,6 @@ import lombok.Setter;
 @Setter
 public class GetFavoriteGlampingRequestDto {
 
-    private long userId;
+    @JsonIgnore private long userId;
 
 }

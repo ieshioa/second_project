@@ -32,7 +32,7 @@ public interface UserService {
     ResponseEntity<?super GetUserResponseDto> getUser(GetUserRequestDto dto);
 
     //  마이페이지 - 내 정보 수정하기  //
-    ResponseEntity<?super UpdateUserResponseDto> updateUser(UpdateUserRequestDto dto);
+    ResponseEntity<?super UpdateUserResponseDto> updateUser(UpdateUserRequestDto dto,  MultipartFile mf);
 
     //  마이페이지 - 회원 탈퇴  //
     ResponseEntity<?super DeleteUserResponseDto> deleteUser(long userId);

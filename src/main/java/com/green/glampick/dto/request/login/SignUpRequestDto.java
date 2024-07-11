@@ -17,7 +17,7 @@ public class SignUpRequestDto {
     @JsonIgnore private long userId;
 
     @JsonIgnore private String providerId;
-    @JsonIgnore private SignInProviderType userSocialType;
+    @JsonIgnore private String userSocialType;
 
     @NotBlank @Email
     private String userEmail;
@@ -36,5 +36,7 @@ public class SignUpRequestDto {
     private String userNickname;
 
     private String userProfileImage;
+
+    @JsonIgnore private String userRole;
 
 }

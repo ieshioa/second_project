@@ -1,8 +1,10 @@
 package com.green.glampick.entity;
 
+import com.green.glampick.common.Role;
 import com.green.glampick.dto.request.login.SignUpRequestDto;
 import com.green.glampick.dto.request.user.GetBookRequestDto;
 import com.green.glampick.dto.request.user.UpdateUserRequestDto;
+import com.green.glampick.security.SignInProviderType;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -36,6 +38,7 @@ public class UserEntity {
 
     private String userPhone;  // 유저 휴대폰 번호
 
+    @Setter
     private String userProfileImage;  // 유저 프로필 이미지
 
     private String userRole;  // 유저 권한
@@ -55,7 +58,8 @@ public class UserEntity {
         this.userName = dto.getUserName();
         this.userNickname = dto.getUserNickname();
         this.userProfileImage = dto.getUserProfileImage();
-        this.userRole = "USER";
+        this.userRole = dto.getUserRole();
+        this.userSocialType = dto.getUserSocialType();
     }
 
     public UserEntity(UpdateUserRequestDto dto) {
