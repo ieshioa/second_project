@@ -4,6 +4,8 @@ import com.green.glampick.dto.request.login.SignInRequestDto;
 import com.green.glampick.dto.request.login.SignUpRequestDto;
 import com.green.glampick.dto.response.login.PostSignInResponseDto;
 import com.green.glampick.dto.response.login.PostSignUpResponseDto;
+import com.green.glampick.dto.response.login.mail.PostMailCheckResponseDto;
+import com.green.glampick.dto.response.login.mail.PostMailSendResponseDto;
 import com.green.glampick.dto.response.login.sms.PostSmsCheckResponseDto;
 import com.green.glampick.dto.response.login.sms.PostSmsSendResponseDto;
 import com.green.glampick.dto.response.login.token.GetAccessTokenResponseDto;
@@ -18,9 +20,22 @@ import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springdoc.core.annotations.ParameterObject;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import static com.green.glampick.common.swagger.description.login.GetAccessTokenSwaggerDescription.ACCESS_TOKEN_DESCRIPTION;
+import static com.green.glampick.common.swagger.description.login.PostCheckMailSwaggerDescription.CHECK_MAIL_DESCRIPTION;
+import static com.green.glampick.common.swagger.description.login.PostCheckMailSwaggerDescription.CHECK_MAIL_RESPONSE_ERROR_CODE;
+import static com.green.glampick.common.swagger.description.login.PostCheckSmsSwaggerDescription.CHECK_SMS_DESCRIPTION;
+import static com.green.glampick.common.swagger.description.login.PostCheckSmsSwaggerDescription.CHECK_SMS_RESPONSE_ERROR_CODE;
+import static com.green.glampick.common.swagger.description.login.PostSendMailSwaggerDescription.SEND_MAIL_DESCRIPTION;
+import static com.green.glampick.common.swagger.description.login.PostSendMailSwaggerDescription.SEND_MAIL_RESPONSE_ERROR_CODE;
+import static com.green.glampick.common.swagger.description.login.PostSendSmsSwaggerDescription.SEND_SMS_DESCRIPTION;
+import static com.green.glampick.common.swagger.description.login.PostSendSmsSwaggerDescription.SEND_SMS_RESPONSE_ERROR_CODE;
+import static com.green.glampick.common.swagger.description.login.PostSignInSwaggerDescription.SIGN_IN_DESCRIPTION;
+import static com.green.glampick.common.swagger.description.login.PostSignInSwaggerDescription.SIGN_IN_RESPONSE_ERROR_CODE;
+import static com.green.glampick.common.swagger.description.login.PostSignUpSwaggerDescription.SIGN_UP_DESCRIPTION;
+import static com.green.glampick.common.swagger.description.login.PostSignUpSwaggerDescription.SIGN_UP_RESPONSE_ERROR_CODE;
 
 @Slf4j
 @RestController
@@ -31,71 +46,77 @@ public class LoginController {
     private final LoginService service;
 
     @PostMapping("/sign-up")
-    @Operation(summary = "이메일 회원가입", description = "<strong>이메일을 통한 회원가입을 진행합니다.</strong>" +
-                "<p>이메일 인증을 받은 후, 회원가입이 가능합니다.</p>",
-                responses = {@ApiResponse(
-                    responseCode = "200",
-                    description = "성공에 대한 반환 값 입니다.",
-                    content = @Content(
-                            mediaType = "application/json",
-                            schema = @Schema(implementation = PostSignUpResponseDto.class)
-                    ))})
+    @Operation(summary = "이메일 회원가입", description = SIGN_UP_DESCRIPTION)
+    @ApiResponse(responseCode = "200", description = SIGN_UP_RESPONSE_ERROR_CODE,
+        content = @Content(
+                mediaType = "application/json",
+                schema = @Schema(implementation = PostSignUpResponseDto.class)))
     public ResponseEntity<? super PostSignUpResponseDto> signUpUser(@RequestBody @Valid SignUpRequestDto dto) {
         return service.signUpUser(dto);
     }
 
     @PostMapping("/sign-in")
-    @Operation(summary = "이메일 로그인", description = "<strong>이메일을 통한 로그인을 진행합니다.</strong>",
-               responses = {@ApiResponse(
-                   responseCode = "200",
-                   description = "성공에 대한 반환 값 입니다.",
-                   content = @Content(
-                           mediaType = "application/json",
-                           schema = @Schema(implementation = PostSignInResponseDto.class)
-                   ))})
+    @Operation(summary = "이메일 로그인", description = SIGN_IN_DESCRIPTION)
+    @ApiResponse(responseCode = "200", description = SIGN_IN_RESPONSE_ERROR_CODE,
+       content = @Content(
+                mediaType = "application/json",
+                schema = @Schema(implementation = PostSignInResponseDto.class)))
     public ResponseEntity<? super PostSignInResponseDto> signInUser(HttpServletResponse res, @RequestBody @Valid SignInRequestDto dto) {
         return service.signInUser(res, dto);
     }
 
     @GetMapping("/access-token")
-    @Operation(summary = "Access Token 불러오기", description = "<strong>Access Token 값을 받아옵니다.</strong>",
-            responses = {@ApiResponse(
-                    responseCode = "200",
-                    description = "성공에 대한 반환 값 입니다.",
-                    content = @Content(
-                            mediaType = "application/json",
-                            schema = @Schema(implementation = GetAccessTokenResponseDto.class)
-                    ))})
+    @Operation(summary = "Access Token 불러오기", description = ACCESS_TOKEN_DESCRIPTION)
+    @ApiResponse(responseCode = "200",
+        content = @Content(
+                mediaType = "application/json",
+                schema = @Schema(implementation = GetAccessTokenResponseDto.class)))
     public ResponseEntity<? super GetAccessTokenResponseDto> getAccessToken(HttpServletRequest req) {
         return service.getAccessToken(req);
     }
 
     @PostMapping("/send-sms")
-    @Operation(summary = "휴대폰 인증 문자 보내기", description = "<strong>입력한 번호로 인증코드가 발송됩니다.</strong>",
-            responses = {@ApiResponse(
-                    responseCode = "200",
-                    description = "성공에 대한 반환 값 입니다.",
-                    content = @Content(
-                            mediaType = "application/json",
-                            schema = @Schema(implementation = PostSmsSendResponseDto.class)
-                    ))})
+    @Operation(summary = "휴대폰 인증 문자 보내기", description = SEND_SMS_DESCRIPTION)
+    @ApiResponse(responseCode = "200", description = SEND_SMS_RESPONSE_ERROR_CODE,
+        content = @Content(
+                mediaType = "application/json",
+                schema = @Schema(implementation = PostSmsSendResponseDto.class)))
     public ResponseEntity<? super PostSmsSendResponseDto> sendOne(@RequestParam String userPhone) {
         return service.sendOne(userPhone);
     }
 
     @PostMapping("/check-sms")
-    @Operation(summary = "휴대폰 인증코드 체크", description = "<strong>받은 휴대폰 인증코드를 확인합니다.</strong>",
-            responses = {@ApiResponse(
-                    responseCode = "200",
-                    description = "성공에 대한 반환 값 입니다.",
-                    content = @Content(
-                            mediaType = "application/json",
-                            schema = @Schema(implementation = PostSmsCheckResponseDto.class)
-                    ))})
+    @Operation(summary = "휴대폰 인증코드 체크", description = CHECK_SMS_DESCRIPTION)
+    @ApiResponse(responseCode = "200", description = CHECK_SMS_RESPONSE_ERROR_CODE,
+        content = @Content(
+                mediaType = "application/json",
+                schema = @Schema(implementation = PostSmsCheckResponseDto.class)))
     public ResponseEntity<? super PostSmsCheckResponseDto> smsCheck(
             @RequestParam String userPhone, @RequestParam int phoneKey)
     {
         return service.checkPhone(userPhone, phoneKey);
+    }
+
+    @PostMapping("/mail-send")
+    @Operation(summary = "이메일 인증 보내기", description = SEND_MAIL_DESCRIPTION)
+    @ApiResponse(responseCode = "200", description = SEND_MAIL_RESPONSE_ERROR_CODE,
+        content = @Content(
+                mediaType = "application/json",
+                schema = @Schema(implementation = PostMailSendResponseDto.class)))
+    public ResponseEntity<? super PostMailSendResponseDto> sendMail(@RequestParam String userEmail) {
+        return service.sendAuthCode(userEmail);
+    }
+
+    @PostMapping("/mail-check")
+    @Operation(summary = "이메일 인증확인", description = CHECK_MAIL_DESCRIPTION)
+    @ApiResponse(responseCode = "200", description = CHECK_MAIL_RESPONSE_ERROR_CODE,
+        content = @Content(
+                mediaType = "application/json",
+                schema = @Schema(implementation = PostMailCheckResponseDto.class)))
+    public ResponseEntity<? super PostMailCheckResponseDto> mailCheck(
+            @RequestParam String userEmail, @RequestParam int emailKey)
+    {
+        return service.checkCode(userEmail, emailKey);
     }
 
 }

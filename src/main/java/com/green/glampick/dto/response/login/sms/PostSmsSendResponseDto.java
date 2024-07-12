@@ -29,18 +29,8 @@ public class PostSmsSendResponseDto extends ResponseDto{
         return ResponseEntity.status(HttpStatus.OK).body(result);
     }
 
-    public static ResponseEntity<ResponseDto> nullEmptyEmail() {
-        ResponseDto result = new ResponseDto(ResponseCode.EMPTY_EMAIL, ResponseMessage.EMPTY_EMAIL);
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(result);
-    }
-
-    public static ResponseEntity<ResponseDto> validationError() {
-        ResponseDto result = new ResponseDto(ResponseCode.VALIDATION_FAILED, ResponseMessage.VALIDATION_FAILED);
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(result);
-    }
-
-    public static ResponseEntity<ResponseDto> duplicatedEmail() {
-        ResponseDto result = new ResponseDto(ResponseCode.DUPLICATE_EMAIL, ResponseMessage.DUPLICATE_EMAIL);
+    public static ResponseEntity<ResponseDto> invalidPhone() {
+        ResponseDto result = new ResponseDto(ResponseCode.INVALID_PHONE, ResponseMessage.INVALID_PHONE);
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(result);
     }
 
