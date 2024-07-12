@@ -26,14 +26,10 @@ public class MainController {
 
     @GetMapping
     @Operation(summary = "인기 글램핑 리스트", description = MAIN_GLAMPING_DESCRIPTION)
-    @ApiResponse(
-            description = MAIN_GLAMPING_RESPONSE_ERROR_CODE,
-            responseCode = "200",
-            content = @Content(
-                    mediaType = "application/json",
-                    schema = @Schema(implementation = GetMainGlampingListResponseDto.class)
-            )
-    )
+    @ApiResponse(responseCode = "200", description = MAIN_GLAMPING_RESPONSE_ERROR_CODE,
+        content = @Content(
+                mediaType = "application/json",
+                schema = @Schema(implementation = GetMainGlampingListResponseDto.class)))
     public ResponseEntity<? super GetMainGlampingListResponseDto> mainGlampingList() {
         return service.mainGlampingList();
     }

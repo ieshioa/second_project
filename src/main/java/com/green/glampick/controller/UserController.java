@@ -1,10 +1,14 @@
 package com.green.glampick.controller;
 
 import com.green.glampick.dto.request.user.*;
+import com.green.glampick.dto.response.login.PostSignUpResponseDto;
 import com.green.glampick.dto.response.user.*;
 import com.green.glampick.entity.ReviewImageEntity;
 import com.green.glampick.service.UserService;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -15,6 +19,12 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
+import static com.green.glampick.common.swagger.description.login.PostSignUpSwaggerDescription.SIGN_UP_RESPONSE_ERROR_CODE;
+import static com.green.glampick.common.swagger.description.user.GetUserBookSwaggerDescription.USER_BOOK_DESCRIPTION;
+import static com.green.glampick.common.swagger.description.user.GetUserBookSwaggerDescription.USER_BOOK_RESPONSE_ERROR_CODE;
+import static com.green.glampick.common.swagger.description.user.PostUserBookCancelSwaggerDescription.USER_BOOK_CANCEL_DESCRIPTION;
+import static com.green.glampick.common.swagger.description.user.PostUserBookCancelSwaggerDescription.USER_BOOK_CANCEL_RESPONSE_ERROR_CODE;
+
 @Slf4j
 @RestController
 @RequiredArgsConstructor
@@ -24,17 +34,21 @@ public class UserController {
     private final UserService service;
 
     @GetMapping("/book")// 예약 내역 불러오기
-    @Operation(summary = "예약 내역 불러오기", description = "<strong></strong>" +
-            "<p> reservationId = </p>" +
-            "<p> reviewContent = </p>" +
-            "<p> reviewStarPoint = </p>")
+    @Operation(summary = "예약 내역 불러오기", description = USER_BOOK_DESCRIPTION)
+    @ApiResponse(responseCode = "200", description = USER_BOOK_RESPONSE_ERROR_CODE,
+        content = @Content(
+                mediaType = "application/json",
+                schema = @Schema(implementation = PostSignUpResponseDto.class)))
     public ResponseEntity<?super GetBookResponseDto> getBook(@ParameterObject GetBookRequestDto dto) {
         return service.getBook(dto);
     }
 
     @PostMapping("/book-cancel")// 예약 내역 취소하기
-    @Operation(summary = "예약 취소", description = "<strong></strong>" +
-            "<p></p>")
+    @Operation(summary = "예약 취소", description = USER_BOOK_CANCEL_DESCRIPTION)
+    @ApiResponse(responseCode = "200", description = USER_BOOK_CANCEL_RESPONSE_ERROR_CODE,
+        content = @Content(
+                mediaType = "application/json",
+                schema = @Schema(implementation = PostSignUpResponseDto.class)))
     public ResponseEntity<?super CancelBookResponseDto> cancelBook(@RequestBody CancelBookRequestDto dto) {
         return service.cancelBook(dto);
     }
