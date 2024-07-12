@@ -20,7 +20,7 @@ public class PostReviewRequestDto {
     private String reviewContent;
     private int reviewStarPoint;
     private long roomId;
-
+    @JsonIgnore
     private List<MultipartFile> ReviewImageFiles = new ArrayList<>();
 
 }
