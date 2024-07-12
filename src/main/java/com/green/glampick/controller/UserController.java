@@ -20,10 +20,16 @@ import org.springframework.web.multipart.MultipartFile;
 import java.util.List;
 
 import static com.green.glampick.common.swagger.description.login.PostSignUpSwaggerDescription.SIGN_UP_RESPONSE_ERROR_CODE;
+import static com.green.glampick.common.swagger.description.user.DeleteUserReviewSwaggerDescription.USER_REVIEW_REMOVE_DESCRIPTION;
+import static com.green.glampick.common.swagger.description.user.DeleteUserReviewSwaggerDescription.USER_REVIEW_REMOVE_RESPONSE_ERROR_CODE;
 import static com.green.glampick.common.swagger.description.user.GetUserBookSwaggerDescription.USER_BOOK_DESCRIPTION;
 import static com.green.glampick.common.swagger.description.user.GetUserBookSwaggerDescription.USER_BOOK_RESPONSE_ERROR_CODE;
+import static com.green.glampick.common.swagger.description.user.GetUserReviewSwaggerDescription.USER_REVIEW_VIEW_DESCRIPTION;
+import static com.green.glampick.common.swagger.description.user.GetUserReviewSwaggerDescription.USER_REVIEW_VIEW_RESPONSE_ERROR_CODE;
 import static com.green.glampick.common.swagger.description.user.PostUserBookCancelSwaggerDescription.USER_BOOK_CANCEL_DESCRIPTION;
 import static com.green.glampick.common.swagger.description.user.PostUserBookCancelSwaggerDescription.USER_BOOK_CANCEL_RESPONSE_ERROR_CODE;
+import static com.green.glampick.common.swagger.description.user.PostUserReviewSwaggerDescription.USER_REVIEW_DESCRIPTION;
+import static com.green.glampick.common.swagger.description.user.PostUserReviewSwaggerDescription.USER_REVIEW_RESPONSE_ERROR_CODE;
 
 @Slf4j
 @RestController
@@ -33,46 +39,53 @@ import static com.green.glampick.common.swagger.description.user.PostUserBookCan
 public class UserController {
     private final UserService service;
 
-    @GetMapping("/book")// 예약 내역 불러오기
-    @Operation(summary = "예약 내역 불러오기", description = USER_BOOK_DESCRIPTION)
+    //  유저 페이지 - 예약 내역 불러오기  //
+    @GetMapping("/book")
+    @Operation(summary = "예약내역 불러오기", description = USER_BOOK_DESCRIPTION)
     @ApiResponse(responseCode = "200", description = USER_BOOK_RESPONSE_ERROR_CODE,
         content = @Content(
-                mediaType = "application/json",
-                schema = @Schema(implementation = PostSignUpResponseDto.class)))
+                mediaType = "application/json", schema = @Schema(implementation = PostSignUpResponseDto.class)))
     public ResponseEntity<?super GetBookResponseDto> getBook(@ParameterObject GetBookRequestDto dto) {
         return service.getBook(dto);
     }
 
-    @PostMapping("/book-cancel")// 예약 내역 취소하기
-    @Operation(summary = "예약 취소", description = USER_BOOK_CANCEL_DESCRIPTION)
+    //  유저 페이지 - 예약 내역 취소하기  //
+    @PostMapping("/book-cancel")
+    @Operation(summary = "예약내역 취소하기", description = USER_BOOK_CANCEL_DESCRIPTION)
     @ApiResponse(responseCode = "200", description = USER_BOOK_CANCEL_RESPONSE_ERROR_CODE,
         content = @Content(
-                mediaType = "application/json",
-                schema = @Schema(implementation = PostSignUpResponseDto.class)))
+                mediaType = "application/json", schema = @Schema(implementation = PostSignUpResponseDto.class)))
     public ResponseEntity<?super CancelBookResponseDto> cancelBook(@RequestBody CancelBookRequestDto dto) {
         return service.cancelBook(dto);
     }
 
-    @PostMapping("/review")// 리뷰 작성
-    @Operation(summary = "리뷰 작성", description = "<strong></strong>" +
-            "<p> reservationId = 예약 ID ex) 1 </p>" +
-            "<p> reviewContent = 리뷰 내용 ex) 정말 좋았다.</p>" +
-            "<p> reviewStarPoint = 별점 ex) 3 </p>")
+    //  유저 페이지 - 리뷰 작성하기  //
+    @PostMapping("/review")
+    @Operation(summary = "리뷰 작성하기", description = USER_REVIEW_DESCRIPTION)
+    @ApiResponse(responseCode = "200", description = USER_REVIEW_RESPONSE_ERROR_CODE,
+        content = @Content(
+                mediaType = "application/json", schema = @Schema(implementation = PostReviewResponseDto.class)))
     public ResponseEntity<?super PostReviewResponseDto> postReview(@RequestPart PostReviewRequestDto dto, @RequestPart List<MultipartFile> mf) {
         return service.postReview(dto, mf);
     }
 
-    @DeleteMapping("/delete")// 리뷰 삭제
-    @Operation(summary = "리뷰 삭제", description = "<strong></strong>" +
-            "<p> review_id = 리뷰 pk ex) 1 </p>")//
+    //  유저 페이지 - 리뷰 삭제하기  //
+    @DeleteMapping("/delete")
+    @Operation(summary = "리뷰 삭제하기", description = USER_REVIEW_REMOVE_DESCRIPTION)
+    @ApiResponse(responseCode = "200", description = USER_REVIEW_REMOVE_RESPONSE_ERROR_CODE,
+            content = @Content(
+                    mediaType = "application/json", schema = @Schema(implementation = DeleteReviewResponseDto.class)))
     public ResponseEntity<?super DeleteReviewResponseDto> deleteReview(@ParameterObject DeleteReviewRequestDto dto) {
         return service.deleteReview(dto);
 
     }
 
-    @GetMapping("/review")// 리뷰 불러오기
-    @Operation(summary = "리뷰 불러오기", description = "<strong></strong>" +
-            "<p> review_id = 리뷰 pk ex) 1 </p>")
+    //  유저 페이지 - 리뷰 불러오기  //
+    @GetMapping("/review")
+    @Operation(summary = "리뷰 불러오기", description = USER_REVIEW_VIEW_DESCRIPTION)
+    @ApiResponse(responseCode = "200", description = USER_REVIEW_VIEW_RESPONSE_ERROR_CODE,
+            content = @Content(
+                    mediaType = "application/json", schema = @Schema(implementation = PostReviewResponseDto.class)))
     public ResponseEntity<?super GetReviewResponseDto> getReview(@ParameterObject @ModelAttribute GetReviewRequestDto dto) {
         return service.getReview(dto);
     }
@@ -107,7 +120,7 @@ public class UserController {
     }
 
     @DeleteMapping("")// 회원탈퇴
-    @Operation(summary = "회원탈퇴", description = "<strong></strong>" +
+    @Operation(summary = "회원 탈퇴", description = "<strong></strong>" +
             "<p></p>")
     public ResponseEntity<?super DeleteUserResponseDto> deleteUser(@ParameterObject DeleteUserRequestDto dto) {
         return service.deleteUser(dto);
