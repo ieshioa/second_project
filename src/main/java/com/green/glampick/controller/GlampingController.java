@@ -54,6 +54,8 @@ public class GlampingController {
 // 강국 =================================================================================================================
     @Operation(summary = "글램핑 상세 페이지",
         description = "<strong> 변수명 glampId : 글램프 PK </strong> <p>  ex)23 </p>"  +
+                      "<strong> 변수명 inDate : 글램프 PK </strong> <p>  ex)2024-06-10 </p>"  +
+                      "<strong> 변수명 outDate : 글램프 PK </strong> <p>  ex)2024-06-15 </p>"  +
                       "<strong> 변수명 status : 상태 코드 </strong>" +
                       "<p> 0 -> 처음 5개보기 </p> " ,
         responses = {

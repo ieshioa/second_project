@@ -41,7 +41,6 @@ public class MainServiceImpl implements MainService {
             e.printStackTrace();
             return ResponseDto.databaseError();
         }
-
     }
 
 }

@@ -25,5 +25,7 @@ public class GlampingRoomListItem {
     private String checkInTime;
     @Schema(example = "23:00", description = "체크아웃 시간")
     private String checkOutTime;
+    @Schema(example = "true", $dynamicAnchor = "예약가능여부")
+    private boolean isReservationAvailable;
 
 }
