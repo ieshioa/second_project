@@ -155,10 +155,15 @@ public class OwnerServiceImpl implements OwnerService {
     public ResponseEntity<? super PutGlampingInfoResponseDto> updateGlampingInfo(GlampingPutRequestDto p) {
         GlampingPostRequestDto req = p.getRequestDto();
         // 유저 PK 불러오기
-        req.setUserId(authenticationFacade.getLoginUserId());
-//        req.setUserId(100);
-        if (req.getUserId() <= 0) {
-            return PutGlampingInfoResponseDto.validateUserId();
+        try {
+            req.setUserId(authenticationFacade.getLoginUserId());
+//            req.setUserId(100);
+            if (req.getUserId() <= 0) {
+                throw new RuntimeException();
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            return PostGlampingInfoResponseDto.validateUserId();
         }
 
         // GlampingValidate
