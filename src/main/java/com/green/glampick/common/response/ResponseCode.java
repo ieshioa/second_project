@@ -29,6 +29,7 @@ public interface ResponseCode {
 
     // HTTP Status 401
     String SIGN_IN_FAILED = "SF";  // "로그인에 실패하였습니다."
+    String AUTHORIZATION_FAILED = "AF";  // "인증에 실패하였습니다."
 
     // HTTP Status 403
     String NOT_PERMISSION = "NP";  // "권한이 없습니다."

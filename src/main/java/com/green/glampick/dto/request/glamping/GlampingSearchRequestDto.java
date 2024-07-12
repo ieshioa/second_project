@@ -18,7 +18,7 @@ public class GlampingSearchRequestDto extends Paging {
         super(page, PAGING_SIZE);
     }
 
-    @Schema(example = "경북", description = "지역")
+    @Schema(example = "gyeongbuk", description = "지역")
     private String region;
     @Schema(example = "2024-06-28", description = "체크인")
     private String inDate;

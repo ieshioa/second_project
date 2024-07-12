@@ -41,9 +41,14 @@ public class UserServiceImpl implements UserService {
     @Override
     public ResponseEntity<? super GetBookResponseDto> getBook(GetBookRequestDto dto) {
 
-        long loggedInUserId = authenticationFacade.getLoginUserId();
-        if (loggedInUserId == 0) { return GetBookResponseDto.noPermission(); }
-        dto.setUserId(loggedInUserId);
+        try{
+            long loggedInUserId = authenticationFacade.getLoginUserId();
+            if (loggedInUserId == 0) { return GetBookResponseDto.noPermission(); }
+            dto.setUserId(loggedInUserId);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return GetUserResponseDto.authorizationFailed();
+        }
 
 
         List<GetReservationBeforeResultSet> reservationBeforeResultSetList;
@@ -69,11 +74,14 @@ public class UserServiceImpl implements UserService {
     @Override
     public ResponseEntity<? super CancelBookResponseDto> cancelBook(CancelBookRequestDto dto) {
 
-        long loggedInUserId = authenticationFacade.getLoginUserId();
-        if (loggedInUserId == 0) {
-            return CancelBookResponseDto.noPermission();
+        try{
+            long loggedInUserId = authenticationFacade.getLoginUserId();
+            if (loggedInUserId == 0) { return GetBookResponseDto.noPermission(); }
+            dto.setUserId(loggedInUserId);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return GetUserResponseDto.authorizationFailed();
         }
-        dto.setUserId(authenticationFacade.getLoginUserId());
 
 
         Optional<ReservationBeforeEntity> optionalBeforeEntity = Optional.empty();
@@ -113,8 +121,15 @@ public class UserServiceImpl implements UserService {
     //  마이페이지 - 리뷰 작성하기  //
     @Override
     public ResponseEntity<? super PostReviewResponseDto> postReview(PostReviewRequestDto dto, List<MultipartFile> mf) {
-        long loggedInUserId = authenticationFacade.getLoginUserId();
-        dto.setUserId(loggedInUserId);
+            long loggedInUserId = 0;
+            try{
+                loggedInUserId = authenticationFacade.getLoginUserId();
+                if (loggedInUserId == 0) { return GetBookResponseDto.noPermission(); }
+                dto.setUserId(loggedInUserId);
+            } catch (Exception e) {
+                e.printStackTrace();
+                return GetUserResponseDto.authorizationFailed();
+            }
 
 
             ReviewEntity reviewEntity = new ReviewEntity(dto);
@@ -174,9 +189,14 @@ public class UserServiceImpl implements UserService {
     @Override // 리뷰 불러오기
     public ResponseEntity<? super GetReviewResponseDto> getReview(GetReviewRequestDto dto) {
 
-        long loggedInUserId = authenticationFacade.getLoginUserId();
-        if (loggedInUserId == 0) { return GetBookResponseDto.noPermission(); }
-        dto.setUserId(loggedInUserId);
+        try{
+            long loggedInUserId = authenticationFacade.getLoginUserId();
+            if (loggedInUserId == 0) { return GetBookResponseDto.noPermission(); }
+            dto.setUserId(loggedInUserId);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return GetUserResponseDto.authorizationFailed();
+        }
 
         List<GetUserReviewResultSet> resultSetList = null;
         List<ReviewImageEntity> imageEntities = new ArrayList<>();
@@ -226,9 +246,14 @@ public class UserServiceImpl implements UserService {
     @Override //관심글램핑 불러오기
     public ResponseEntity<? super GetFavoriteGlampingResponseDto> getFavoriteGlamping(GetFavoriteGlampingRequestDto dto) {
 
-        long loggedInUserId = authenticationFacade.getLoginUserId();
-        if (loggedInUserId == 0) { return GetBookResponseDto.noPermission(); }
-        dto.setUserId(loggedInUserId);
+        try{
+            long loggedInUserId = authenticationFacade.getLoginUserId();
+            if (loggedInUserId == 0) { return GetBookResponseDto.noPermission(); }
+            dto.setUserId(loggedInUserId);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return GetUserResponseDto.authorizationFailed();
+        }
 
         List<GetFavoriteGlampingResultSet> resultSets;
 
@@ -248,7 +273,14 @@ public class UserServiceImpl implements UserService {
     @Override
     public ResponseEntity<? super GetUserResponseDto> getUser(GetUserRequestDto dto) {
 
-        dto.setUserId(authenticationFacade.getLoginUserId());
+        try{
+            long loggedInUserId = authenticationFacade.getLoginUserId();
+            if (loggedInUserId == 0) { return GetBookResponseDto.noPermission(); }
+            dto.setUserId(loggedInUserId);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return GetUserResponseDto.authorizationFailed();
+        }
 
         try {
 
@@ -269,8 +301,14 @@ public class UserServiceImpl implements UserService {
     //  마이페이지 - 내 정보 수정하기  //
     @Override
     public ResponseEntity<? super UpdateUserResponseDto> updateUser(UpdateUserRequestDto dto, MultipartFile mf) {
-        long loggedInUserId = authenticationFacade.getLoginUserId();
-        dto.setUserId(loggedInUserId);
+        try{
+            long loggedInUserId = authenticationFacade.getLoginUserId();
+            if (loggedInUserId == 0) { return GetBookResponseDto.noPermission(); }
+            dto.setUserId(loggedInUserId);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return GetUserResponseDto.authorizationFailed();
+        }
 
         try {
             UserEntity userEntity = userRepository.findById(dto.getUserId()).get();

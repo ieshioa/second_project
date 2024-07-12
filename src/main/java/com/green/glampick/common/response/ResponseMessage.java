@@ -29,6 +29,7 @@ public interface ResponseMessage {
 
     // HTTP Status 401 UNAUTHORIZED
     String SIGN_IN_FAILED = "로그인에 실패하였습니다.";  // "SF"
+    String AUTHORIZATION_FAILED = "인증에 실패하였습니다.";  // "AF"
 
     // HTTP Status 403 FORBIDDEN
     String NOT_PERMISSION = "권한이 없습니다.";  // "NP"
