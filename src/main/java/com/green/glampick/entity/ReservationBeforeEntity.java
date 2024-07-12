@@ -35,7 +35,7 @@ public class ReservationBeforeEntity {
 
     private String checkOutDate;//체크아웃 일자
 
-    private long reservationAmount;//최종 결제 가격
+    private long payAmount;//최종 결제 가격
 
     @CreationTimestamp
     @Column(nullable = false, updatable = false)
@@ -51,6 +51,6 @@ public class ReservationBeforeEntity {
         this.inputName = dto.getInputName();
         this.checkInDate = dto.getCheckInDate();
         this.checkOutDate = dto.getCheckOutDate();
-        this.reservationAmount = dto.getReservationId();
+        this.payAmount = dto.getPayAmount();
     }
 }
