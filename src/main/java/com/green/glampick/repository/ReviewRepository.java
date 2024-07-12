@@ -35,4 +35,6 @@ public interface ReviewRepository extends JpaRepository<ReviewEntity, Long> {
     )
     List<GetUserReviewResultSet> getReview(long userId, int limit, int offset);
 
+    @Query("SELECT AVG(s.starPointAvg) FROM glamping s")
+    long findStarPointAvg();
 }

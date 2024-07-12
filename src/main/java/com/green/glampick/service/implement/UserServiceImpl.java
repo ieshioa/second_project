@@ -159,6 +159,8 @@ public class UserServiceImpl implements UserService {
                 reviewImageEntityList.add(reviewImageEntity);
             }
             this.reviewImageRepository.saveAll(reviewImageEntityList);
+            reviewEntity.setReviewStarPoint(dto.getReviewStarPoint());
+            this.reviewRepository.save(reviewEntity);
 
         } catch (Exception e) {
             e.printStackTrace();
