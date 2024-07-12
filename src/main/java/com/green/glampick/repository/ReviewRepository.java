@@ -34,6 +34,26 @@ public interface ReviewRepository extends JpaRepository<ReviewEntity, Long> {
     )
     List<GetUserReviewResultSet> getReview(long userId);
 
-    @Query("SELECT AVG(s.starPointAvg) FROM glamping s")
+    @Query(
+            value =
+            "UPDATE glamping " +
+            "SET star_point_avg = ( " +
+            "SELECT TRUNCATE(AVG(review_star_point),1) " +
+            "FROM review " +
+            "WHERE glamp_id = 9) " +
+            "WHERE user_id = 1 " +
+            "AND glamp_id = 9; ",
+    nativeQuery = true)
     long findStarPointAvg();
+
+//    UPDATE glamping
+//    SET review_count = (
+//            SELECT COUNT(review_content)
+//    FROM review
+//    WHERE glamp_id = 3
+//)
+//    WHERE user_id = 11
+//    AND glamp_id = 3;
+//    SELECT *
+//    FROM glamping;
 }
