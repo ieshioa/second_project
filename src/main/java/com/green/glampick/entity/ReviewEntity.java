@@ -5,8 +5,10 @@ import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 import org.hibernate.annotations.CreationTimestamp;
 
+@Setter
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
@@ -22,6 +24,7 @@ public class ReviewEntity {
     private String reviewContent;  // 리뷰내용
     private int reviewStarPoint;  // 리뷰 별점
     private String reviewComment;
+
 
 
     @CreationTimestamp
