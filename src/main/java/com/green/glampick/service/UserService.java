@@ -35,6 +35,6 @@ public interface UserService {
     ResponseEntity<?super UpdateUserResponseDto> updateUser(UpdateUserRequestDto dto,  MultipartFile mf);
 
     //  마이페이지 - 회원 탈퇴  //
-    ResponseEntity<?super DeleteUserResponseDto> deleteUser(long userId);
+    ResponseEntity<?super DeleteUserResponseDto> deleteUser(DeleteUserRequestDto dto);
 
 }

@@ -95,8 +95,8 @@ public class UserController {
     @DeleteMapping("")// 회원탈퇴
     @Operation(summary = "회원탈퇴", description = "<strong></strong>" +
             "<p></p>")
-    public ResponseEntity<?super DeleteUserResponseDto> deleteUser(@RequestParam("user_id") int userId) {
-        return service.deleteUser(userId);
+    public ResponseEntity<?super DeleteUserResponseDto> deleteUser(@ParameterObject DeleteUserRequestDto dto) {
+        return service.deleteUser(dto);
     }
 
 }
