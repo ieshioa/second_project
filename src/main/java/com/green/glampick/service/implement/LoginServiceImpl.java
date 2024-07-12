@@ -10,13 +10,13 @@ import com.green.glampick.dto.request.login.SignUpRequestDto;
 import com.green.glampick.dto.response.login.PostSignInResponseDto;
 import com.green.glampick.dto.response.login.PostSignUpResponseDto;
 import com.green.glampick.dto.response.login.mail.PostMailCheckResponseDto;
+import com.green.glampick.dto.response.login.mail.PostMailSendResponseDto;
 import com.green.glampick.dto.response.login.sms.PostSmsCheckResponseDto;
 import com.green.glampick.dto.response.login.sms.PostSmsSendResponseDto;
 import com.green.glampick.dto.response.login.token.GetAccessTokenResponseDto;
 import com.green.glampick.entity.UserEntity;
 import com.green.glampick.jwt.JwtTokenProvider;
 import com.green.glampick.repository.UserRepository;
-import com.green.glampick.security.AuthenticationFacade;
 import com.green.glampick.security.MyUser;
 import com.green.glampick.security.MyUserDetail;
 import com.green.glampick.security.SignInProviderType;
@@ -27,12 +27,17 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import javax.mail.MessagingException;
+import javax.mail.internet.MimeMessage;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
@@ -51,15 +56,36 @@ public class LoginServiceImpl implements LoginService {
     private final AppProperties appProperties;
     private final SmsUtils smsUtils;
 
-    private Map<String, Integer> phoneCodeMap;
-    private Map<String, Long> phoneCodeExpiryMap;
+    private Map<String, Integer> CodeMap;
+    private Map<String, Long> CodeExpiryMap;
+
+    @Autowired
+    private JavaMailSender mailSender;
 
     //  최초 실행 시, 초기화를 한번만 진행  //
     @PostConstruct
     @Override
     public void init() {
-        phoneCodeMap = new ConcurrentHashMap<>();
-        phoneCodeExpiryMap = new ConcurrentHashMap<>();
+        CodeMap = new ConcurrentHashMap<>();
+        CodeExpiryMap = new ConcurrentHashMap<>();
+    }
+
+    //  6자리의 랜덤 숫자코드를 생성  //
+    @Override
+    public int createKey() {
+        Random random = new Random();
+        int key = 0;
+        for (int i = 0; i < 6; i++) {
+            key = key * 10 + random.nextInt(10);
+        }
+        return key;
+    }
+
+    //  1분 마다 스케줄이 실행되는 메소드  //
+    @Scheduled(fixedRate = 60000)
+    public void cleanUpExpiredCodes() {
+        long now = System.currentTimeMillis();
+        CodeExpiryMap.entrySet().removeIf(entry -> now > entry.getValue());
     }
 
     //  이메일 회원가입 처리  //
@@ -238,8 +264,8 @@ public class LoginServiceImpl implements LoginService {
             verificationCode = createKey();
 
             //  Map 객체에 유저 휴대폰 번호와 위에서 생성한 코드를 추가하고, 유효시간은 5분으로 지정한다. (5분뒤 삭제) //
-            phoneCodeMap.put(userPhone, verificationCode);
-            phoneCodeExpiryMap.put(userPhone, System.currentTimeMillis() + 300000);
+            CodeMap.put(userPhone, verificationCode);
+            CodeExpiryMap.put(userPhone, System.currentTimeMillis() + 300000);
 
             //  Cool SMS 를 통하여, 받아온 유저 휴대폰 번호에 코드를 보낸다.  //
             smsUtils.sendOne(userPhone, verificationCode);
@@ -259,21 +285,21 @@ public class LoginServiceImpl implements LoginService {
 
         try {
             //  이메일과 인증코드가 Map 에 저장되어 있는 인증코드와 같다면  //
-            if (phoneCodeMap.containsKey(userPhone) && phoneCodeMap.get(userPhone).equals(phoneKey)) {
+            if (CodeMap.containsKey(userPhone) && CodeMap.get(userPhone).equals(phoneKey)) {
 
                 //  Map 에 저장되어 있는 인증코드의 유효시간이 지났다면  //
-                if (System.currentTimeMillis() > phoneCodeExpiryMap.get(userPhone)) {
+                if (System.currentTimeMillis() > CodeExpiryMap.get(userPhone)) {
 
                     //  Map 에 저장되어 있는 정보를 삭제하고, 유효시간이 만료된 응답을 보낸다.  //
-                    phoneCodeMap.remove(userPhone);
-                    phoneCodeExpiryMap.remove(userPhone);
+                    CodeMap.remove(userPhone);
+                    CodeExpiryMap.remove(userPhone);
                     return PostSmsCheckResponseDto.expiredCode();
 
                 }
 
                 //  인증 성공 시, Map 에 저장되어 있는 코드와 유효시간을 삭제한다.  //
-                phoneCodeMap.remove(userPhone);
-                phoneCodeExpiryMap.remove(userPhone);
+                CodeMap.remove(userPhone);
+                CodeExpiryMap.remove(userPhone);
 
                 return PostSmsCheckResponseDto.success();
 
@@ -291,21 +317,88 @@ public class LoginServiceImpl implements LoginService {
 
     }
 
-    //  6자리의 랜덤 숫자코드를 생성  //
+    //  이메일 인증 보내기  //
     @Override
-    public int createKey() {
-        Random random = new Random();
-        int key = 0;
-        for (int i = 0; i < 6; i++) {
-            key = key * 10 + random.nextInt(10);
+    public ResponseEntity<? super PostMailSendResponseDto> sendAuthCode(String userEmail) {
+
+        try {
+
+            //  입력받은 이메일이 비어있는 값이면, 빈 값에 대한 응답을 보낸다.  //
+            if (userEmail == null || userEmail.isEmpty()) {
+                return PostMailSendResponseDto.nullEmptyEmail();
+            }
+
+            //  입력받은 이메일이 정규표현식을 통하여 이메일 형식에 맞지 않으면, 이메일 형식 오류에 대한 응답을 보낸다.  //
+            String emailRegex = "^[\\w-\\.]+@([\\w-]+\\.)+[\\w-]{2,4}$";
+            Pattern patternEmail = Pattern.compile(emailRegex);
+            Matcher matcherEmail = patternEmail.matcher(userEmail);
+            if (!matcherEmail.matches()) { return PostMailSendResponseDto.invalidEmail(); }
+
+            //  입력받은 이메일이 유저 테이블에 이미 있는 이메일 이라면, 중복 이메일에 대한 응답을 보낸다.  //
+            boolean existedEmail = userRepository.existsByUserEmail(userEmail);
+            if (existedEmail) { return PostMailSendResponseDto.duplicatedEmail(); }
+
+            //  변수에 랜덤으로 생성되는 6자리의 숫자를 넣는다.  //
+            int mailCode = createKey();
+
+            //  Map 객체에 유저 이메일과 위에서 생성한 코드를 추가하고, 유효시간은 5분으로 지정한다. (5분뒤 삭제) //
+            CodeMap.put(userEmail, mailCode);
+            CodeExpiryMap.put(userEmail, System.currentTimeMillis() + 300000);
+
+            //  MimeMessage 객체를 만든다.  //
+            MimeMessage mimeMessage = mailSender.createMimeMessage();
+
+            //  MimeMessage 에 받아온 유저 이메일과, Text, Code 에 대한 값을 넣는다.  //
+            MimeMessageHelper helper = new MimeMessageHelper(mimeMessage, false, "UTF-8");
+            helper.setTo(userEmail);
+            helper.setSubject("Your Authentication Code");
+            helper.setText("Your authentication code is: " + mailCode, true);
+
+            //  위에서 정의한 MimeMessage 를 전송한다.  //
+            mailSender.send(mimeMessage);
+
+            return PostMailSendResponseDto.success(mailCode);
+
+        } catch (MessagingException e) {
+            e.printStackTrace();
+            return ResponseDto.databaseError();
         }
-        return key;
     }
 
-    //  1분 마다 스케줄이 실행되는 메소드  //
-    @Scheduled(fixedRate = 60000)
-    public void cleanUpExpiredCodes() {
-        long now = System.currentTimeMillis();
-        phoneCodeExpiryMap.entrySet().removeIf(entry -> now > entry.getValue());
+    //  이메일 코드 체크하기  //
+    @Override
+    public ResponseEntity<? super PostMailCheckResponseDto> checkCode(String userEmail, int emailKey) {
+
+        try {
+            //  이메일과 인증코드가 Map 에 저장되어 있는 인증코드와 같다면  //
+            if (CodeMap.containsKey(userEmail) && CodeMap.get(userEmail).equals(emailKey)) {
+
+                //  Map 에 저장되어 있는 인증코드의 유효시간이 지났다면  //
+                if (System.currentTimeMillis() > CodeExpiryMap.get(userEmail)) {
+
+                    //  Map 에 저장되어 있는 정보를 삭제하고, 유효시간이 만료된 응답을 보낸다.  //
+                    CodeMap.remove(userEmail);
+                    CodeExpiryMap.remove(userEmail);
+                    return PostMailCheckResponseDto.expiredCode();
+
+                }
+
+                //  인증 성공 시, Map 에 저장되어 있는 코드와 유효시간을 삭제한다.  //
+                CodeMap.remove(userEmail);
+                CodeExpiryMap.remove(userEmail);
+
+                return PostMailCheckResponseDto.success();
+
+            } else {
+
+                //  인증코드가 틀리다면 틀린 인증번호에 대한 응답을 보낸다.  //
+                return PostMailCheckResponseDto.invalidCode();
+
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseDto.databaseError();
+        }
     }
 }
