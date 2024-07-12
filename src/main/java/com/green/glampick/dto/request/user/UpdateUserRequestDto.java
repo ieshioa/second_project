@@ -13,6 +13,6 @@ public class UpdateUserRequestDto {
     private String userNickname;
     private String userPw;
 
-    private String userProfileImage;
+    @JsonIgnore private String userProfileImage;
 
 }

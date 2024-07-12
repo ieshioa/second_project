@@ -105,7 +105,7 @@ public class UserServiceImpl implements UserService {
                     , beforeEntity.getInputName()
                     , beforeEntity.getCheckInDate()
                     , beforeEntity.getCheckOutDate()
-                    , beforeEntity.getReservationAmount()
+                    , beforeEntity.getPayAmount()
                     , dto.getComment()
                     , beforeEntity.getCreatedAt());
 
