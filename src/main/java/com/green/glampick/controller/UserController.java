@@ -65,8 +65,8 @@ public class UserController {
     @DeleteMapping("/delete")// 리뷰 삭제
     @Operation(summary = "리뷰 삭제", description = "<strong></strong>" +
             "<p> review_id = 리뷰 pk ex) 1 </p>")//
-    public ResponseEntity<?super DeleteReviewResponseDto> deleteReview(@RequestParam("review_id") long reviewId) {
-        return service.deleteReview(reviewId);
+    public ResponseEntity<?super DeleteReviewResponseDto> deleteReview(@ParameterObject DeleteReviewRequestDto dto) {
+        return service.deleteReview(dto);
 
     }
 
@@ -109,8 +109,8 @@ public class UserController {
     @DeleteMapping("")// 회원탈퇴
     @Operation(summary = "회원탈퇴", description = "<strong></strong>" +
             "<p></p>")
-    public ResponseEntity<?super DeleteUserResponseDto> deleteUser(@RequestParam("user_id") int userId) {
-        return service.deleteUser(userId);
+    public ResponseEntity<?super DeleteUserResponseDto> deleteUser(@ParameterObject DeleteUserRequestDto dto) {
+        return service.deleteUser(dto);
     }
 
 }

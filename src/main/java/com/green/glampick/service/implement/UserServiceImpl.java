@@ -4,6 +4,7 @@ import com.green.glampick.common.CustomFileUtils;
 import com.green.glampick.dto.ResponseDto;
 import com.green.glampick.dto.object.UserReviewListItem;
 import com.green.glampick.dto.request.user.*;
+import com.green.glampick.dto.response.login.PostSignInResponseDto;
 import com.green.glampick.dto.response.user.*;
 import com.green.glampick.entity.*;
 import com.green.glampick.repository.*;
@@ -36,6 +37,7 @@ public class UserServiceImpl implements UserService {
     private final FavoriteGlampingRepository favoriteGlampingRepository;
     private final CustomFileUtils customFileUtils;
     private final ReviewImageRepository reviewImageRepository;
+
 
     //  마이페이지 - 예약 내역 불러오기  //
     @Override
@@ -153,15 +155,17 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override // 리뷰 삭제
-    public ResponseEntity<? super DeleteReviewResponseDto> deleteReview(long reviewId) {
+    public ResponseEntity<? super DeleteReviewResponseDto> deleteReview(DeleteReviewRequestDto dto) {
+        long loggedInUserId = authenticationFacade.getLoginUserId();
+        dto.setUserId(loggedInUserId);
 
         ReviewEntity reviewEntity = new ReviewEntity();
         try {
-            reviewRepository.findById(reviewId);
-            if (reviewId == 0) {
+            reviewRepository.findById(dto.getReviewId());
+            if (dto.getReviewId() == 0) {
                 return DeleteReviewResponseDto.noExistedReview();
             }
-            reviewRepository.deleteById(reviewId);
+            reviewRepository.deleteById(dto.getReviewId());
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -304,17 +308,26 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override// 회원 탈퇴
-    public ResponseEntity<? super DeleteUserResponseDto> deleteUser(long userId) {
-        UserEntity userEntity = new UserEntity();
+    public ResponseEntity<? super DeleteUserResponseDto> deleteUser(DeleteUserRequestDto dto) {
+        long loggedInUserId = authenticationFacade.getLoginUserId();
+        dto.setUserId(loggedInUserId);
+//        UserEntity userEntity = userRepository.findByUserId(dto.getUserId());
         try {
-            userRepository.findById(userId);
-            if (userId == 0) {
+            userRepository.findById(dto.getUserId());
+            if (dto.getUserId() == 0) {
                 return DeleteUserResponseDto.noExistedUser();
             }
-            userRepository.deleteById(userId);
+//            String userPw = dto.getUserPw();
+//            String encodingPw = userEntity.getUserPw();
+//            boolean matches = passwordEncoder.matches(userPw, encodingPw);
+//            if (!matches) { return DeleteUserResponseDto.noPermission(); }
+            userRepository.deleteById(dto.getUserId());
         } catch (Exception e) {
             e.printStackTrace();
         }
         return DeleteUserResponseDto.success();
     }
 }
+
+
+
