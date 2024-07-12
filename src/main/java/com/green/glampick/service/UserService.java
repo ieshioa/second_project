@@ -20,7 +20,7 @@ public interface UserService {
     ResponseEntity<?super PostReviewResponseDto> postReview(PostReviewRequestDto dto, List<MultipartFile> mf);
 
     //  마이페이지 - 리뷰 삭제하기  //
-    ResponseEntity<?super DeleteReviewResponseDto> deleteReview(long reviewId);
+    ResponseEntity<?super DeleteReviewResponseDto> deleteReview(DeleteReviewRequestDto dto);
 
     //  마이페이지 - 리뷰 불러오기  //
     ResponseEntity<?super GetReviewResponseDto> getReview(GetReviewRequestDto dto);

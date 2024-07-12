@@ -51,8 +51,8 @@ public class UserController {
     @DeleteMapping("/delete")// 리뷰 삭제
     @Operation(summary = "리뷰 삭제", description = "<strong></strong>" +
             "<p> review_id = 리뷰 pk ex) 1 </p>")//
-    public ResponseEntity<?super DeleteReviewResponseDto> deleteReview(@RequestParam("review_id") long reviewId) {
-        return service.deleteReview(reviewId);
+    public ResponseEntity<?super DeleteReviewResponseDto> deleteReview(@ParameterObject DeleteReviewRequestDto dto) {
+        return service.deleteReview(dto);
 
     }
 

@@ -155,15 +155,17 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override // 리뷰 삭제
-    public ResponseEntity<? super DeleteReviewResponseDto> deleteReview(long reviewId) {
+    public ResponseEntity<? super DeleteReviewResponseDto> deleteReview(DeleteReviewRequestDto dto) {
+        long loggedInUserId = authenticationFacade.getLoginUserId();
+        dto.setUserId(loggedInUserId);
 
         ReviewEntity reviewEntity = new ReviewEntity();
         try {
-            reviewRepository.findById(reviewId);
-            if (reviewId == 0) {
+            reviewRepository.findById(dto.getReviewId());
+            if (dto.getReviewId() == 0) {
                 return DeleteReviewResponseDto.noExistedReview();
             }
-            reviewRepository.deleteById(reviewId);
+            reviewRepository.deleteById(dto.getReviewId());
 
         } catch (Exception e) {
             e.printStackTrace();
