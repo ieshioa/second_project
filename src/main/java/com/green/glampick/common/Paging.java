@@ -5,6 +5,8 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Getter;
 import lombok.ToString;
 
+import static com.green.glampick.common.GlobalConst.PAGING_SIZE;
+
 
 @Getter
 @ToString
@@ -23,5 +25,13 @@ public class Paging {
         this.page = page == null ? 1 : page;
         this.size = size == null ? 10 : size;
         this.startIdx = (this.page - 1) * this.size;
+    }
+
+    public int getOffset() {
+        return startIdx;
+    }
+
+    public int getLimit() {
+        return size;
     }
 }
