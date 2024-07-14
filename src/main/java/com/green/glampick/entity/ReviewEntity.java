@@ -35,7 +35,7 @@ public class ReviewEntity {
     public ReviewEntity (PostReviewRequestDto dto) {
 
         this.userId = dto.getUserId();
-        this.glampId = dto.getGlamp_id();
+        this.glampId = dto.getGlampId();
         this.reviewContent = dto.getReviewContent();
         this.reviewStarPoint = dto.getReviewStarPoint();
         this.roomId = dto.getRoomId();

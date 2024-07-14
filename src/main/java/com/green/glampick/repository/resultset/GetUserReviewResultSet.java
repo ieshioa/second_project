@@ -17,6 +17,6 @@ public interface GetUserReviewResultSet {
      int getReviewStarPoint();
      String getOwnerReviewComment();
      LocalDateTime getCreatedAt();
-     String getStarPointAvg();
+
 
 }
