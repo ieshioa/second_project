@@ -156,6 +156,12 @@
         ORDER BY A.check_in_date DESC
     </select>
 
+    <select id="getUserIdByGlampId">
+        SELECT user_id
+        FROM user
+        WHERE glamp_id = #{glampId}
+    </select>
+
 <!-- 강국 ================================================= -->
 
 

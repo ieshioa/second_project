@@ -48,8 +48,7 @@ public class OwnerServiceImpl implements OwnerService {
             , MultipartFile glampImg) {
 
         try {
-            req.setUserId(authenticationFacade.getLoginUserId());
-            if (req.getUserId() <= 0) { throw new RuntimeException(); }
+            req.setUserId(userValidationGlamping());
         } catch (Exception e) {
             e.printStackTrace();
             return PostGlampingInfoResponseDto.validateUserId();
@@ -103,6 +102,13 @@ public class OwnerServiceImpl implements OwnerService {
     @Transactional
     public ResponseEntity<? super PostRoomInfoResponseDto> postRoomInfo(RoomPostRequestDto req
             , List<MultipartFile> image) {
+        try {
+            userValidationRoom(req.getGlampId());
+        } catch (Exception e) {
+            e.printStackTrace();
+            return PostGlampingInfoResponseDto.validateUserId();
+        }
+
         // RoomValidate
         try {
             RoomValidate.imgExist(image);   // 이미지가 들어있는가?
@@ -153,8 +159,7 @@ public class OwnerServiceImpl implements OwnerService {
         GlampingPostRequestDto req = p.getRequestDto();
 
         try {
-            req.setUserId(authenticationFacade.getLoginUserId());
-            if (req.getUserId() <= 0) { throw new RuntimeException(); }
+            req.setUserId(userValidationGlamping());
         } catch (Exception e) {
             e.printStackTrace();
             return PostGlampingInfoResponseDto.validateUserId();
@@ -181,6 +186,14 @@ public class OwnerServiceImpl implements OwnerService {
     @Transactional
     public ResponseEntity<? super PutRoomInfoResponseDto> updateRoomInfo(RoomPutRequestDto p) {
         RoomPostRequestDto req = p.getRequestDto();
+
+        try {
+            userValidationRoom(req.getGlampId());
+        } catch (Exception e) {
+            e.printStackTrace();
+            return PostGlampingInfoResponseDto.validateUserId();
+        }
+
         // RoomValidate
         try {
             GlampingValidate.isNull(p.getRoomId()); // 룸 Id가 올바른가?
@@ -211,6 +224,13 @@ public class OwnerServiceImpl implements OwnerService {
 
     public ResponseEntity<? super GetOwnerBookListResponseDto> getGlampReservation(Long glampId) {
 
+        try {
+            userValidationGlamping();
+        } catch (Exception e) {
+            e.printStackTrace();
+            return PostGlampingInfoResponseDto.validateUserId();
+        }
+
         if (glampId == null || glampId < 0) { return GetOwnerBookListResponseDto.wrongGlampId(); }
 
         List<BookBeforeItem> before;
@@ -226,6 +246,25 @@ public class OwnerServiceImpl implements OwnerService {
         }
 
         return GetOwnerBookListResponseDto.success(before, complete, cancel);
+    }
+
+    private long userValidationGlamping() {
+        long userId = 0;
+        try {
+            userId = authenticationFacade.getLoginUserId();
+            if (userId <= 0) { throw new RuntimeException(); }
+        } catch (Exception e) {
+            throw new RuntimeException();
+        }
+        return userId;
+    }
+
+    private void userValidationRoom(long glampId) {
+        long loginUserId = userValidationGlamping();
+        Long getUserId = mapper.getUserIdByGlampId(glampId);
+        if(getUserId == null || loginUserId != getUserId || loginUserId <= 0) {
+            throw new RuntimeException();
+        }
     }
 
 
