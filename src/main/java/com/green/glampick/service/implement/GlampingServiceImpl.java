@@ -163,6 +163,7 @@ public class GlampingServiceImpl implements GlampingService {
     public ResponseEntity<? super GetMoreRoomItemResponseDto> moreDetailsRoom(GetInfoRequestDto p) {
         // 객실 정보 리스트
         List<GlampingRoomListItem> rooms = mapper.selRoomInfo(p);
+        boolean isReservationAvailable = true;
 
         // 추가 객실 정보 리스트
         rooms.subList(0, GlobalConst.PAGING_SIZE).clear();
@@ -170,8 +171,22 @@ public class GlampingServiceImpl implements GlampingService {
 
         //객실 서비스 세팅
         for (GlampingRoomListItem item : rooms) {
+            item.setReservationAvailable(isReservationAvailable);
             item.setRoomServices(mapper.selRoomService(item.getRoomId()));
 
+            p.setRoomId(item.getRoomId());
+
+            List<GlampingDateItem> dateItems = mapper.selDate(p);
+
+            for (GlampingDateItem dateItem : dateItems) {
+                HashMap<String, LocalDate> dateHashMap = parseDate(p.getInDate(), p.getOutDate(), dateItem.getCheckInDate(), dateItem.getCheckOutDate());
+                boolean k = checkOverlap(dateHashMap) ;
+
+                if (k) {
+                    item.setReservationAvailable(false);
+                    break;
+                }
+            }
         }
 
         GetMoreRoomItemResponseDto glampInfoDto = GetMoreRoomItemResponseDto.builder().roomItems(rooms).build();

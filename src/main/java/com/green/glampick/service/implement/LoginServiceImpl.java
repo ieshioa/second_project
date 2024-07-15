@@ -59,8 +59,7 @@ public class LoginServiceImpl implements LoginService {
     private Map<String, Integer> CodeMap;
     private Map<String, Long> CodeExpiryMap;
 
-    @Autowired
-    private JavaMailSender mailSender;
+    private final JavaMailSender mailSender;
 
     //  최초 실행 시, 초기화를 한번만 진행  //
     @PostConstruct

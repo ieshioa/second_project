@@ -19,6 +19,7 @@ public class GetInfoRequestDto {
     private String outDate;
     @Schema(example = "0")
     private int status;
+
     @JsonIgnore
     private int size;
     @JsonIgnore

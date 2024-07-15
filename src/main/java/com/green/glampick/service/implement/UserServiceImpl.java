@@ -207,9 +207,10 @@ public class UserServiceImpl implements UserService {
         List<ReviewImageEntity> imageEntities = new ArrayList<>();
 
         try {
+            int limit = dto.getLimit();
+            int offset = dto.getOffset();
 
-
-            resultSetList = reviewRepository.getReview(dto.getUserId());
+            resultSetList = reviewRepository.getReview(dto.getUserId(), limit, offset);
             List<Long> reviewIds = resultSetList.stream()
                     .map(GetUserReviewResultSet::getReviewId)
                     .collect(Collectors.toList());

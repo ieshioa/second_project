@@ -30,10 +30,11 @@ public interface ReviewRepository extends JpaRepository<ReviewEntity, Long> {
         "JOIN glamping C ON A.glamp_id = C.glamp_id " +
         "JOIN room D ON A.room_id = D.room_id " +
         "WHERE B.user_id = ?1 " +
-        "ORDER BY A.created_at DESC ",
+        "ORDER BY A.created_at DESC " +
+        "LIMIT ?2 OFFSET ?3",
             nativeQuery = true
     )
-    List<GetUserReviewResultSet> getReview(long userId);
+    List<GetUserReviewResultSet> getReview(long userId, int limit, int offset);
 
 
 
