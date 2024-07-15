@@ -9,6 +9,6 @@ public class PostAvgRequest {
 
     private long userId;
     private long glampId;
-    private long reviewStarPoint;
+    private long starPointAvg;
     private long reviewCount;
 }
