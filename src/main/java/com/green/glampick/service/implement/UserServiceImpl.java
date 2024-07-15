@@ -4,7 +4,6 @@ import com.green.glampick.common.CustomFileUtils;
 import com.green.glampick.dto.ResponseDto;
 import com.green.glampick.dto.object.UserReviewListItem;
 import com.green.glampick.dto.request.user.*;
-import com.green.glampick.dto.response.login.PostSignInResponseDto;
 import com.green.glampick.dto.response.user.*;
 import com.green.glampick.entity.*;
 import com.green.glampick.repository.*;
@@ -366,6 +365,29 @@ public class UserServiceImpl implements UserService {
             e.printStackTrace();
         }
         return DeleteUserResponseDto.success();
+    }
+
+    @Override
+    public ResponseEntity<? super PostUserPasswordResponseDto> postUserPassword(PostUserPasswordRequestDto dto) {
+        long loggedInUserId = authenticationFacade.getLoginUserId();
+        dto.setUserId(loggedInUserId);
+
+        try {
+
+            UserEntity userEntity = userRepository.findByUserId(dto.getUserId());
+            if (dto.getUserId() == 0) { return PostUserPasswordResponseDto.noExistedUser(); }
+
+            String userPw = dto.getUserPw();
+            String encodingPw = userEntity.getUserPw();
+            boolean matches = passwordEncoder.matches(userPw, encodingPw);
+            if (!matches) { return PostUserPasswordResponseDto.invalidPassword(); }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseDto.databaseError();
+        }
+
+        return PostUserPasswordResponseDto.success();
     }
 }
 
