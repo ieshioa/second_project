@@ -210,9 +210,9 @@ public class OwnerServiceImpl implements OwnerService {
     }
 
     public ResponseEntity<? super GetOwnerBookListResponseDto> getGlampReservation(Long glampId) {
-        if (glampId == null || glampId < 0) {
-            return GetOwnerBookListResponseDto.wrongGlampId();
-        }
+
+        if (glampId == null || glampId < 0) { return GetOwnerBookListResponseDto.wrongGlampId(); }
+
         List<BookBeforeItem> before;
         List<BookCompleteItem> complete;
         List<BookCancelItem> cancel;
