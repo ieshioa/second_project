@@ -76,3 +76,17 @@ coolsms:
   api:
     key: ${COOLSMS.API_KEY}
     secret: ${COOLSMS.API_SECRET}
+
+---
+
+spring:
+  datasource:
+    url: ${PROD.DB_URL}
+    username: ${PROD.DB_USERNAME}
+    password: ${PROD.DB_PASSWORD}
+  config:
+    activate:
+      on-profile: prod
+
+file:
+  directory: ${PROD.FILE_DIRECTORY}
