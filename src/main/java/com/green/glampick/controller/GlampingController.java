@@ -3,6 +3,7 @@ package com.green.glampick.controller;
 import com.green.glampick.dto.request.glamping.*;
 import com.green.glampick.dto.response.glamping.*;
 import com.green.glampick.dto.response.glamping.favorite.GetFavoriteGlampingResponseDto;
+import com.green.glampick.dto.response.login.PostSignUpResponseDto;
 import com.green.glampick.service.GlampingService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -15,6 +16,10 @@ import org.springdoc.core.annotations.ParameterObject;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import static com.green.glampick.common.swagger.description.glamping.GetSearchGlampingSwaggerDescription.SEARCH_GLAMPING_DESCRIPTION;
+import static com.green.glampick.common.swagger.description.glamping.GetSearchGlampingSwaggerDescription.SEARCH_GLAMPING_RESPONSE_ERROR_CODE;
+import static com.green.glampick.common.swagger.description.user.GetUserBookSwaggerDescription.USER_BOOK_RESPONSE_ERROR_CODE;
+
 @Slf4j
 @RestController
 @RequiredArgsConstructor
@@ -26,26 +31,10 @@ public class GlampingController {
 
 // 민지 =================================================================================================================
     @GetMapping("search")
-    @Operation(summary = "글램핑 검색 결과 가져오기", description =
-            "<p> <strong> 필수입력 데이터 </strong> </p>" +
-                    "<p> <strong> region : 지역이름 </strong> </p> " +
-                    "<p> <strong> inDate : 체크인 날짜 </strong> </p> " +
-                    "<p> <strong> ourDate : 체크아웃 날짜 </strong>  </p>" +
-                    "<p> <strong> people : 인원수 </strong> </p> " +
-                    "<p> 나머지는 선택입력 </p> " +
-                     " <p> sortType, page 는 default 1 </p>" )
-    @ApiResponse(
-            description =
-                    "<p> <strong> ResponseCode 응답 코드 </strong> </p> " +
-                            "<p> SU(200) : 검색 결과를 불러옴 </p> " +
-                            "<p> RN(200) : 검색 결과가 없음 </p> " +
-                            "<p> DBE(500) : 데이터베이스 서버 오류 </p> ",
-            responseCode = "200",
+    @Operation(summary = "글램핑 검색 결과 가져오기", description = SEARCH_GLAMPING_DESCRIPTION)
+    @ApiResponse(responseCode = "200", description = SEARCH_GLAMPING_RESPONSE_ERROR_CODE,
             content = @Content(
-                    mediaType = "application/json",
-                    schema = @Schema(implementation = GetSearchGlampingListResponseDto.class)
-            )
-    )
+                    mediaType = "application/json", schema = @Schema(implementation = GetSearchGlampingListResponseDto.class)))
     public ResponseEntity<? super GetSearchGlampingListResponseDto> searchGlamping(@ParameterObject @ModelAttribute GlampingSearchRequestDto searchReq) {
         return service.searchGlamping(searchReq);
     }
