@@ -36,6 +36,7 @@ public class UserEntity {
     @Setter
     private String userNickname;  // 유저 닉네임
 
+    @Setter
     private String userPhone;  // 유저 휴대폰 번호
 
     @Setter

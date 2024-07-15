@@ -20,6 +20,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -38,7 +39,7 @@ public class OwnerController {
 
 // 민지 =================================================================================================================
     // create - 글램핑
-    @PostMapping("glamping")
+    @PostMapping(value = "glamping", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
     @Operation(summary = "글램핑 정보 등록", description =
             "<p> <strong> 선택입력 : extraCharge(기준 인원 외 추가 인원당 요금) </strong> </p>" +
                     "<p> <strong> 나머지 모든 데이터는 필수 입력입니다. </strong> </p>" +
@@ -60,7 +61,7 @@ public class OwnerController {
     }
 
     // create - 객실
-    @PostMapping("room")
+    @PostMapping(value = "room", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
     @Operation(summary = "객실 정보 등록", description =
             "<p> <strong> 선택입력 : service[] </strong> </p>" +
                     "<p> <strong> 나머지 모든 데이터는 필수 입력입니다. </strong> </p>" +

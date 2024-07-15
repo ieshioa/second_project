@@ -20,6 +20,7 @@ public class PostUserReviewSwaggerDescription {
     public static final String USER_REVIEW_RESPONSE_ERROR_CODE =
 
             "<strong>발생 가능한 에러코드</strong>" +
+            "<p>CU - 미 로그인 (400)</p>" +
             "<p>NU - 존재하지 않는 유저 (400)</p>" +
             "<p>NP - 권한 없음 (403)</p>" +
             "<p>DBE - 데이터베이스 에러 (500)</p>"

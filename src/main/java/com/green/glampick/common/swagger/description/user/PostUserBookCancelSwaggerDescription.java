@@ -15,7 +15,8 @@ public class PostUserBookCancelSwaggerDescription {
     public static final String USER_BOOK_CANCEL_RESPONSE_ERROR_CODE =
 
             "<strong>발생 가능한 에러코드</strong>" +
-                    "<p>DBE - 데이터베이스 에러 (500)</p>"
+            "<p>CU - 미 로그인 (400)</p>" +
+            "<p>DBE - 데이터베이스 에러 (500)</p>"
             ;
 
 }

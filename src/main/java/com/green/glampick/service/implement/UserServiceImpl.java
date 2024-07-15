@@ -337,6 +337,7 @@ public class UserServiceImpl implements UserService {
             userEntity.setUserProfileImage(saveFileName);
             userEntity.setUserNickname(dto.getUserNickname());
             userEntity.setUserPw(dto.getUserPw());
+            userEntity.setUserPhone(dto.getUserPhone());
 
             userRepository.save(userEntity);
 

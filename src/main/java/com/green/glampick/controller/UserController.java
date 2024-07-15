@@ -13,6 +13,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springdoc.core.annotations.ParameterObject;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -24,12 +25,18 @@ import static com.green.glampick.common.swagger.description.user.DeleteUserRevie
 import static com.green.glampick.common.swagger.description.user.DeleteUserReviewSwaggerDescription.USER_REVIEW_REMOVE_RESPONSE_ERROR_CODE;
 import static com.green.glampick.common.swagger.description.user.GetUserBookSwaggerDescription.USER_BOOK_DESCRIPTION;
 import static com.green.glampick.common.swagger.description.user.GetUserBookSwaggerDescription.USER_BOOK_RESPONSE_ERROR_CODE;
+import static com.green.glampick.common.swagger.description.user.GetUserFavoriteGlampingSwaggerDescription.USER_FAVORITE_LIST_DESCRIPTION;
+import static com.green.glampick.common.swagger.description.user.GetUserFavoriteGlampingSwaggerDescription.USER_FAVORITE_LIST_RESPONSE_ERROR_CODE;
 import static com.green.glampick.common.swagger.description.user.GetUserReviewSwaggerDescription.USER_REVIEW_VIEW_DESCRIPTION;
 import static com.green.glampick.common.swagger.description.user.GetUserReviewSwaggerDescription.USER_REVIEW_VIEW_RESPONSE_ERROR_CODE;
 import static com.green.glampick.common.swagger.description.user.PostUserBookCancelSwaggerDescription.USER_BOOK_CANCEL_DESCRIPTION;
 import static com.green.glampick.common.swagger.description.user.PostUserBookCancelSwaggerDescription.USER_BOOK_CANCEL_RESPONSE_ERROR_CODE;
 import static com.green.glampick.common.swagger.description.user.PostUserReviewSwaggerDescription.USER_REVIEW_DESCRIPTION;
 import static com.green.glampick.common.swagger.description.user.PostUserReviewSwaggerDescription.USER_REVIEW_RESPONSE_ERROR_CODE;
+import static com.green.glampick.common.swagger.description.user.UpdateUserInfoSwaggerDescription.USER_INFO_UPDATE_DESCRIPTION;
+import static com.green.glampick.common.swagger.description.user.UpdateUserInfoSwaggerDescription.USER_INFO_UPDATE_RESPONSE_ERROR_CODE;
+import static com.green.glampick.common.swagger.description.user.getUserInfoSwaggerDescription.USER_INFO_DESCRIPTION;
+import static com.green.glampick.common.swagger.description.user.getUserInfoSwaggerDescription.USER_INFO_RESPONSE_ERROR_CODE;
 
 @Slf4j
 @RestController
@@ -90,9 +97,12 @@ public class UserController {
         return service.getReview(dto);
     }
 
-    @GetMapping("/favorite-glamping")// 관심 글램핑 불러오기
-    @Operation(summary = "관심 글램핑 불러오기", description = "<strong></strong>" +
-            "<p></p>")
+    //  유저 페이지 - 관심 글램핑 리스트 불러오기  //
+    @GetMapping("/favorite-glamping")
+    @Operation(summary = "리뷰 불러오기", description = USER_FAVORITE_LIST_DESCRIPTION)
+    @ApiResponse(responseCode = "200", description = USER_FAVORITE_LIST_RESPONSE_ERROR_CODE,
+            content = @Content(
+                    mediaType = "application/json", schema = @Schema(implementation = GetFavoriteGlampingResponseDto.class)))
     public ResponseEntity<?super GetFavoriteGlampingResponseDto> getFavoriteGlamping(@ParameterObject @ModelAttribute GetFavoriteGlampingRequestDto dto) {
         return service.getFavoriteGlamping(dto);
     }
@@ -104,17 +114,21 @@ public class UserController {
 //    }
 
     @GetMapping// 유저 정보 불러오기
-    @Operation(summary = "유저 정보 불러오기", description = "<strong></strong>" +
-            "<p></p>")
+    @Operation(summary = "유저 정보 불러오기", description = USER_INFO_DESCRIPTION)
+    @ApiResponse(responseCode = "200", description = USER_INFO_RESPONSE_ERROR_CODE,
+            content = @Content(
+                    mediaType = "application/json", schema = @Schema(implementation = GetUserResponseDto.class)))
     public ResponseEntity<?super GetUserResponseDto> getUser(@ParameterObject GetUserRequestDto dto) {
         return service.getUser(dto);
     }
 
-    @PutMapping// 유저 정보 수정하기
-    @Operation(summary = "유저 정보 수정하기", description = "<strong></strong>" +
-            "<p></p>")
+    @PutMapping(consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})// 유저 정보 수정하기
+    @Operation(summary = "유저 정보 수정하기", description = USER_INFO_UPDATE_DESCRIPTION)
+    @ApiResponse(responseCode = "200", description = USER_INFO_UPDATE_RESPONSE_ERROR_CODE,
+            content = @Content(
+                    mediaType = "application/json", schema = @Schema(implementation = GetUserResponseDto.class)))
     public ResponseEntity<?super UpdateUserResponseDto> updateUser
-            (@RequestPart UpdateUserRequestDto dto, @RequestPart  MultipartFile mf)
+            (@RequestPart UpdateUserRequestDto dto, @RequestPart MultipartFile mf)
     {
         return service.updateUser(dto, mf);
     }
