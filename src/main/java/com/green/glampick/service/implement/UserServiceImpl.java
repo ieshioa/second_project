@@ -37,6 +37,7 @@ public class UserServiceImpl implements UserService {
     private final FavoriteGlampingRepository favoriteGlampingRepository;
     private final CustomFileUtils customFileUtils;
     private final ReviewImageRepository reviewImageRepository;
+    private final GlampingStarRepository glampingStarRepository;
 
 
     //  마이페이지 - 예약 내역 불러오기  //
@@ -132,7 +133,10 @@ public class UserServiceImpl implements UserService {
 
 
             ReviewEntity reviewEntity = new ReviewEntity(dto);
+            reviewEntity.setGlampId(dto.getGlampId());
+            reviewEntity.setRoomId(dto.getRoomId());
             reviewEntity = reviewRepository.save(reviewEntity);
+
 
             PostReviewPicsRequestDto postReviewPicsRequestDto = PostReviewPicsRequestDto.builder().reviewId(reviewEntity.getReviewId()).build();
             // 파일을 저장할 폴더 경로를 생성

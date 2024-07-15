@@ -24,6 +24,7 @@ public class ReviewEntity {
     private String reviewContent;  // 리뷰내용
     private int reviewStarPoint;  // 리뷰 별점
     private String reviewComment;
+    private long reservationId;
 
 
 
@@ -39,6 +40,7 @@ public class ReviewEntity {
         this.reviewContent = dto.getReviewContent();
         this.reviewStarPoint = dto.getReviewStarPoint();
         this.roomId = dto.getRoomId();
+        this.reservationId = dto.getReservationId();
     }
 
 

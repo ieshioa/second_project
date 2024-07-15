@@ -1,5 +1,6 @@
 package com.green.glampick.entity;
 
+import com.green.glampick.dto.request.user.PostAvgRequest;
 import com.green.glampick.dto.request.user.PostReviewRequestDto;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -11,7 +12,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Entity(name = "glamping")
 @Table(name = "glamping")
-public class GlampingEntity {
+public class GlampingEntity{
     //글램핑 테이블
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -29,11 +30,12 @@ public class GlampingEntity {
     private String createdAt;  //글램핑 등록 일자
 
 
-    public GlampingEntity(PostReviewRequestDto dto) {
+    public GlampingEntity(PostAvgRequest dto) {
 
         this.userId = dto.getUserId();
         this.glampId = dto.getGlampId();
-        this.starPointAvg = dto.getReviewStarPoint();
+        this.starPointAvg = dto.getStarPointAvg();
+        this.reviewCount = dto.getReviewCount();
 
     }
 }

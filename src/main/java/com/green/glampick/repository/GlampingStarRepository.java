@@ -2,15 +2,15 @@ package com.green.glampick.repository;
 
 
 import com.green.glampick.entity.GlampingEntity;
+import com.green.glampick.entity.ReviewEntity;
 import jakarta.transaction.Transactional;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 
-public interface GlampingStarRepository extends JpaRepository<GlampingEntity, Long> {
+public interface GlampingStarRepository extends JpaRepository<ReviewEntity, Long> {
 
-    @Modifying
-    @Transactional
+
     @Query(
             value =
                     "UPDATE glamping " +
