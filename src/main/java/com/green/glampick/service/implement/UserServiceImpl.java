@@ -133,9 +133,12 @@ public class UserServiceImpl implements UserService {
 
 
             ReviewEntity reviewEntity = new ReviewEntity(dto);
-            reviewEntity.setGlampId(dto.getGlampId());
-            reviewEntity.setRoomId(dto.getRoomId());
+            reviewEntity.setReservationId(dto.getReservationId());
+            reviewEntity.setReviewContent(dto.getReviewContent());
+            reviewEntity.setReviewStarPoint(dto.getReviewStarPoint());
             reviewEntity = reviewRepository.save(reviewEntity);
+
+            glampingStarRepository.findStarPointAvg(dto.getReservationId());
 
 
             PostReviewPicsRequestDto postReviewPicsRequestDto = PostReviewPicsRequestDto.builder().reviewId(reviewEntity.getReviewId()).build();
@@ -167,7 +170,7 @@ public class UserServiceImpl implements UserService {
             return ResponseDto.databaseError();
         }
 
-        return PostReviewResponseDto.success();
+        return PostReviewResponseDto.success(reviewEntity.getReviewId());
 
     }
 

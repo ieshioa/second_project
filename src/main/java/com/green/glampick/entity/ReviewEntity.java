@@ -19,15 +19,11 @@ public class ReviewEntity {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long reviewId;  // 리뷰 PK
     private long userId;  // 유저 PK
-    private long glampId;  // 글램핑 PK
-    private long roomId; // 룸 pk
+    private long glampId;
     private String reviewContent;  // 리뷰내용
     private int reviewStarPoint;  // 리뷰 별점
     private String reviewComment;
     private long reservationId;
-
-
-
     @CreationTimestamp
     @Column(updatable = false)
     private String createdAt;  // 리뷰작성일자
@@ -36,10 +32,8 @@ public class ReviewEntity {
     public ReviewEntity (PostReviewRequestDto dto) {
 
         this.userId = dto.getUserId();
-        this.glampId = dto.getGlampId();
         this.reviewContent = dto.getReviewContent();
         this.reviewStarPoint = dto.getReviewStarPoint();
-        this.roomId = dto.getRoomId();
         this.reservationId = dto.getReservationId();
     }
 

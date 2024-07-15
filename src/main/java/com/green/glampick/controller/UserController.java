@@ -67,7 +67,7 @@ public class UserController {
     }
 
     //  유저 페이지 - 리뷰 작성하기  //
-    @PostMapping("/review")
+    @PostMapping(value = "/review", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
     @Operation(summary = "리뷰 작성하기", description = USER_REVIEW_DESCRIPTION)
     @ApiResponse(responseCode = "200", description = USER_REVIEW_RESPONSE_ERROR_CODE,
         content = @Content(
