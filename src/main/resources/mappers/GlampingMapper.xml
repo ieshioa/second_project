@@ -49,6 +49,7 @@
             LIMIT 		#{size}
         </if>
     </select>
+    <!-- 체크인 체크아웃 데이트 추출 -->
     <select id="selDate">
         SELECT	    glamp_id AS glampId, room_id AS roomId ,check_in_date AS checkInDate,check_out_date AS checkOutDate
         FROM		reservation_before
@@ -87,6 +88,7 @@
         INNER JOIN      user B
         ON 			    A.user_id = B.user_id
         WHERE 		    glamp_id = #{glampId}
+        ORDER BY		A.created_at DESC
         LIMIT           7;
     </select>
     <!-- 리뷰 유저수 -->
@@ -109,6 +111,7 @@
         INNER JOIN 		    user B
         ON                  A.user_id = B.user_id
         WHERE 			    A.glamp_id = #{glampId}
+        ORDER BY		    A.created_at DESC
         LIMIT               #{startIdx}, #{size}
     </select>
     <!-- 썸네일 리뷰이미지 -->
