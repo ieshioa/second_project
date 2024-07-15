@@ -20,7 +20,7 @@ public interface UserService {
     ResponseEntity<?super PostReviewResponseDto> postReview(PostReviewRequestDto dto, List<MultipartFile> mf);
 
     //  마이페이지 - 리뷰 삭제하기  //
-    ResponseEntity<?super DeleteReviewResponseDto> deleteReview(long reviewId);
+    ResponseEntity<?super DeleteReviewResponseDto> deleteReview(DeleteReviewRequestDto dto);
 
     //  마이페이지 - 리뷰 불러오기  //
     ResponseEntity<?super GetReviewResponseDto> getReview(GetReviewRequestDto dto);
@@ -32,9 +32,12 @@ public interface UserService {
     ResponseEntity<?super GetUserResponseDto> getUser(GetUserRequestDto dto);
 
     //  마이페이지 - 내 정보 수정하기  //
-    ResponseEntity<?super UpdateUserResponseDto> updateUser(UpdateUserRequestDto dto);
+    ResponseEntity<?super UpdateUserResponseDto> updateUser(UpdateUserRequestDto dto,  MultipartFile mf);
 
     //  마이페이지 - 회원 탈퇴  //
-    ResponseEntity<?super DeleteUserResponseDto> deleteUser(long userId);
+    ResponseEntity<?super DeleteUserResponseDto> deleteUser(DeleteUserRequestDto dto);
+
+    //  마이페이지 - 비밀번호 체크  //
+    ResponseEntity<?super PostUserPasswordResponseDto> postUserPassword(PostUserPasswordRequestDto dto);
 
 }

@@ -181,7 +181,7 @@
             SELECT glamp_id, room_id
             FROM reservation_before
             WHERE (check_in_date >= #{outDate}
-            OR #{inDate} >= check_out_date )
+            AND #{inDate} >= check_out_date )
             AND room_id IS NOT NULL
         ) B
         ON A.glamp_id = B.glamp_id

@@ -58,10 +58,9 @@ public class SocialLoginServiceImpl extends DefaultOAuth2UserService {
 
         if(userEntity == null) { //회원가입 처리
             SignUpRequestDto signUpParam = new SignUpRequestDto();
-            signUpParam.setUserSocialType(signInProviderType);
+            signUpParam.setUserSocialType(signInProviderType.name());
             signUpParam.setProviderId(oAuth2UserInfo.getId());
             signUpParam.setUserName(oAuth2UserInfo.getName());
-            signUpParam.setUserProfileImage(oAuth2UserInfo.getProfilePicUrl());
 
             userEntity = new UserEntity(signUpParam);
             userRepository.save(userEntity);

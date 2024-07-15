@@ -4,6 +4,7 @@ import com.green.glampick.entity.ReviewEntity;
 import com.green.glampick.repository.resultset.GetUserReviewResultSet;
 import jakarta.transaction.Transactional;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
@@ -29,9 +30,22 @@ public interface ReviewRepository extends JpaRepository<ReviewEntity, Long> {
         "JOIN glamping C ON A.glamp_id = C.glamp_id " +
         "JOIN room D ON A.room_id = D.room_id " +
         "WHERE B.user_id = ?1 " +
-        "ORDER BY A.created_at DESC ",
+        "ORDER BY A.created_at DESC " +
+        "LIMIT ?2 OFFSET ?3",
             nativeQuery = true
     )
-    List<GetUserReviewResultSet> getReview(long userId);
+    List<GetUserReviewResultSet> getReview(long userId, int limit, int offset);
 
+
+
+//    UPDATE glamping
+//    SET review_count = (
+//            SELECT COUNT(review_content)
+//    FROM review
+//    WHERE glamp_id = 3
+//)
+//    WHERE user_id = 11
+//    AND glamp_id = 3;
+//    SELECT *
+//    FROM glamping;
 }

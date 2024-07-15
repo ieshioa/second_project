@@ -46,13 +46,9 @@ public class OwnerServiceImpl implements OwnerService {
     @Transactional
     public ResponseEntity<? super PostGlampingInfoResponseDto> postGlampingInfo(GlampingPostRequestDto req
             , MultipartFile glampImg) {
-        // 유저 PK 불러오기
+
         try {
-//            req.setUserId(authenticationFacade.getLoginUserId());
-            req.setUserId(100);
-            if (req.getUserId() <= 0) {
-                throw new RuntimeException();
-            }
+            req.setUserId(userValidationGlamping());
         } catch (Exception e) {
             e.printStackTrace();
             return PostGlampingInfoResponseDto.validateUserId();
@@ -90,7 +86,7 @@ public class OwnerServiceImpl implements OwnerService {
         // 글램핑 대표 이미지 넣기
         try {
             // 폴더 : /glamping/{glampId}
-            String glampPath = String.format("/glamping/%s/glamp", glampId);
+            String glampPath = String.format("glamping/%s/glamp", glampId);
             customFileUtils.makeFolders(glampPath);
             // 파일을 저장한다
             String target = String.format("/%s/%s", glampPath, glmapImgName);
@@ -106,6 +102,13 @@ public class OwnerServiceImpl implements OwnerService {
     @Transactional
     public ResponseEntity<? super PostRoomInfoResponseDto> postRoomInfo(RoomPostRequestDto req
             , List<MultipartFile> image) {
+        try {
+            userValidationRoom(req.getGlampId());
+        } catch (Exception e) {
+            e.printStackTrace();
+            return PostGlampingInfoResponseDto.validateUserId();
+        }
+
         // RoomValidate
         try {
             RoomValidate.imgExist(image);   // 이미지가 들어있는가?
@@ -122,7 +125,7 @@ public class OwnerServiceImpl implements OwnerService {
         mapper.insertRoom(req);  // room 테이블 insert
 
         // 폴더 만들기
-        String roomPath = String.format("/glamping/%s/room/%s", req.getGlampId(), req.getRoomId());
+        String roomPath = String.format("glamping/%s/room/%s", req.getGlampId(), req.getRoomId());
         customFileUtils.makeFolders(roomPath);
         // room 파일명 생성 및 저장
         try {
@@ -154,11 +157,12 @@ public class OwnerServiceImpl implements OwnerService {
     @Transactional
     public ResponseEntity<? super PutGlampingInfoResponseDto> updateGlampingInfo(GlampingPutRequestDto p) {
         GlampingPostRequestDto req = p.getRequestDto();
-        // 유저 PK 불러오기
-//        req.setUserId(authenticationFacade.getLoginUserId());
-        req.setUserId(100);
-        if (req.getUserId() <= 0) {
-            return PutGlampingInfoResponseDto.validateUserId();
+
+        try {
+            req.setUserId(userValidationGlamping());
+        } catch (Exception e) {
+            e.printStackTrace();
+            return PostGlampingInfoResponseDto.validateUserId();
         }
 
         // GlampingValidate
@@ -182,6 +186,14 @@ public class OwnerServiceImpl implements OwnerService {
     @Transactional
     public ResponseEntity<? super PutRoomInfoResponseDto> updateRoomInfo(RoomPutRequestDto p) {
         RoomPostRequestDto req = p.getRequestDto();
+
+        try {
+            userValidationRoom(req.getGlampId());
+        } catch (Exception e) {
+            e.printStackTrace();
+            return PostGlampingInfoResponseDto.validateUserId();
+        }
+
         // RoomValidate
         try {
             GlampingValidate.isNull(p.getRoomId()); // 룸 Id가 올바른가?
@@ -211,9 +223,16 @@ public class OwnerServiceImpl implements OwnerService {
     }
 
     public ResponseEntity<? super GetOwnerBookListResponseDto> getGlampReservation(Long glampId) {
-        if (glampId == null || glampId < 0) {
-            return GetOwnerBookListResponseDto.wrongGlampId();
+
+        try {
+            userValidationGlamping();
+        } catch (Exception e) {
+            e.printStackTrace();
+            return PostGlampingInfoResponseDto.validateUserId();
         }
+
+        if (glampId == null || glampId < 0) { return GetOwnerBookListResponseDto.wrongGlampId(); }
+
         List<BookBeforeItem> before;
         List<BookCompleteItem> complete;
         List<BookCancelItem> cancel;
@@ -227,6 +246,25 @@ public class OwnerServiceImpl implements OwnerService {
         }
 
         return GetOwnerBookListResponseDto.success(before, complete, cancel);
+    }
+
+    private long userValidationGlamping() {
+        long userId = 0;
+        try {
+            userId = authenticationFacade.getLoginUserId();
+            if (userId <= 0) { throw new RuntimeException(); }
+        } catch (Exception e) {
+            throw new RuntimeException();
+        }
+        return userId;
+    }
+
+    private void userValidationRoom(long glampId) {
+        long loginUserId = userValidationGlamping();
+        Long getUserId = mapper.getUserIdByGlampId(glampId);
+        if(getUserId == null || loginUserId != getUserId || loginUserId <= 0) {
+            throw new RuntimeException();
+        }
     }
 
 

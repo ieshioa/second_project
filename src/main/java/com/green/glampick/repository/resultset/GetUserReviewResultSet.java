@@ -18,4 +18,5 @@ public interface GetUserReviewResultSet {
      String getOwnerReviewComment();
      LocalDateTime getCreatedAt();
 
+
 }

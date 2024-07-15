@@ -1,6 +1,5 @@
 package com.green.glampick.config;
 
-import io.github.cdimascio.dotenv.Dotenv;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.mail.javamail.JavaMailSender;
@@ -13,13 +12,12 @@ public class MailConfig {
 
     @Bean
     public JavaMailSender javaMailSender() {
-        Dotenv dotenv = Dotenv.load();
 
         JavaMailSenderImpl mailSender = new JavaMailSenderImpl();
-        mailSender.setHost(dotenv.get("MAIL_HOST")); // SMTP Server Host
-        mailSender.setPort(Integer.parseInt(dotenv.get("MAIL_PORT"))); // SMTP Server Port
-        mailSender.setUsername(dotenv.get("MAIL_USERNAME")); // User Email
-        mailSender.setPassword(dotenv.get("MAIL_PASSWORD")); // User App Key
+        mailSender.setHost("smtp.gmail.com"); // SMTP Server Host
+        mailSender.setPort(587); // SMTP Server Port
+        mailSender.setUsername("poi991024@gmail.com"); // User Email
+        mailSender.setPassword("rcjx tgpg ayqi sski"); // User App Key
 
         Properties javaMailProperties = new Properties();
         javaMailProperties.put("mail.transport.protocol", "smtp"); // SMTP 프로토콜 사용

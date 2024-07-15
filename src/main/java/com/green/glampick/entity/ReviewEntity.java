@@ -5,8 +5,10 @@ import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 import org.hibernate.annotations.CreationTimestamp;
 
+@Setter
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
@@ -22,6 +24,8 @@ public class ReviewEntity {
     private String reviewContent;  // 리뷰내용
     private int reviewStarPoint;  // 리뷰 별점
     private String reviewComment;
+    private long reservationId;
+
 
 
     @CreationTimestamp
@@ -32,10 +36,11 @@ public class ReviewEntity {
     public ReviewEntity (PostReviewRequestDto dto) {
 
         this.userId = dto.getUserId();
-        this.glampId = dto.getGlamp_id();
+        this.glampId = dto.getGlampId();
         this.reviewContent = dto.getReviewContent();
         this.reviewStarPoint = dto.getReviewStarPoint();
         this.roomId = dto.getRoomId();
+        this.reservationId = dto.getReservationId();
     }
 
 

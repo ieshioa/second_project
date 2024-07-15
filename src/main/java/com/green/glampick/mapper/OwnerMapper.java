@@ -30,5 +30,7 @@ public interface OwnerMapper {
     List<BookBeforeItem> getBookBefore(long glampId);
     List<BookCompleteItem> getBookComplete(long glampId);
     List<BookCancelItem> getBookCancel(long glampId);
+
+    Long getUserIdByGlampId(long glampId);
     // 강국
 }

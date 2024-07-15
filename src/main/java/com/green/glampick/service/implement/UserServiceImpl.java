@@ -2,15 +2,13 @@ package com.green.glampick.service.implement;
 
 import com.green.glampick.common.CustomFileUtils;
 import com.green.glampick.dto.ResponseDto;
-import com.green.glampick.dto.object.ReviewListItem;
 import com.green.glampick.dto.object.UserReviewListItem;
 import com.green.glampick.dto.request.user.*;
+import com.green.glampick.dto.response.owner.post.PostGlampingInfoResponseDto;
 import com.green.glampick.dto.response.user.*;
 import com.green.glampick.entity.*;
 import com.green.glampick.repository.*;
-import com.green.glampick.repository.resultset.GetBookResultSet;
-import com.green.glampick.repository.resultset.GetFavoriteGlampingResultSet;
-import com.green.glampick.repository.resultset.GetUserReviewResultSet;
+import com.green.glampick.repository.resultset.*;
 import com.green.glampick.security.AuthenticationFacade;
 import com.green.glampick.service.UserService;
 import lombok.RequiredArgsConstructor;
@@ -32,47 +30,59 @@ public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
     private final ReservationBeforeRepository reservationBeforeRepository;
     private final ReservationCancelRepository reservationCancelRepository;
+    private final ReservationCompleteRepository reservationCompleteRepository;
     private final ReviewRepository reviewRepository;
     private final AuthenticationFacade authenticationFacade;
     private final PasswordEncoder passwordEncoder;
     private final FavoriteGlampingRepository favoriteGlampingRepository;
     private final CustomFileUtils customFileUtils;
     private final ReviewImageRepository reviewImageRepository;
+    private final GlampingStarRepository glampingStarRepository;
+
 
     //  마이페이지 - 예약 내역 불러오기  //
     @Override
     public ResponseEntity<? super GetBookResponseDto> getBook(GetBookRequestDto dto) {
 
-        long loggedInUserId = authenticationFacade.getLoginUserId();
-        if (loggedInUserId == 0) {
-            return GetBookResponseDto.noPermission();
+        try {
+            dto.setUserId(authenticationFacade.getLoginUserId());
+            if (dto.getUserId() <= 0) { throw new RuntimeException(); }
+        } catch (Exception e) {
+            e.printStackTrace();
+            return GetBookResponseDto.validateUserId();
         }
-        dto.setUserId(authenticationFacade.getLoginUserId());
 
 
-        List<GetBookResultSet> resultSets;
+        List<GetReservationBeforeResultSet> reservationBeforeResultSetList;
+        List<GetReservationCancelResultSet> reservationCancelResultSetList;
+        List<GetReservationCompleteResultSet> reservationCompleteResultSetList;
 
         try {
-            resultSets = reservationBeforeRepository.getBook(dto.getUserId());
-            if (resultSets == null) {
-                return GetBookResponseDto.noExistedBook();
-            }
+
+            reservationBeforeResultSetList = reservationBeforeRepository.getBook(dto.getUserId());
+            reservationCancelResultSetList = reservationCancelRepository.getBook(dto.getUserId());
+            reservationCompleteResultSetList = reservationCompleteRepository.getBook(dto.getUserId());
+
         } catch (Exception e) {
             e.printStackTrace();
             return ResponseDto.databaseError();
         }
-        return GetBookResponseDto.success(resultSets);
+        return GetBookResponseDto.success(reservationBeforeResultSetList
+                                         , reservationCompleteResultSetList
+                                         , reservationCancelResultSetList);
     }
 
     //  마이페이지 - 예약 취소하기  //
     @Override
     public ResponseEntity<? super CancelBookResponseDto> cancelBook(CancelBookRequestDto dto) {
 
-        long loggedInUserId = authenticationFacade.getLoginUserId();
-        if (loggedInUserId == 0) {
-            return CancelBookResponseDto.noPermission();
+        try {
+            dto.setUserId(authenticationFacade.getLoginUserId());
+            if (dto.getUserId() <= 0) { throw new RuntimeException(); }
+        } catch (Exception e) {
+            e.printStackTrace();
+            return CancelBookResponseDto.validateUserId();
         }
-        dto.setUserId(authenticationFacade.getLoginUserId());
 
 
         Optional<ReservationBeforeEntity> optionalBeforeEntity = Optional.empty();
@@ -94,7 +104,7 @@ public class UserServiceImpl implements UserService {
                     , beforeEntity.getInputName()
                     , beforeEntity.getCheckInDate()
                     , beforeEntity.getCheckOutDate()
-                    , beforeEntity.getReservationAmount()
+                    , beforeEntity.getPayAmount()
                     , dto.getComment()
                     , beforeEntity.getCreatedAt());
 
@@ -112,18 +122,27 @@ public class UserServiceImpl implements UserService {
     //  마이페이지 - 리뷰 작성하기  //
     @Override
     public ResponseEntity<? super PostReviewResponseDto> postReview(PostReviewRequestDto dto, List<MultipartFile> mf) {
-        long loggedInUserId = authenticationFacade.getLoginUserId();
-        dto.setUserId(loggedInUserId);
+
+        try {
+            dto.setUserId(authenticationFacade.getLoginUserId());
+            if (dto.getUserId() <= 0) { throw new RuntimeException(); }
+        } catch (Exception e) {
+            e.printStackTrace();
+            return PostReviewResponseDto.validateUserId();
+        }
 
 
             ReviewEntity reviewEntity = new ReviewEntity(dto);
+            reviewEntity.setGlampId(dto.getGlampId());
+            reviewEntity.setRoomId(dto.getRoomId());
             reviewEntity = reviewRepository.save(reviewEntity);
+
 
             PostReviewPicsRequestDto postReviewPicsRequestDto = PostReviewPicsRequestDto.builder().reviewId(reviewEntity.getReviewId()).build();
             // 파일을 저장할 폴더 경로를 생성
-            String makefoled = String.format("review/%d/%d", loggedInUserId, reviewEntity.getReviewId());
+            String makefolder = String.format("review/%d/%d", dto.getUserId(), reviewEntity.getReviewId());
             // 폴더를 생성
-            customFileUtils.makeFolders(makefoled);
+            customFileUtils.makeFolders(makefolder);
 
         try {
 //            List<MultipartFile> reviewImageList = dto.getReviewImageFiles();
@@ -132,7 +151,7 @@ public class UserServiceImpl implements UserService {
             for (MultipartFile image : mf) {
                 String saveFileName = customFileUtils.makeRandomFileName(image);
                 postReviewPicsRequestDto.getReviewPicsName().add(saveFileName);
-                String filePath = String.format("%s/%s", makefoled, saveFileName);
+                String filePath = String.format("%s/%s", makefolder, saveFileName);
                 customFileUtils.transferTo(image, filePath);
 
                 ReviewImageEntity reviewImageEntity = new ReviewImageEntity();
@@ -141,7 +160,8 @@ public class UserServiceImpl implements UserService {
                 reviewImageEntityList.add(reviewImageEntity);
             }
             this.reviewImageRepository.saveAll(reviewImageEntityList);
-
+            reviewEntity.setReviewStarPoint(dto.getReviewStarPoint());
+    
         } catch (Exception e) {
             e.printStackTrace();
             return ResponseDto.databaseError();
@@ -152,15 +172,23 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override // 리뷰 삭제
-    public ResponseEntity<? super DeleteReviewResponseDto> deleteReview(long reviewId) {
+    public ResponseEntity<? super DeleteReviewResponseDto> deleteReview(DeleteReviewRequestDto dto) {
+
+        try {
+            dto.setUserId(authenticationFacade.getLoginUserId());
+            if (dto.getUserId() <= 0) { throw new RuntimeException(); }
+        } catch (Exception e) {
+            e.printStackTrace();
+            return DeleteReviewResponseDto.validateUserId();
+        }
 
         ReviewEntity reviewEntity = new ReviewEntity();
         try {
-            reviewRepository.findById(reviewId);
-            if (reviewId == 0) {
+            reviewRepository.findById(dto.getReviewId());
+            if (dto.getReviewId() == 0) {
                 return DeleteReviewResponseDto.noExistedReview();
             }
-            reviewRepository.deleteById(reviewId);
+            reviewRepository.deleteById(dto.getReviewId());
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -173,17 +201,22 @@ public class UserServiceImpl implements UserService {
     @Override // 리뷰 불러오기
     public ResponseEntity<? super GetReviewResponseDto> getReview(GetReviewRequestDto dto) {
 
-        long loggedInUserId = authenticationFacade.getLoginUserId();
-        if (loggedInUserId == 0) { return GetBookResponseDto.noPermission(); }
-        dto.setUserId(loggedInUserId);
+        try {
+            dto.setUserId(authenticationFacade.getLoginUserId());
+            if (dto.getUserId() <= 0) { throw new RuntimeException(); }
+        } catch (Exception e) {
+            e.printStackTrace();
+            return GetReviewResponseDto.validateUserId();
+        }
 
         List<GetUserReviewResultSet> resultSetList = null;
         List<ReviewImageEntity> imageEntities = new ArrayList<>();
 
         try {
+            int limit = dto.getLimit();
+            int offset = dto.getOffset();
 
-
-            resultSetList = reviewRepository.getReview(dto.getUserId());
+            resultSetList = reviewRepository.getReview(dto.getUserId(), limit, offset);
             List<Long> reviewIds = resultSetList.stream()
                     .map(GetUserReviewResultSet::getReviewId)
                     .collect(Collectors.toList());
@@ -221,10 +254,17 @@ public class UserServiceImpl implements UserService {
 
     }
 
-
     @Override //관심글램핑 불러오기
     public ResponseEntity<? super GetFavoriteGlampingResponseDto> getFavoriteGlamping(GetFavoriteGlampingRequestDto dto) {
-        dto.setUserId(dto.getUserId());
+
+        try {
+            dto.setUserId(authenticationFacade.getLoginUserId());
+            if (dto.getUserId() <= 0) { throw new RuntimeException(); }
+        } catch (Exception e) {
+            e.printStackTrace();
+            return GetFavoriteGlampingResponseDto.validateUserId();
+        }
+
         List<GetFavoriteGlampingResultSet> resultSets;
 
         try {
@@ -243,7 +283,13 @@ public class UserServiceImpl implements UserService {
     @Override
     public ResponseEntity<? super GetUserResponseDto> getUser(GetUserRequestDto dto) {
 
-        dto.setUserId(authenticationFacade.getLoginUserId());
+        try {
+            dto.setUserId(authenticationFacade.getLoginUserId());
+            if (dto.getUserId() <= 0) { throw new RuntimeException(); }
+        } catch (Exception e) {
+            e.printStackTrace();
+            return GetUserResponseDto.validateUserId();
+        }
 
         try {
 
@@ -263,8 +309,15 @@ public class UserServiceImpl implements UserService {
 
     //  마이페이지 - 내 정보 수정하기  //
     @Override
-    public ResponseEntity<? super UpdateUserResponseDto> updateUser(UpdateUserRequestDto dto) {
-        dto.setUserId(authenticationFacade.getLoginUserId());
+    public ResponseEntity<? super UpdateUserResponseDto> updateUser(UpdateUserRequestDto dto, MultipartFile mf) {
+
+        try {
+            dto.setUserId(authenticationFacade.getLoginUserId());
+            if (dto.getUserId() <= 0) { throw new RuntimeException(); }
+        } catch (Exception e) {
+            e.printStackTrace();
+            return UpdateUserResponseDto.validateUserId();
+        }
 
         try {
             UserEntity userEntity = userRepository.findById(dto.getUserId()).get();
@@ -272,12 +325,21 @@ public class UserServiceImpl implements UserService {
                 return UpdateUserResponseDto.noExistedUser();
             }
 
+            String path = String.format("user/%d", userEntity.getUserId());
+            customFileUtils.deleteFolder(path);
+            customFileUtils.makeFolders(path);
+            String saveFileName = customFileUtils.makeRandomFileName(mf);
+            String filePath = String.format("%s/%s", path, saveFileName);
+            customFileUtils.transferTo(mf, filePath);
+
             String userPw = dto.getUserPw();
             String encodingPw = passwordEncoder.encode(userPw);
             dto.setUserPw(encodingPw);
 
+            userEntity.setUserProfileImage(saveFileName);
             userEntity.setUserNickname(dto.getUserNickname());
             userEntity.setUserPw(dto.getUserPw());
+            userEntity.setUserPhone(dto.getUserPhone());
 
             userRepository.save(userEntity);
 
@@ -290,17 +352,59 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override// 회원 탈퇴
-    public ResponseEntity<? super DeleteUserResponseDto> deleteUser(long userId) {
-        UserEntity userEntity = new UserEntity();
+    public ResponseEntity<? super DeleteUserResponseDto> deleteUser(DeleteUserRequestDto dto) {
+
         try {
-            userRepository.findById(userId);
-            if (userId == 0) {
-                return DeleteUserResponseDto.noExistedUser();
-            }
-            userRepository.deleteById(userId);
+            dto.setUserId(authenticationFacade.getLoginUserId());
+            if (dto.getUserId() <= 0) { throw new RuntimeException(); }
+        } catch (Exception e) {
+            e.printStackTrace();
+            return DeleteUserResponseDto.validateUserId();
+        }
+
+        try {
+
+            userRepository.findById(dto.getUserId());
+            if (dto.getUserId() == 0) { return DeleteUserResponseDto.noExistedUser(); }
+            userRepository.deleteById(dto.getUserId());
+
         } catch (Exception e) {
             e.printStackTrace();
         }
+
         return DeleteUserResponseDto.success();
+
+    }
+
+    @Override
+    public ResponseEntity<? super PostUserPasswordResponseDto> postUserPassword(PostUserPasswordRequestDto dto) {
+
+        try {
+            dto.setUserId(authenticationFacade.getLoginUserId());
+            if (dto.getUserId() <= 0) { throw new RuntimeException(); }
+        } catch (Exception e) {
+            e.printStackTrace();
+            return PostUserPasswordResponseDto.validateUserId();
+        }
+
+        try {
+
+            UserEntity userEntity = userRepository.findByUserId(dto.getUserId());
+            if (dto.getUserId() == 0) { return PostUserPasswordResponseDto.noExistedUser(); }
+
+            String userPw = dto.getUserPw();
+            String encodingPw = userEntity.getUserPw();
+            boolean matches = passwordEncoder.matches(userPw, encodingPw);
+            if (!matches) { return PostUserPasswordResponseDto.invalidPassword(); }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseDto.databaseError();
+        }
+
+        return PostUserPasswordResponseDto.success();
     }
 }
+
+
+

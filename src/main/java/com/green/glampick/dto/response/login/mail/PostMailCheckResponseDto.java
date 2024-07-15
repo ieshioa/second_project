@@ -38,9 +38,4 @@ public class PostMailCheckResponseDto extends ResponseDto {
         PostMailCheckResponseDto result = new PostMailCheckResponseDto(ResponseCode.INVALID_CODE, ResponseMessage.INVALID_CODE, false);
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(result);
     }
-
-    public static ResponseEntity<ResponseDto> validationError() {
-        ResponseDto result = new ResponseDto(ResponseCode.VALIDATION_FAILED, ResponseMessage.VALIDATION_FAILED);
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(result);
-    }
 }

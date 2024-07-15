@@ -1,19 +1,42 @@
 package com.green.glampick.controller;
 
 import com.green.glampick.dto.request.user.*;
+import com.green.glampick.dto.response.login.PostSignUpResponseDto;
 import com.green.glampick.dto.response.user.*;
 import com.green.glampick.entity.ReviewImageEntity;
 import com.green.glampick.service.UserService;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springdoc.core.annotations.ParameterObject;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
+
+import static com.green.glampick.common.swagger.description.login.PostSignUpSwaggerDescription.SIGN_UP_RESPONSE_ERROR_CODE;
+import static com.green.glampick.common.swagger.description.user.DeleteUserReviewSwaggerDescription.USER_REVIEW_REMOVE_DESCRIPTION;
+import static com.green.glampick.common.swagger.description.user.DeleteUserReviewSwaggerDescription.USER_REVIEW_REMOVE_RESPONSE_ERROR_CODE;
+import static com.green.glampick.common.swagger.description.user.GetUserBookSwaggerDescription.USER_BOOK_DESCRIPTION;
+import static com.green.glampick.common.swagger.description.user.GetUserBookSwaggerDescription.USER_BOOK_RESPONSE_ERROR_CODE;
+import static com.green.glampick.common.swagger.description.user.GetUserFavoriteGlampingSwaggerDescription.USER_FAVORITE_LIST_DESCRIPTION;
+import static com.green.glampick.common.swagger.description.user.GetUserFavoriteGlampingSwaggerDescription.USER_FAVORITE_LIST_RESPONSE_ERROR_CODE;
+import static com.green.glampick.common.swagger.description.user.GetUserReviewSwaggerDescription.USER_REVIEW_VIEW_DESCRIPTION;
+import static com.green.glampick.common.swagger.description.user.GetUserReviewSwaggerDescription.USER_REVIEW_VIEW_RESPONSE_ERROR_CODE;
+import static com.green.glampick.common.swagger.description.user.PostUserBookCancelSwaggerDescription.USER_BOOK_CANCEL_DESCRIPTION;
+import static com.green.glampick.common.swagger.description.user.PostUserBookCancelSwaggerDescription.USER_BOOK_CANCEL_RESPONSE_ERROR_CODE;
+import static com.green.glampick.common.swagger.description.user.PostUserReviewSwaggerDescription.USER_REVIEW_DESCRIPTION;
+import static com.green.glampick.common.swagger.description.user.PostUserReviewSwaggerDescription.USER_REVIEW_RESPONSE_ERROR_CODE;
+import static com.green.glampick.common.swagger.description.user.UpdateUserInfoSwaggerDescription.USER_INFO_UPDATE_DESCRIPTION;
+import static com.green.glampick.common.swagger.description.user.UpdateUserInfoSwaggerDescription.USER_INFO_UPDATE_RESPONSE_ERROR_CODE;
+import static com.green.glampick.common.swagger.description.user.getUserInfoSwaggerDescription.USER_INFO_DESCRIPTION;
+import static com.green.glampick.common.swagger.description.user.getUserInfoSwaggerDescription.USER_INFO_RESPONSE_ERROR_CODE;
 
 @Slf4j
 @RestController
@@ -23,49 +46,63 @@ import java.util.List;
 public class UserController {
     private final UserService service;
 
-    @GetMapping("/book")// 예약 내역 불러오기
-    @Operation(summary = "예약 내역 불러오기", description = "<strong></strong>" +
-            "<p> reservationId = </p>" +
-            "<p> reviewContent = </p>" +
-            "<p> reviewStarPoint = </p>")
+    //  유저 페이지 - 예약 내역 불러오기  //
+    @GetMapping("/book")
+    @Operation(summary = "예약내역 불러오기", description = USER_BOOK_DESCRIPTION)
+    @ApiResponse(responseCode = "200", description = USER_BOOK_RESPONSE_ERROR_CODE,
+        content = @Content(
+                mediaType = "application/json", schema = @Schema(implementation = PostSignUpResponseDto.class)))
     public ResponseEntity<?super GetBookResponseDto> getBook(@ParameterObject GetBookRequestDto dto) {
         return service.getBook(dto);
     }
 
-    @PostMapping("/book-cancel")// 예약 내역 취소하기
-    @Operation(summary = "예약 취소", description = "<strong></strong>" +
-            "<p></p>")
+    //  유저 페이지 - 예약 내역 취소하기  //
+    @PostMapping("/book-cancel")
+    @Operation(summary = "예약내역 취소하기", description = USER_BOOK_CANCEL_DESCRIPTION)
+    @ApiResponse(responseCode = "200", description = USER_BOOK_CANCEL_RESPONSE_ERROR_CODE,
+        content = @Content(
+                mediaType = "application/json", schema = @Schema(implementation = PostSignUpResponseDto.class)))
     public ResponseEntity<?super CancelBookResponseDto> cancelBook(@RequestBody CancelBookRequestDto dto) {
         return service.cancelBook(dto);
     }
 
-    @PostMapping("/review")// 리뷰 작성
-    @Operation(summary = "리뷰 작성", description = "<strong></strong>" +
-            "<p> reservationId = 예약 ID ex) 1 </p>" +
-            "<p> reviewContent = 리뷰 내용 ex) 정말 좋았다.</p>" +
-            "<p> reviewStarPoint = 별점 ex) 3 </p>")
+    //  유저 페이지 - 리뷰 작성하기  //
+    @PostMapping("/review")
+    @Operation(summary = "리뷰 작성하기", description = USER_REVIEW_DESCRIPTION)
+    @ApiResponse(responseCode = "200", description = USER_REVIEW_RESPONSE_ERROR_CODE,
+        content = @Content(
+                mediaType = "application/json", schema = @Schema(implementation = PostReviewResponseDto.class)))
     public ResponseEntity<?super PostReviewResponseDto> postReview(@RequestPart PostReviewRequestDto dto, @RequestPart List<MultipartFile> mf) {
         return service.postReview(dto, mf);
     }
 
-    @DeleteMapping("/delete")// 리뷰 삭제
-    @Operation(summary = "리뷰 삭제", description = "<strong></strong>" +
-            "<p> review_id = 리뷰 pk ex) 1 </p>")//
-    public ResponseEntity<?super DeleteReviewResponseDto> deleteReview(@RequestParam("review_id") long reviewId) {
-        return service.deleteReview(reviewId);
+    //  유저 페이지 - 리뷰 삭제하기  //
+    @DeleteMapping("/delete")
+    @Operation(summary = "리뷰 삭제하기", description = USER_REVIEW_REMOVE_DESCRIPTION)
+    @ApiResponse(responseCode = "200", description = USER_REVIEW_REMOVE_RESPONSE_ERROR_CODE,
+            content = @Content(
+                    mediaType = "application/json", schema = @Schema(implementation = DeleteReviewResponseDto.class)))
+    public ResponseEntity<?super DeleteReviewResponseDto> deleteReview(@ParameterObject DeleteReviewRequestDto dto) {
+        return service.deleteReview(dto);
 
     }
 
-    @GetMapping("/review")// 리뷰 불러오기
-    @Operation(summary = "리뷰 불러오기", description = "<strong></strong>" +
-            "<p> review_id = 리뷰 pk ex) 1 </p>")
+    //  유저 페이지 - 리뷰 불러오기  //
+    @GetMapping("/review")
+    @Operation(summary = "리뷰 불러오기", description = USER_REVIEW_VIEW_DESCRIPTION)
+    @ApiResponse(responseCode = "200", description = USER_REVIEW_VIEW_RESPONSE_ERROR_CODE,
+            content = @Content(
+                    mediaType = "application/json", schema = @Schema(implementation = PostReviewResponseDto.class)))
     public ResponseEntity<?super GetReviewResponseDto> getReview(@ParameterObject @ModelAttribute GetReviewRequestDto dto) {
         return service.getReview(dto);
     }
 
-    @GetMapping("/favorite-glamping")// 관심 글램핑 불러오기
-    @Operation(summary = "관심 글램핑 불러오기", description = "<strong></strong>" +
-            "<p></p>")
+    //  유저 페이지 - 관심 글램핑 리스트 불러오기  //
+    @GetMapping("/favorite-glamping")
+    @Operation(summary = "리뷰 불러오기", description = USER_FAVORITE_LIST_DESCRIPTION)
+    @ApiResponse(responseCode = "200", description = USER_FAVORITE_LIST_RESPONSE_ERROR_CODE,
+            content = @Content(
+                    mediaType = "application/json", schema = @Schema(implementation = GetFavoriteGlampingResponseDto.class)))
     public ResponseEntity<?super GetFavoriteGlampingResponseDto> getFavoriteGlamping(@ParameterObject @ModelAttribute GetFavoriteGlampingRequestDto dto) {
         return service.getFavoriteGlamping(dto);
     }
@@ -76,25 +113,40 @@ public class UserController {
 //        return response;
 //    }
 
-    @GetMapping("")// 유저 정보 불러오기
-    @Operation(summary = "유저 정보 불러오기", description = "<strong></strong>" +
-            "<p></p>")
+    @GetMapping// 유저 정보 불러오기
+    @Operation(summary = "유저 정보 불러오기", description = USER_INFO_DESCRIPTION)
+    @ApiResponse(responseCode = "200", description = USER_INFO_RESPONSE_ERROR_CODE,
+            content = @Content(
+                    mediaType = "application/json", schema = @Schema(implementation = GetUserResponseDto.class)))
     public ResponseEntity<?super GetUserResponseDto> getUser(@ParameterObject GetUserRequestDto dto) {
         return service.getUser(dto);
     }
 
-    @PatchMapping("")// 유저 정보 수정하기
-    @Operation(summary = "유저 정보 수정하기", description = "<strong></strong>" +
-            "<p></p>")
-    public ResponseEntity<?super UpdateUserResponseDto> updateUser(@RequestBody UpdateUserRequestDto dto) {
-        return service.updateUser(dto);
+    @PutMapping(consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})// 유저 정보 수정하기
+    @Operation(summary = "유저 정보 수정하기", description = USER_INFO_UPDATE_DESCRIPTION)
+    @ApiResponse(responseCode = "200", description = USER_INFO_UPDATE_RESPONSE_ERROR_CODE,
+            content = @Content(
+                    mediaType = "application/json", schema = @Schema(implementation = GetUserResponseDto.class)))
+    public ResponseEntity<?super UpdateUserResponseDto> updateUser
+            (@RequestPart UpdateUserRequestDto dto, @RequestPart MultipartFile mf)
+    {
+        return service.updateUser(dto, mf);
     }
 
-    @DeleteMapping("")// 회원탈퇴
-    @Operation(summary = "회원탈퇴", description = "<strong></strong>" +
+    @DeleteMapping// 회원탈퇴
+    @Operation(summary = "회원 탈퇴", description = "<strong></strong>" +
             "<p></p>")
-    public ResponseEntity<?super DeleteUserResponseDto> deleteUser(@RequestParam("user_id") int userId) {
-        return service.deleteUser(userId);
+    public ResponseEntity<?super DeleteUserResponseDto> deleteUser(@ParameterObject DeleteUserRequestDto dto) {
+        return service.deleteUser(dto);
+    }
+
+    @PostMapping("password-check")
+    @Operation(summary = "비밀번호 확인", description = "수정할거에요~")
+    @ApiResponse(responseCode = "200", description = "수정할거에요~",
+            content = @Content(
+                    mediaType = "application/json", schema = @Schema(implementation = PostUserPasswordResponseDto.class)))
+    public ResponseEntity<? super PostUserPasswordResponseDto> postUserPassword(@RequestBody PostUserPasswordRequestDto dto) {
+        return service.postUserPassword(dto);
     }
 
 }
