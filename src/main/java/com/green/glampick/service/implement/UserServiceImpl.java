@@ -4,7 +4,7 @@ import com.green.glampick.common.CustomFileUtils;
 import com.green.glampick.dto.ResponseDto;
 import com.green.glampick.dto.object.UserReviewListItem;
 import com.green.glampick.dto.request.user.*;
-import com.green.glampick.dto.response.login.PostSignInResponseDto;
+import com.green.glampick.dto.response.owner.post.PostGlampingInfoResponseDto;
 import com.green.glampick.dto.response.user.*;
 import com.green.glampick.entity.*;
 import com.green.glampick.repository.*;
@@ -43,13 +43,12 @@ public class UserServiceImpl implements UserService {
     @Override
     public ResponseEntity<? super GetBookResponseDto> getBook(GetBookRequestDto dto) {
 
-        try{
-            long loggedInUserId = authenticationFacade.getLoginUserId();
-            if (loggedInUserId == 0) { return GetBookResponseDto.noPermission(); }
-            dto.setUserId(loggedInUserId);
+        try {
+            dto.setUserId(authenticationFacade.getLoginUserId());
+            if (dto.getUserId() <= 0) { throw new RuntimeException(); }
         } catch (Exception e) {
             e.printStackTrace();
-            return GetUserResponseDto.authorizationFailed();
+            return GetBookResponseDto.validateUserId();
         }
 
 
@@ -76,13 +75,12 @@ public class UserServiceImpl implements UserService {
     @Override
     public ResponseEntity<? super CancelBookResponseDto> cancelBook(CancelBookRequestDto dto) {
 
-        try{
-            long loggedInUserId = authenticationFacade.getLoginUserId();
-            if (loggedInUserId == 0) { return GetBookResponseDto.noPermission(); }
-            dto.setUserId(loggedInUserId);
+        try {
+            dto.setUserId(authenticationFacade.getLoginUserId());
+            if (dto.getUserId() <= 0) { throw new RuntimeException(); }
         } catch (Exception e) {
             e.printStackTrace();
-            return GetUserResponseDto.authorizationFailed();
+            return CancelBookResponseDto.validateUserId();
         }
 
 
@@ -123,15 +121,16 @@ public class UserServiceImpl implements UserService {
     //  마이페이지 - 리뷰 작성하기  //
     @Override
     public ResponseEntity<? super PostReviewResponseDto> postReview(PostReviewRequestDto dto, List<MultipartFile> mf) {
-            long loggedInUserId = 0;
-            try{
-                loggedInUserId = authenticationFacade.getLoginUserId();
-                if (loggedInUserId == 0) { return GetBookResponseDto.noPermission(); }
-                dto.setUserId(loggedInUserId);
-            } catch (Exception e) {
-                e.printStackTrace();
-                return GetUserResponseDto.authorizationFailed();
-            }
+
+        long loggedInUserId = 0;
+
+        try {
+            dto.setUserId(authenticationFacade.getLoginUserId());
+            if (dto.getUserId() <= 0) { throw new RuntimeException(); }
+        } catch (Exception e) {
+            e.printStackTrace();
+            return PostReviewResponseDto.validateUserId();
+        }
 
 
             ReviewEntity reviewEntity = new ReviewEntity(dto);
@@ -172,8 +171,14 @@ public class UserServiceImpl implements UserService {
 
     @Override // 리뷰 삭제
     public ResponseEntity<? super DeleteReviewResponseDto> deleteReview(DeleteReviewRequestDto dto) {
-        long loggedInUserId = authenticationFacade.getLoginUserId();
-        dto.setUserId(loggedInUserId);
+
+        try {
+            dto.setUserId(authenticationFacade.getLoginUserId());
+            if (dto.getUserId() <= 0) { throw new RuntimeException(); }
+        } catch (Exception e) {
+            e.printStackTrace();
+            return DeleteReviewResponseDto.validateUserId();
+        }
 
         ReviewEntity reviewEntity = new ReviewEntity();
         try {
@@ -194,13 +199,12 @@ public class UserServiceImpl implements UserService {
     @Override // 리뷰 불러오기
     public ResponseEntity<? super GetReviewResponseDto> getReview(GetReviewRequestDto dto) {
 
-        try{
-            long loggedInUserId = authenticationFacade.getLoginUserId();
-            if (loggedInUserId == 0) { return GetBookResponseDto.noPermission(); }
-            dto.setUserId(loggedInUserId);
+        try {
+            dto.setUserId(authenticationFacade.getLoginUserId());
+            if (dto.getUserId() <= 0) { throw new RuntimeException(); }
         } catch (Exception e) {
             e.printStackTrace();
-            return GetUserResponseDto.authorizationFailed();
+            return GetReviewResponseDto.validateUserId();
         }
 
         List<GetUserReviewResultSet> resultSetList = null;
@@ -248,17 +252,15 @@ public class UserServiceImpl implements UserService {
 
     }
 
-
     @Override //관심글램핑 불러오기
     public ResponseEntity<? super GetFavoriteGlampingResponseDto> getFavoriteGlamping(GetFavoriteGlampingRequestDto dto) {
 
-        try{
-            long loggedInUserId = authenticationFacade.getLoginUserId();
-            if (loggedInUserId == 0) { return GetBookResponseDto.noPermission(); }
-            dto.setUserId(loggedInUserId);
+        try {
+            dto.setUserId(authenticationFacade.getLoginUserId());
+            if (dto.getUserId() <= 0) { throw new RuntimeException(); }
         } catch (Exception e) {
             e.printStackTrace();
-            return GetUserResponseDto.authorizationFailed();
+            return GetFavoriteGlampingResponseDto.validateUserId();
         }
 
         List<GetFavoriteGlampingResultSet> resultSets;
@@ -279,13 +281,12 @@ public class UserServiceImpl implements UserService {
     @Override
     public ResponseEntity<? super GetUserResponseDto> getUser(GetUserRequestDto dto) {
 
-        try{
-            long loggedInUserId = authenticationFacade.getLoginUserId();
-            if (loggedInUserId == 0) { return GetBookResponseDto.noPermission(); }
-            dto.setUserId(loggedInUserId);
+        try {
+            dto.setUserId(authenticationFacade.getLoginUserId());
+            if (dto.getUserId() <= 0) { throw new RuntimeException(); }
         } catch (Exception e) {
             e.printStackTrace();
-            return GetUserResponseDto.authorizationFailed();
+            return GetUserResponseDto.validateUserId();
         }
 
         try {
@@ -307,13 +308,13 @@ public class UserServiceImpl implements UserService {
     //  마이페이지 - 내 정보 수정하기  //
     @Override
     public ResponseEntity<? super UpdateUserResponseDto> updateUser(UpdateUserRequestDto dto, MultipartFile mf) {
-        try{
-            long loggedInUserId = authenticationFacade.getLoginUserId();
-            if (loggedInUserId == 0) { return GetBookResponseDto.noPermission(); }
-            dto.setUserId(loggedInUserId);
+
+        try {
+            dto.setUserId(authenticationFacade.getLoginUserId());
+            if (dto.getUserId() <= 0) { throw new RuntimeException(); }
         } catch (Exception e) {
             e.printStackTrace();
-            return GetUserResponseDto.authorizationFailed();
+            return UpdateUserResponseDto.validateUserId();
         }
 
         try {
@@ -349,23 +350,56 @@ public class UserServiceImpl implements UserService {
 
     @Override// 회원 탈퇴
     public ResponseEntity<? super DeleteUserResponseDto> deleteUser(DeleteUserRequestDto dto) {
-        long loggedInUserId = authenticationFacade.getLoginUserId();
-        dto.setUserId(loggedInUserId);
-//        UserEntity userEntity = userRepository.findByUserId(dto.getUserId());
+
         try {
+            dto.setUserId(authenticationFacade.getLoginUserId());
+            if (dto.getUserId() <= 0) { throw new RuntimeException(); }
+        } catch (Exception e) {
+            e.printStackTrace();
+            return DeleteUserResponseDto.validateUserId();
+        }
+
+        try {
+
             userRepository.findById(dto.getUserId());
-            if (dto.getUserId() == 0) {
-                return DeleteUserResponseDto.noExistedUser();
-            }
-//            String userPw = dto.getUserPw();
-//            String encodingPw = userEntity.getUserPw();
-//            boolean matches = passwordEncoder.matches(userPw, encodingPw);
-//            if (!matches) { return DeleteUserResponseDto.noPermission(); }
+            if (dto.getUserId() == 0) { return DeleteUserResponseDto.noExistedUser(); }
             userRepository.deleteById(dto.getUserId());
+
         } catch (Exception e) {
             e.printStackTrace();
         }
+
         return DeleteUserResponseDto.success();
+
+    }
+
+    @Override
+    public ResponseEntity<? super PostUserPasswordResponseDto> postUserPassword(PostUserPasswordRequestDto dto) {
+
+        try {
+            dto.setUserId(authenticationFacade.getLoginUserId());
+            if (dto.getUserId() <= 0) { throw new RuntimeException(); }
+        } catch (Exception e) {
+            e.printStackTrace();
+            return PostUserPasswordResponseDto.validateUserId();
+        }
+
+        try {
+
+            UserEntity userEntity = userRepository.findByUserId(dto.getUserId());
+            if (dto.getUserId() == 0) { return PostUserPasswordResponseDto.noExistedUser(); }
+
+            String userPw = dto.getUserPw();
+            String encodingPw = userEntity.getUserPw();
+            boolean matches = passwordEncoder.matches(userPw, encodingPw);
+            if (!matches) { return PostUserPasswordResponseDto.invalidPassword(); }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseDto.databaseError();
+        }
+
+        return PostUserPasswordResponseDto.success();
     }
 }
 

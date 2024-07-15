@@ -40,9 +40,9 @@ public class GetUserResponseDto extends ResponseDto {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(result);
     }
 
-    public static ResponseEntity<ResponseDto> authorizationFailed() {
-        ResponseDto result = new ResponseDto(ResponseCode.AUTHORIZATION_FAILED, ResponseMessage.AUTHORIZATION_FAILED);
-        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(result);
+    public static ResponseEntity<ResponseDto> validateUserId() {
+        ResponseDto result = new ResponseDto(ResponseCode.CANT_FIND_USER, ResponseMessage.CANT_FIND_USER);
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(result);
     }
 
     public static ResponseEntity<ResponseDto> noPermission() {

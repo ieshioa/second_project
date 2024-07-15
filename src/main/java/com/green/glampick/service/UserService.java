@@ -37,4 +37,7 @@ public interface UserService {
     //  마이페이지 - 회원 탈퇴  //
     ResponseEntity<?super DeleteUserResponseDto> deleteUser(DeleteUserRequestDto dto);
 
+    //  마이페이지 - 비밀번호 체크  //
+    ResponseEntity<?super PostUserPasswordResponseDto> postUserPassword(PostUserPasswordRequestDto dto);
+
 }

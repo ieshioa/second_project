@@ -15,6 +15,7 @@ public interface ResponseMessage {
     String INVALID_PHONE = "전화번호 형식이 올바르지 않습니다.";  // "IPH"
     String EXPIRED_CODE = "인증코드의 유효시간이 지났습니다.";  // "EF"
     String INVALID_CODE = "인증코드가 올바르지 않습니다.";  // "IC"
+    String NOT_MATCH_PASSWORD = "비밀번호가 일치하지 않습니다.";  // "NMP"
     String DUPLICATE_EMAIL = "중복된 이메일 입니다.";  // "DE"
     String DUPLICATE_TEL_NUMBER = "중복된 전화번호 입니다.";  // "DT"
     String DUPLICATE_NICK_NAME = "중복된 닉네임 입니다.";  // "DN"

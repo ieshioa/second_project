@@ -7,6 +7,7 @@ import com.green.glampick.dto.request.glamping.*;
 import com.green.glampick.dto.ResponseDto;
 import com.green.glampick.dto.response.glamping.*;
 import com.green.glampick.dto.response.glamping.favorite.GetFavoriteGlampingResponseDto;
+import com.green.glampick.dto.response.owner.post.PostGlampingInfoResponseDto;
 import com.green.glampick.mapper.GlampingMapper;
 import com.green.glampick.security.AuthenticationFacade;
 import com.green.glampick.service.GlampingService;
@@ -92,8 +93,15 @@ public class GlampingServiceImpl implements GlampingService {
     @Override
     @Transactional
     public ResponseEntity<? super GetFavoriteGlampingResponseDto> favoriteGlamping(GetFavoriteRequestDto p) {
-        //p.setUserId(facade.getLoginUserId());
-        p.setUserId(1);
+
+        try {
+            p.setUserId(facade.getLoginUserId());
+            if (p.getUserId() <= 0) { throw new RuntimeException(); }
+        } catch (Exception e) {
+            e.printStackTrace();
+            return GetFavoriteGlampingResponseDto.validateUserId();
+        }
+
         try {
             //관심글램픽
             int result = mapper.deleteFavorite(p);
@@ -109,6 +117,7 @@ public class GlampingServiceImpl implements GlampingService {
             return ResponseDto.databaseError();
         }
     }
+
     @Override
     public ResponseEntity<? super GetGlampingInformationResponseDto> infoGlampingDetail(GetInfoRequestDto p) {
         log.info("p: {}", p);
@@ -159,6 +168,7 @@ public class GlampingServiceImpl implements GlampingService {
 
         return new ResponseEntity<>(glampInfoDto,HttpStatus.OK) ;
     }
+
     @Override
     public ResponseEntity<? super GetMoreRoomItemResponseDto> moreDetailsRoom(GetInfoRequestDto p) {
         // 객실 정보 리스트
@@ -193,6 +203,7 @@ public class GlampingServiceImpl implements GlampingService {
 
         return new ResponseEntity<>(glampInfoDto,HttpStatus.OK);
     }
+
     @Override
     public ResponseEntity<? super GetGlampingReviewInfoResponseDto> infoReviewList(ReviewInfoRequestDto p) {
 
@@ -227,6 +238,7 @@ public class GlampingServiceImpl implements GlampingService {
         GetMoreReviewImgageResponseDto dto = GetMoreReviewImgageResponseDto.builder().moreReviewImage(images).build();
         return new ResponseEntity<>(dto, HttpStatus.OK);
     }
+
     public ResponseEntity<? super GetMoreRoomImageResponseDto> moreRoomImage(@ParameterObject @ModelAttribute GetMoreRoomImageRequestDto p) {
 
         //dto 에 넣을 HashMap
@@ -263,6 +275,7 @@ public class GlampingServiceImpl implements GlampingService {
             throw new RuntimeException();
         }
     }
+
     private boolean checkDate (String in, String out) {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
         LocalDate inDate = LocalDate.parse(in, formatter);

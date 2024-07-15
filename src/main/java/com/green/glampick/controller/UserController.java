@@ -103,7 +103,7 @@ public class UserController {
 //        return response;
 //    }
 
-    @GetMapping("")// 유저 정보 불러오기
+    @GetMapping// 유저 정보 불러오기
     @Operation(summary = "유저 정보 불러오기", description = "<strong></strong>" +
             "<p></p>")
     public ResponseEntity<?super GetUserResponseDto> getUser(@ParameterObject GetUserRequestDto dto) {
@@ -119,11 +119,20 @@ public class UserController {
         return service.updateUser(dto, mf);
     }
 
-    @DeleteMapping("")// 회원탈퇴
+    @DeleteMapping// 회원탈퇴
     @Operation(summary = "회원 탈퇴", description = "<strong></strong>" +
             "<p></p>")
     public ResponseEntity<?super DeleteUserResponseDto> deleteUser(@ParameterObject DeleteUserRequestDto dto) {
         return service.deleteUser(dto);
+    }
+
+    @PostMapping("password-check")
+    @Operation(summary = "비밀번호 확인", description = "수정할거에요~")
+    @ApiResponse(responseCode = "200", description = "수정할거에요~",
+            content = @Content(
+                    mediaType = "application/json", schema = @Schema(implementation = PostUserPasswordResponseDto.class)))
+    public ResponseEntity<? super PostUserPasswordResponseDto> postUserPassword(@RequestBody PostUserPasswordRequestDto dto) {
+        return service.postUserPassword(dto);
     }
 
 }
