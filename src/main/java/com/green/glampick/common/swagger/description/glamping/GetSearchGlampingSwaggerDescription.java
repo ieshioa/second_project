@@ -19,7 +19,8 @@ public class GetSearchGlampingSwaggerDescription {
 
     public static final String SEARCH_GLAMPING_RESPONSE_ERROR_CODE =
 
-            "<strong>RN - 검색 결과 존재하지 않음 (200)</strong>" +
+            "<strong>해당 코드는 성공코드 입니다.</strong>" +
+            "<p>RN - 검색 결과 존재하지 않음 (200)</p>" +
             "<p>-------------------------------------------------</p>" +
             "<strong>발생 가능한 에러코드</strong>" +
             "<p>VF - 유효성 검사 실패 (400)</p>" +
