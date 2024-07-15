@@ -73,11 +73,13 @@ public class LoginServiceImpl implements LoginService {
     @Override
     public int createKey() {
         Random random = new Random();
-        int key = 0;
+        StringBuilder keyBuilder = new StringBuilder();
+
         for (int i = 0; i < 6; i++) {
-            key = key * 10 + random.nextInt(10);
+            keyBuilder.append(random.nextInt(10));
         }
-        return key;
+
+        return Integer.parseInt(keyBuilder.toString());
     }
 
     //  1분 마다 스케줄이 실행되는 메소드  //
