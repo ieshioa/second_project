@@ -122,8 +122,6 @@ public class UserServiceImpl implements UserService {
     @Override
     public ResponseEntity<? super PostReviewResponseDto> postReview(PostReviewRequestDto dto, List<MultipartFile> mf) {
 
-        long loggedInUserId = 0;
-
         try {
             dto.setUserId(authenticationFacade.getLoginUserId());
             if (dto.getUserId() <= 0) { throw new RuntimeException(); }
@@ -138,7 +136,7 @@ public class UserServiceImpl implements UserService {
 
             PostReviewPicsRequestDto postReviewPicsRequestDto = PostReviewPicsRequestDto.builder().reviewId(reviewEntity.getReviewId()).build();
             // 파일을 저장할 폴더 경로를 생성
-            String makefolder = String.format("review/%d/%d", loggedInUserId, reviewEntity.getReviewId());
+            String makefolder = String.format("review/%d/%d", dto.getUserId(), reviewEntity.getReviewId());
             // 폴더를 생성
             customFileUtils.makeFolders(makefolder);
 
