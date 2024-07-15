@@ -3,6 +3,7 @@ package com.green.glampick.service.implement;
 import com.green.glampick.dto.ResponseDto;
 import com.green.glampick.dto.request.book.postBookRequestDto;
 import com.green.glampick.dto.response.book.PostBookResponseDto;
+import com.green.glampick.dto.response.owner.post.PostGlampingInfoResponseDto;
 import com.green.glampick.entity.ReservationBeforeEntity;
 import com.green.glampick.repository.ReservationBeforeRepository;
 import com.green.glampick.security.AuthenticationFacade;
@@ -30,11 +31,15 @@ public class BookServiceImpl implements BookService {
     public ResponseEntity<? super PostBookResponseDto> postBook(postBookRequestDto dto) {
 
         //  로그인 유저가 없다면, 권한이 없다는 응답을 보낸다.  //
-        long loggedInUserId = authenticationFacade.getLoginUserId();
-        if (loggedInUserId == 0) { return PostBookResponseDto.noPermission(); }
-
-        //  로그인 유저가 있다면, RequestDto 에 로그인 유저 PK 를 넣는다.  //
-        dto.setUserId(loggedInUserId);
+        try {
+            dto.setUserId(authenticationFacade.getLoginUserId());
+            if (dto.getUserId() <= 0) {
+                throw new RuntimeException();
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            return PostBookResponseDto.validateUserId();
+        }
 
         ReservationBeforeEntity reservationBeforeEntity = new ReservationBeforeEntity(dto);
 

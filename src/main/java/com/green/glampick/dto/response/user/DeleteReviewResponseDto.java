@@ -25,11 +25,6 @@ public class DeleteReviewResponseDto extends ResponseDto {
         return ResponseEntity.status(HttpStatus.OK).body(result);
     }
 
-    public static ResponseEntity<ResponseDto> noExistedUser() {
-        ResponseDto result = new ResponseDto(ResponseCode.NOT_EXISTED_USER, ResponseMessage.NOT_EXISTED_USER);
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(result);
-    }
-
     public static ResponseEntity<ResponseDto> noExistedReview() {
         ResponseDto result = new ResponseDto(ResponseCode.NOT_EXISTED_REVIEW, ResponseMessage.NOT_EXISTED_REVIEW);
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(result);
@@ -38,6 +33,11 @@ public class DeleteReviewResponseDto extends ResponseDto {
     public static ResponseEntity<ResponseDto> noPermission() {
         ResponseDto result = new ResponseDto(ResponseCode.NOT_PERMISSION, ResponseMessage.NOT_PERMISSION);
         return ResponseEntity.status(HttpStatus.FORBIDDEN).body(result);
+    }
+
+    public static ResponseEntity<ResponseDto> validateUserId() {
+        ResponseDto result = new ResponseDto(ResponseCode.CANT_FIND_USER, ResponseMessage.CANT_FIND_USER);
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(result);
     }
 
 }

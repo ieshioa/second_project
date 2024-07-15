@@ -57,6 +57,9 @@ public class PostReviewResponseDto extends ResponseDto {
         return ResponseEntity.status(HttpStatus.FORBIDDEN).body(result);
     }
 
-
+    public static ResponseEntity<ResponseDto> validateUserId() {
+        ResponseDto result = new ResponseDto(ResponseCode.CANT_FIND_USER, ResponseMessage.CANT_FIND_USER);
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(result);
+    }
 
 }
