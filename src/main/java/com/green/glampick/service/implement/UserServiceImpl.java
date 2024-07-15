@@ -46,7 +46,9 @@ public class UserServiceImpl implements UserService {
 
         try {
             dto.setUserId(authenticationFacade.getLoginUserId());
-            if (dto.getUserId() <= 0) { throw new RuntimeException(); }
+            if (dto.getUserId() <= 0) {
+                throw new RuntimeException();
+            }
         } catch (Exception e) {
             e.printStackTrace();
             return GetBookResponseDto.validateUserId();
@@ -68,8 +70,8 @@ public class UserServiceImpl implements UserService {
             return ResponseDto.databaseError();
         }
         return GetBookResponseDto.success(reservationBeforeResultSetList
-                                         , reservationCompleteResultSetList
-                                         , reservationCancelResultSetList);
+                , reservationCompleteResultSetList
+                , reservationCancelResultSetList);
     }
 
     //  마이페이지 - 예약 취소하기  //
@@ -78,7 +80,9 @@ public class UserServiceImpl implements UserService {
 
         try {
             dto.setUserId(authenticationFacade.getLoginUserId());
-            if (dto.getUserId() <= 0) { throw new RuntimeException(); }
+            if (dto.getUserId() <= 0) {
+                throw new RuntimeException();
+            }
         } catch (Exception e) {
             e.printStackTrace();
             return CancelBookResponseDto.validateUserId();
@@ -125,27 +129,31 @@ public class UserServiceImpl implements UserService {
 
         try {
             dto.setUserId(authenticationFacade.getLoginUserId());
-            if (dto.getUserId() <= 0) { throw new RuntimeException(); }
+            if (dto.getUserId() <= 0) {
+                throw new RuntimeException();
+            }
         } catch (Exception e) {
             e.printStackTrace();
             return PostReviewResponseDto.validateUserId();
         }
 
 
-            ReviewEntity reviewEntity = new ReviewEntity(dto);
-            reviewEntity.setReservationId(dto.getReservationId());
-            reviewEntity.setReviewContent(dto.getReviewContent());
-            reviewEntity.setReviewStarPoint(dto.getReviewStarPoint());
-            reviewEntity = reviewRepository.save(reviewEntity);
+        ReviewEntity reviewEntity = new ReviewEntity(dto);
+        reservationCompleteRepository.findById(dto.getGlampId());
+
+        reviewEntity.setReservationId(dto.getReservationId());
+        reviewEntity.setReviewContent(dto.getReviewContent());
+        reviewEntity.setReviewStarPoint(dto.getReviewStarPoint());
+        reviewEntity = reviewRepository.save(reviewEntity);
 
 //            glampingStarRepository.findStarPointAvg(dto.getReservationId());
 
 
-            PostReviewPicsRequestDto postReviewPicsRequestDto = PostReviewPicsRequestDto.builder().reviewId(reviewEntity.getReviewId()).build();
-            // 파일을 저장할 폴더 경로를 생성
-            String makefolder = String.format("review/%d/%d", dto.getUserId(), reviewEntity.getReviewId());
-            // 폴더를 생성
-            customFileUtils.makeFolders(makefolder);
+        PostReviewPicsRequestDto postReviewPicsRequestDto = PostReviewPicsRequestDto.builder().reviewId(reviewEntity.getReviewId()).build();
+        // 파일을 저장할 폴더 경로를 생성
+        String makefolder = String.format("review/%d/%d", dto.getUserId(), reviewEntity.getReviewId());
+        // 폴더를 생성
+        customFileUtils.makeFolders(makefolder);
 
         try {
 //            List<MultipartFile> reviewImageList = dto.getReviewImageFiles();
@@ -164,7 +172,7 @@ public class UserServiceImpl implements UserService {
             }
             this.reviewImageRepository.saveAll(reviewImageEntityList);
             reviewEntity.setReviewStarPoint(dto.getReviewStarPoint());
-    
+
         } catch (Exception e) {
             e.printStackTrace();
             return ResponseDto.databaseError();
@@ -179,7 +187,9 @@ public class UserServiceImpl implements UserService {
 
         try {
             dto.setUserId(authenticationFacade.getLoginUserId());
-            if (dto.getUserId() <= 0) { throw new RuntimeException(); }
+            if (dto.getUserId() <= 0) {
+                throw new RuntimeException();
+            }
         } catch (Exception e) {
             e.printStackTrace();
             return DeleteReviewResponseDto.validateUserId();
@@ -206,7 +216,9 @@ public class UserServiceImpl implements UserService {
 
         try {
             dto.setUserId(authenticationFacade.getLoginUserId());
-            if (dto.getUserId() <= 0) { throw new RuntimeException(); }
+            if (dto.getUserId() <= 0) {
+                throw new RuntimeException();
+            }
         } catch (Exception e) {
             e.printStackTrace();
             return GetReviewResponseDto.validateUserId();
@@ -262,7 +274,9 @@ public class UserServiceImpl implements UserService {
 
         try {
             dto.setUserId(authenticationFacade.getLoginUserId());
-            if (dto.getUserId() <= 0) { throw new RuntimeException(); }
+            if (dto.getUserId() <= 0) {
+                throw new RuntimeException();
+            }
         } catch (Exception e) {
             e.printStackTrace();
             return GetFavoriteGlampingResponseDto.validateUserId();
@@ -288,7 +302,9 @@ public class UserServiceImpl implements UserService {
 
         try {
             dto.setUserId(authenticationFacade.getLoginUserId());
-            if (dto.getUserId() <= 0) { throw new RuntimeException(); }
+            if (dto.getUserId() <= 0) {
+                throw new RuntimeException();
+            }
         } catch (Exception e) {
             e.printStackTrace();
             return GetUserResponseDto.validateUserId();
@@ -316,7 +332,9 @@ public class UserServiceImpl implements UserService {
 
         try {
             dto.setUserId(authenticationFacade.getLoginUserId());
-            if (dto.getUserId() <= 0) { throw new RuntimeException(); }
+            if (dto.getUserId() <= 0) {
+                throw new RuntimeException();
+            }
         } catch (Exception e) {
             e.printStackTrace();
             return UpdateUserResponseDto.validateUserId();
@@ -359,7 +377,9 @@ public class UserServiceImpl implements UserService {
 
         try {
             dto.setUserId(authenticationFacade.getLoginUserId());
-            if (dto.getUserId() <= 0) { throw new RuntimeException(); }
+            if (dto.getUserId() <= 0) {
+                throw new RuntimeException();
+            }
         } catch (Exception e) {
             e.printStackTrace();
             return DeleteUserResponseDto.validateUserId();
@@ -368,7 +388,9 @@ public class UserServiceImpl implements UserService {
         try {
 
             userRepository.findById(dto.getUserId());
-            if (dto.getUserId() == 0) { return DeleteUserResponseDto.noExistedUser(); }
+            if (dto.getUserId() == 0) {
+                return DeleteUserResponseDto.noExistedUser();
+            }
             userRepository.deleteById(dto.getUserId());
 
         } catch (Exception e) {
@@ -384,7 +406,9 @@ public class UserServiceImpl implements UserService {
 
         try {
             dto.setUserId(authenticationFacade.getLoginUserId());
-            if (dto.getUserId() <= 0) { throw new RuntimeException(); }
+            if (dto.getUserId() <= 0) {
+                throw new RuntimeException();
+            }
         } catch (Exception e) {
             e.printStackTrace();
             return PostUserPasswordResponseDto.validateUserId();
@@ -393,12 +417,16 @@ public class UserServiceImpl implements UserService {
         try {
 
             UserEntity userEntity = userRepository.findByUserId(dto.getUserId());
-            if (dto.getUserId() == 0) { return PostUserPasswordResponseDto.noExistedUser(); }
+            if (dto.getUserId() == 0) {
+                return PostUserPasswordResponseDto.noExistedUser();
+            }
 
             String userPw = dto.getUserPw();
             String encodingPw = userEntity.getUserPw();
             boolean matches = passwordEncoder.matches(userPw, encodingPw);
-            if (!matches) { return PostUserPasswordResponseDto.invalidPassword(); }
+            if (!matches) {
+                return PostUserPasswordResponseDto.invalidPassword();
+            }
 
         } catch (Exception e) {
             e.printStackTrace();
