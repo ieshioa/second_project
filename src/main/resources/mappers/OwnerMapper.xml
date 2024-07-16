@@ -42,8 +42,8 @@
         INSERT INTO room_service
         ( room_id, service_id )
         VALUES
-        <foreach collection="serviceList" item="service" separator=",">
-            ( #{roomId}, #{service} )
+        <foreach collection="service" item="item" separator=",">
+            ( #{roomId}, #{item} )
         </foreach>
     </insert>
 
@@ -158,7 +158,7 @@
 
     <select id="getUserIdByGlampId">
         SELECT user_id
-        FROM user
+        FROM glamping
         WHERE glamp_id = #{glampId}
     </select>
 
