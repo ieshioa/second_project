@@ -148,8 +148,8 @@ public class UserServiceImpl implements UserService {
         reviewEntity = reviewRepository.save(reviewEntity);
         glampingStarRepository.fin(dto.getReservationId());
 
-        long getGlampId = reservationCompleteRepository.findByGlampId(dto.getReservationId());
-        glampingStarRepository.findStarPointAvg(getGlampId);
+        ReservationCompleteEntity reservationCompleteEntity = reservationCompleteRepository.findByGlampId(dto.getReservationId());
+        glampingStarRepository.findStarPointAvg(reservationCompleteEntity.getGlampId());
 
 
         PostReviewPicsRequestDto postReviewPicsRequestDto = PostReviewPicsRequestDto.builder().reviewId(reviewEntity.getReviewId()).build();
