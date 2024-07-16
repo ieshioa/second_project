@@ -82,7 +82,7 @@
     </select>
     <!-- 글램핑 상세 페이지 리뷰 데이터 -->
     <select id="selReviewInfoInGlamping">
-        SELECT		    B.user_name AS userName,
+        SELECT		    B.user_nickname AS userNickName,
                         A.review_content AS content
         FROM			review A
         INNER JOIN      user B
@@ -102,7 +102,7 @@
         SELECT                 A.review_id AS reviewId,
                             A.glamp_id AS glampId,
                             B.user_profile_image AS userProfileImage,
-                            B.user_name AS userNickName,
+                            B.user_nickname AS userNickName,
                             A.review_star_point AS starPoint,
                             A.created_at AS createdAt,
                             A.review_content AS userReviewContent,
