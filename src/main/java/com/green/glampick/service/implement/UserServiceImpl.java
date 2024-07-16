@@ -99,11 +99,14 @@ public class UserServiceImpl implements UserService {
             ReservationBeforeEntity beforeEntity = optionalBeforeEntity.get();
             ReservationCancelEntity cancelEntity = new ReservationCancelEntity(
                     beforeEntity.getUserId()
+                    , beforeEntity.getBookId()
                     , beforeEntity.getGlampId()
                     , beforeEntity.getRoomId()
                     , beforeEntity.getInputName()
+                    , beforeEntity.getPersonnel()
                     , beforeEntity.getCheckInDate()
                     , beforeEntity.getCheckOutDate()
+                    , beforeEntity.getPg()
                     , beforeEntity.getPayAmount()
                     , dto.getComment()
                     , beforeEntity.getCreatedAt());

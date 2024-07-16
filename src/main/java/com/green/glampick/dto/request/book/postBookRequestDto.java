@@ -4,6 +4,9 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+
 @Getter
 @Setter
 public class postBookRequestDto {
@@ -14,8 +17,8 @@ public class postBookRequestDto {
     private long glampId;
     private long roomId;
     private String inputName;
-    private String checkInDate;
-    private String checkOutDate;
+    LocalDate checkInDate;
+    LocalDate checkOutDate;
     private String pg;
     private long payAmount;
 

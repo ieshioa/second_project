@@ -9,6 +9,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.hibernate.annotations.CreationTimestamp;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Setter
@@ -25,6 +26,7 @@ public class ReservationCompleteEntity {
 
     private long userId;//유저 ID
 
+    private String bookId;
 
     private long glampId;
 
@@ -32,11 +34,15 @@ public class ReservationCompleteEntity {
 
     private String inputName;//예약자 성함
 
-    private String checkInDate;//체크인 일자
+    private int personnel;
 
-    private String checkOutDate;//체크아웃 일자
+    LocalDate checkInDate;//체크인 일자
 
-    private long reservationAmount;//최종 결제 가격
+    LocalDate checkOutDate;//체크아웃 일자
+
+    private String pg;
+
+    private long payAmount;//최종 결제 가격
 
     @CreationTimestamp @Column(nullable = false, updatable = false)
     private LocalDateTime createdAt;
@@ -44,6 +50,21 @@ public class ReservationCompleteEntity {
 
     public ReservationCompleteEntity(PostReviewRequestDto dto){
         this.reservationId = dto.getReservationId();
+    }
+
+    public ReservationCompleteEntity(Long userId, String bookId, Long glampId, Long roomId, String inputName,
+                                     LocalDate checkInDate, LocalDate checkOutDate,
+                                     long payAmount, String pg, LocalDateTime createdAt) {
+        this.userId = userId;
+        this.bookId = bookId;
+        this.glampId = glampId;
+        this.roomId = roomId;
+        this.inputName = inputName;
+        this.checkInDate = checkInDate;
+        this.checkOutDate = checkOutDate;
+        this.payAmount = payAmount;
+        this.pg = pg;
+        this.createdAt = createdAt;
     }
 
 }
