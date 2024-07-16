@@ -103,7 +103,7 @@ public class UserController {
 
     //  유저 페이지 - 관심 글램핑 리스트 불러오기  //
     @GetMapping("/favorite-glamping")
-    @Operation(summary = "리뷰 불러오기", description = USER_FAVORITE_LIST_DESCRIPTION)
+    @Operation(summary = "관심 글램핑 리스트 불러오기", description = USER_FAVORITE_LIST_DESCRIPTION)
     @ApiResponse(responseCode = "200", description = USER_FAVORITE_LIST_RESPONSE_ERROR_CODE,
             content = @Content(
                     mediaType = "application/json", schema = @Schema(implementation = GetFavoriteGlampingResponseDto.class)))
