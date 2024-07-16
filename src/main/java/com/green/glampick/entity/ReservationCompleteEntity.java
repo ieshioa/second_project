@@ -42,8 +42,5 @@ public class ReservationCompleteEntity {
     private LocalDateTime createdAt;
 
 
-    public ReservationCompleteEntity(PostReviewRequestDto dto){
-        this.reservationId = dto.getReservationId();
-    }
 
 }
