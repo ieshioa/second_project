@@ -127,7 +127,7 @@ public class GlampingController {
     public ResponseEntity<? super GetGlampingReviewInfoResponseDto> infoReviewList(@ParameterObject @ModelAttribute ReviewInfoRequestDto p) {
         return service.infoReviewList(p);
     }
-    @Operation(summary = "리뷰 전체페이지 더보기",
+    @Operation(summary = "리뷰이미지 더보기",
             description =
                     "<strong> 변수명 glampId : 글램프 PK </strong> <p>  ex)35 </p>" +
                     "<strong> 변수명 page : 페이지 값 </strong> <p> ex) 1 </p>",
