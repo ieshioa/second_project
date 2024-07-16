@@ -4,6 +4,7 @@ public interface GetReservationBeforeResultSet {
 
     String getGlampName();
     String getGlampImage();
+    String bookId();
     String getRoomName();
     String getCheckInDate();
     String getCheckOutDate();

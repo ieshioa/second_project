@@ -15,6 +15,7 @@ public interface ReservationBeforeRepository extends JpaRepository<ReservationBe
             value =
             "SELECT C.glamp_name AS glampName " +
             ", C.glamp_image AS glampImage " +
+            ", A.book_id AS bookId " +
             ", B.room_name AS roomName " +
             ", A. check_in_date AS checkInDate " +
             ", A. check_out_date AS checkOutDate " +
@@ -27,7 +28,7 @@ public interface ReservationBeforeRepository extends JpaRepository<ReservationBe
             "JOIN glamping C " +
             "ON B.glamp_id = C.glamp_id " +
             "WHERE A.user_id = :userId " +
-            "ORDER BY A.created_at DESC ",
+            "ORDER BY A.created_at ",
             nativeQuery = true
     )
     List<GetReservationBeforeResultSet> getBook(Long userId);
