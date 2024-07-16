@@ -13,6 +13,7 @@ import java.util.List;
 public interface OwnerMapper {
     // 민지
     void insertGlamping(GlampingPostRequestDto req);
+    void updateGlampingImageNameToUrl(String pic, long glampId);
     Long hasGlamping(long userId);
     Long existingLocation(String location);
 

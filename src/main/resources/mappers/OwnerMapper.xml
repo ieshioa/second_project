@@ -18,6 +18,12 @@
             , glamp_image = #{glampingImg}
     </insert>
 
+    <update id="updateGlampingImageNameToUrl">
+        UPDATE glamping
+        SET glamp_image = #{pic}
+        WHERE glamp_id = #{glampId}
+    </update>
+
     <insert id="insertRoom" keyProperty="roomId" useGeneratedKeys="true">
         INSERT INTO room
         SET glamp_id = #{glampId}
