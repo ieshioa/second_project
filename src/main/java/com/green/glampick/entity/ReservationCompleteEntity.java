@@ -1,6 +1,7 @@
 package com.green.glampick.entity;
 
 import com.green.glampick.dto.request.book.postBookRequestDto;
+import com.green.glampick.dto.request.user.PostReviewRequestDto;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -10,6 +11,7 @@ import org.hibernate.annotations.CreationTimestamp;
 
 import java.time.LocalDateTime;
 
+@Setter
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
@@ -23,7 +25,6 @@ public class ReservationCompleteEntity {
 
     private long userId;//유저 ID
 
-    private String bookId;
 
     private long glampId;
 
@@ -35,9 +36,14 @@ public class ReservationCompleteEntity {
 
     private String checkOutDate;//체크아웃 일자
 
-    private long payAmount;//최종 결제 가격
+    private long reservationAmount;//최종 결제 가격
 
     @CreationTimestamp @Column(nullable = false, updatable = false)
     private LocalDateTime createdAt;
+
+
+    public ReservationCompleteEntity(PostReviewRequestDto dto){
+        this.reservationId = dto.getReservationId();
+    }
 
 }

@@ -4,6 +4,7 @@ public interface GetReservationCompleteResultSet {
 
     String getGlampName();
     String getGlampImage();
+    String bookId();
     String getRoomName();
     String getCheckInDate();
     String getCheckOutDate();

@@ -3,6 +3,7 @@ package com.green.glampick.controller;
 import com.green.glampick.dto.request.glamping.*;
 import com.green.glampick.dto.response.glamping.*;
 import com.green.glampick.dto.response.glamping.favorite.GetFavoriteGlampingResponseDto;
+import com.green.glampick.dto.response.login.PostSignUpResponseDto;
 import com.green.glampick.service.GlampingService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -15,6 +16,12 @@ import org.springdoc.core.annotations.ParameterObject;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import static com.green.glampick.common.swagger.description.glamping.GetGlampingInfoSwaggerDescription.GLAMPING_INFO_DESCRIPTION;
+import static com.green.glampick.common.swagger.description.glamping.GetGlampingInfoSwaggerDescription.GLAMPING_INFO_RESPONSE_ERROR_CODE;
+import static com.green.glampick.common.swagger.description.glamping.GetSearchGlampingSwaggerDescription.SEARCH_GLAMPING_DESCRIPTION;
+import static com.green.glampick.common.swagger.description.glamping.GetSearchGlampingSwaggerDescription.SEARCH_GLAMPING_RESPONSE_ERROR_CODE;
+import static com.green.glampick.common.swagger.description.user.GetUserBookSwaggerDescription.USER_BOOK_RESPONSE_ERROR_CODE;
+
 @Slf4j
 @RestController
 @RequiredArgsConstructor
@@ -25,72 +32,26 @@ public class GlampingController {
 
 
 // 민지 =================================================================================================================
+
+    //  글램핑 검색 결과 불러오기  //
     @GetMapping("search")
-    @Operation(summary = "글램핑 검색 결과 가져오기", description =
-            "<p> <strong> 필수입력 데이터 </strong> </p>" +
-                    "<p> <strong> region : 지역이름 </strong> </p> " +
-                    "<p> <strong> inDate : 체크인 날짜 </strong> </p> " +
-                    "<p> <strong> ourDate : 체크아웃 날짜 </strong>  </p>" +
-                    "<p> <strong> people : 인원수 </strong> </p> " +
-                    "<p> 나머지는 선택입력 </p> " +
-                     " <p> sortType, page 는 default 1 </p>" )
-    @ApiResponse(
-            description =
-                    "<p> <strong> ResponseCode 응답 코드 </strong> </p> " +
-                            "<p> SU(200) : 검색 결과를 불러옴 </p> " +
-                            "<p> RN(200) : 검색 결과가 없음 </p> " +
-                            "<p> DBE(500) : 데이터베이스 서버 오류 </p> ",
-            responseCode = "200",
+    @Operation(summary = "글램핑 검색 결과 가져오기", description = SEARCH_GLAMPING_DESCRIPTION)
+    @ApiResponse(responseCode = "200", description = SEARCH_GLAMPING_RESPONSE_ERROR_CODE,
             content = @Content(
-                    mediaType = "application/json",
-                    schema = @Schema(implementation = GetSearchGlampingListResponseDto.class)
-            )
-    )
+                    mediaType = "application/json", schema = @Schema(implementation = GetSearchGlampingListResponseDto.class)))
     public ResponseEntity<? super GetSearchGlampingListResponseDto> searchGlamping(@ParameterObject @ModelAttribute GlampingSearchRequestDto searchReq) {
         return service.searchGlamping(searchReq);
     }
 
 
 // 강국 =================================================================================================================
-    @Operation(summary = "글램핑 상세 페이지",
-        description = "<strong> 변수명 glampId : 글램프 PK </strong> <p>  ex)23 </p>"  +
-                      "<strong> 변수명 inDate : 글램프 PK </strong> <p>  ex)2024-06-10 </p>"  +
-                      "<strong> 변수명 outDate : 글램프 PK </strong> <p>  ex)2024-06-15 </p>"  +
-                      "<strong> 변수명 status : 상태 코드 </strong>" +
-                      "<p> 0 -> 처음 5개보기 </p> " ,
-        responses = {
-                @ApiResponse(
-                        responseCode = "200",
-                        description = "성공에 대한 반환 값 입니다." +
-                                "<p> [글램핑 정보]" +
-                                "<p> glampId: 글램핑 PK</p>" +
-                                "<p> glampName:  글램핑장 이름 </p>" +
-                                "<p> glampPic: 글램핑 사진 </p>" +
-                                "<p> starPointAvg: 별점 </p>" +
-                                "<p> glampLocation: 글램핑장 주소</p>" +
-                                "<p> glampIntro: 글램핑 소개글</p>" +
-                                "<p> infoBasic: 기본 정보</p>" +
-                                "<p> infoParking: 주차장 정보</p>" +
-                                "<p> infoNotice: 유의 사항</p>" +
-                                "<p> [리뷰 정보] </p>" +
-                                "<p> userName: 유저닉네임</p>" +
-                                "<p> content: 리뷰내용</p>" +
-                                "<p> countReviewUsers: 리뷰인원수</p>" +
-                                "<p> [객실정보] </p>" +
-                                "<p> roomPics: 객실 사진</p>" +
-                                "<p> roomId: 객실 PK</p>" +
-                                "<p> roomName: 객실 명</p>" +
-                                "<p> roomPrice: 객실 가격</p>" +
-                                "<p> roomNumPeople: 객실 기본인원 수</p>" +
-                                "<p> roomMaxPeople: 객실 최대인원 수</p>" +
-                                "<p> checkInTime: 체크인 시간</p>" +
-                                "<p> checkOutTime: 체크아웃 시간</p>"
-                        ,
-                        content = @Content(
-                                mediaType = "application/json",
-                                schema = @Schema(implementation = GetGlampingInformationResponseDto.class)
-                        ))})
-    @GetMapping("info")// 글램핑 상세페이지
+
+    //  글램핑 상세 페이지 불러오기  //
+    @GetMapping("info")
+    @Operation(summary = "글램핑 상세 페이지 불러오기", description = GLAMPING_INFO_DESCRIPTION)
+    @ApiResponse(responseCode = "200", description = GLAMPING_INFO_RESPONSE_ERROR_CODE,
+            content = @Content(
+                    mediaType = "application/json", schema = @Schema(implementation = GetSearchGlampingListResponseDto.class)))
     public ResponseEntity<? super GetGlampingInformationResponseDto> infoGlampingDetail(@ParameterObject @ModelAttribute GetInfoRequestDto p) {
             return service.infoGlampingDetail(p);
     }

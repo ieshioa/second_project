@@ -37,6 +37,11 @@ public class GetSearchGlampingListResponseDto extends ResponseDto {
         return ResponseEntity.status(HttpStatus.OK).body(result);
     }
 
+    public static ResponseEntity<ResponseDto> isNull() {
+        ResponseDto result = new ResponseDto(ResponseCode.RESULT_IS_NULL, ResponseMessage.RESULT_IS_NULL);
+        return ResponseEntity.status(HttpStatus.OK).body(result);
+    }
+
     public static ResponseEntity<ResponseDto> validationFailed(String errorMsg) {
         ResponseDto result = new ResponseDto(ResponseCode.VALIDATION_FAILED, errorMsg);
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(result);
@@ -51,11 +56,5 @@ public class GetSearchGlampingListResponseDto extends ResponseDto {
         ResponseDto result = new ResponseDto(ResponseCode.WRONG_DATE, ResponseMessage.WRONG_DATE);
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(result);
     }
-
-    public static ResponseEntity<ResponseDto> isNull() {
-        ResponseDto result = new ResponseDto(ResponseCode.RESULT_IS_NULL, ResponseMessage.RESULT_IS_NULL);
-        return ResponseEntity.status(HttpStatus.OK).body(result);
-    }
-
 
 }

@@ -17,11 +17,10 @@ public class PostReviewRequestDto {
     @JsonIgnore private long userId;
     @JsonIgnore private long reviewId;
     @JsonIgnore private long glampId;
-    @JsonIgnore private long roomId;
+    private long reservationId;
     private String reviewContent;
     private int reviewStarPoint;
-    @JsonIgnore
-    private List<MultipartFile> ReviewImageFiles = new ArrayList<>();
-    private long reservationId;
+    @JsonIgnore private List<MultipartFile> ReviewImageFiles = new ArrayList<>();
+
 
 }

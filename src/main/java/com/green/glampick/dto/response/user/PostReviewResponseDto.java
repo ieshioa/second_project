@@ -20,30 +20,14 @@ import java.util.List;
 public class PostReviewResponseDto extends ResponseDto {
 
     private long reviewId;
-    private long userId;
-    private long glampId;
-    private String reviewContent;
-    private long reviewStarPoint;
-    private String createdAt;
-    private long roomId;
-    private List<MultipartFile> reviewImageEntityList;
 
-    private PostReviewResponseDto(ReviewEntity reviewEntity) {
+    private PostReviewResponseDto(long reviewId) {
         super(ResponseCode.SUCCESS, ResponseMessage.SUCCESS);
-        this.reviewId = reviewEntity.getReviewId();
-        this.glampId = reviewEntity.getGlampId();
-        this.userId = reviewEntity.getUserId();
-        this.reviewContent = reviewEntity.getReviewContent();
-        this.reviewStarPoint = reviewEntity.getReviewStarPoint();
-        this.createdAt = reviewEntity.getCreatedAt();
-        this.roomId = reviewEntity.getRoomId();
-//        this.reviewPics = reviewEntity.getr
-
+        this.reviewId = reviewId;
     }
-    //
 
-    public static ResponseEntity<ResponseDto> success() {
-        ResponseDto result = new ResponseDto(ResponseCode.SUCCESS, ResponseMessage.SUCCESS);
+    public static ResponseEntity<PostReviewResponseDto> success(long reviewId) {
+        PostReviewResponseDto result = new PostReviewResponseDto(reviewId);
         return ResponseEntity.status(HttpStatus.OK).body(result);
     }
 
