@@ -22,4 +22,5 @@ public class PostReviewRequestDto {
     private int reviewStarPoint;
     @JsonIgnore private List<MultipartFile> ReviewImageFiles = new ArrayList<>();
 
+
 }
