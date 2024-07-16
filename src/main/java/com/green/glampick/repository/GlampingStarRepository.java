@@ -24,9 +24,9 @@ public interface GlampingStarRepository extends JpaRepository<ReviewEntity, Long
 //            "WHERE glamp_id = :glampId; ",
 //
 //            nativeQuery = true)
-//    void findStarPointAvg(long reservationId);
-
-
+//    void findStarPointAvg(long glampId);
+//
+//
 //    @Query(
 //            value =
 //                    "UPDATE review B " +
@@ -37,5 +37,5 @@ public interface GlampingStarRepository extends JpaRepository<ReviewEntity, Long
 //            "WHERE B.reservation_id =  ",
 //            nativeQuery = true)
 //    )
-//    void
+//    void fin(long reservationId);
 }
