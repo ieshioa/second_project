@@ -48,9 +48,6 @@ public class ReservationCompleteEntity {
     private LocalDateTime createdAt;
 
 
-    public ReservationCompleteEntity(PostReviewRequestDto dto){
-        this.reservationId = dto.getReservationId();
-    }
 
     public ReservationCompleteEntity(Long userId, String bookId, Long glampId, Long roomId, String inputName,
                                      LocalDate checkInDate, LocalDate checkOutDate,
