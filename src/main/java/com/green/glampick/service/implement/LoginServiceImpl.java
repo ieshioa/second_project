@@ -109,8 +109,8 @@ public class LoginServiceImpl implements LoginService {
             Matcher matcherEmail = patternEmail.matcher(userEmail);
             if (!matcherEmail.matches()) { return PostSignUpResponseDto.invalidEmail(); }
             //  입력받은 이메일이 유저 테이블에 이미 있는 이메일 이라면, 중복 이메일에 대한 응답을 보낸다.  //
-            boolean existedEmail = userRepository.existsByUserEmail(userEmail);
-            if (existedEmail) { return PostSignUpResponseDto.duplicatedEmail(); }
+//            boolean existedEmail = userRepository.existsByUserEmail(userEmail);
+//            if (existedEmail) { return PostSignUpResponseDto.duplicatedEmail(); }
 
 
             //  입력받은 닉네임이 정규 표현식을 통하여 닉네임 형식에 맞지 않으면, 닉네임 형식 오류에 대한 응답을 보낸다.  //
