@@ -5,18 +5,25 @@ import com.green.glampick.dto.request.book.postBookRequestDto;
 import com.green.glampick.dto.response.book.PostBookResponseDto;
 import com.green.glampick.dto.response.owner.post.PostGlampingInfoResponseDto;
 import com.green.glampick.entity.ReservationBeforeEntity;
+import com.green.glampick.entity.ReservationCancelEntity;
+import com.green.glampick.entity.ReservationCompleteEntity;
 import com.green.glampick.repository.ReservationBeforeRepository;
+import com.green.glampick.repository.ReservationCompleteRepository;
 import com.green.glampick.security.AuthenticationFacade;
 import com.green.glampick.service.BookService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Date;
+import java.util.List;
+import java.util.Optional;
 import java.util.Random;
 
 @Slf4j
@@ -24,6 +31,7 @@ import java.util.Random;
 @RequiredArgsConstructor
 public class BookServiceImpl implements BookService {
     private final ReservationBeforeRepository reservationBeforeRepository;
+    private final ReservationCompleteRepository reservationCompleteRepository;
     private final AuthenticationFacade authenticationFacade;
 
     //  글램핑 예약하기  //
@@ -74,11 +82,37 @@ public class BookServiceImpl implements BookService {
 
     }
 
-    private boolean checkDate (String in, String out) {
+    private boolean checkDate (LocalDate in, LocalDate out) {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-        LocalDate inDate = LocalDate.parse(in, formatter);
-        LocalDate outDate = LocalDate.parse(out, formatter);
-        return outDate.isBefore(inDate); // 틀리면 true
+        return out.isBefore(in); // 틀리면 true
+    }
+
+    @Scheduled(fixedRate = 600000)
+    public void cleanUpExpiredCodes() {
+
+        LocalDate currentDateTime = LocalDate.now();
+
+        // 체크아웃 날짜가 지난 모든 데이터를 가져옴
+        List<ReservationBeforeEntity> expiredReservations = reservationBeforeRepository.findAllByCheckOutDateBefore(currentDateTime);
+
+        for (ReservationBeforeEntity beforeEntity : expiredReservations) {
+            // 예약 데이터를 완료 엔티티로 옮김
+            ReservationCompleteEntity completeEntity = new ReservationCompleteEntity(
+                    beforeEntity.getUserId(),
+                    beforeEntity.getBookId(),
+                    beforeEntity.getGlampId(),
+                    beforeEntity.getRoomId(),
+                    beforeEntity.getInputName(),
+                    beforeEntity.getCheckInDate(),
+                    beforeEntity.getCheckOutDate(),
+                    beforeEntity.getPayAmount(),
+                    beforeEntity.getPg(),
+                    beforeEntity.getCreatedAt());
+
+            reservationCompleteRepository.save(completeEntity);
+            reservationBeforeRepository.delete(beforeEntity);
+        }
+
     }
 
 }
