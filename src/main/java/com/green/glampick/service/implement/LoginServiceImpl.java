@@ -131,8 +131,8 @@ public class LoginServiceImpl implements LoginService {
             Matcher matcherPhone = patternPhone.matcher(userPhone);
             if (!matcherPhone.matches()) { return PostSignUpResponseDto.invalidPhone(); }
             //  입력받은 전화번호가 유저 테이블에 이미 있는 전화번호 이라면, 중복 전화번호에 대한 응답을 보낸다.  //
-            boolean existedPhone = userRepository.existsByUserPhone(userPhone);
-            if (existedPhone) { return PostSignUpResponseDto.duplicatedPhoneNumber(); }
+//            boolean existedPhone = userRepository.existsByUserPhone(userPhone);
+//            if (existedPhone) { return PostSignUpResponseDto.duplicatedPhoneNumber(); }
 
 
             //  입력받은 비밀번호가 정규표현식을 통하여 비밀번호 형식에 맞지 않으면, 비밀번호 형식 오류에 대한 응답을 보낸다.  //
@@ -258,6 +258,8 @@ public class LoginServiceImpl implements LoginService {
             Pattern patternPhone = Pattern.compile(phoneRegex);
             Matcher matcherPhone = patternPhone.matcher(userPhone);
             if (!matcherPhone.matches()) { return PostSmsSendResponseDto.invalidPhone(); }
+            boolean existedPhone = userRepository.existsByUserPhone(userPhone);
+            if (existedPhone) { return PostSignUpResponseDto.duplicatedPhoneNumber(); }
             //  받아온 유저 휴대폰 번호의 "-" 부분을 없앤다. (010-1234-5678 -> 01012345678)  //
             userPhone.replaceAll("-","");
 
