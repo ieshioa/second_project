@@ -99,7 +99,7 @@
     </select>
     <!-- 리뷰페이지 리뷰정보  -->
     <select id="selReviewInfo">
-        SELECT              A.review_id AS reviewId,
+        SELECT                 A.review_id AS reviewId,
                             A.glamp_id AS glampId,
                             B.user_profile_image AS userProfileImage,
                             B.user_name AS userNickName,
