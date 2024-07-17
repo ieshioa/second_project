@@ -13,8 +13,6 @@ public interface GlampingMapper {
     // 민지
     List<GlampingListItem>  searchGlampList(GlampingSearchRequestDto req);
     int searchCount(GlampingSearchRequestDto req);
-    List<Long> existGlamp(String region, String searchWord);
-    List<Long> existGlampLike(String region, String searchWord);
 
     // 강국
     // 관심등록

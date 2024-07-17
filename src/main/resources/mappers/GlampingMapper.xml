@@ -252,18 +252,4 @@
         </if>
     </select>
 
-    <select id="existGlamp" >
-        SELECT glamp_id
-        FROM glamping
-        WHERE region = #{region}
-            and glamp_name = #{searchWord}
-    </select>
-
-    <select id="existGlampLike">
-        SELECT glamp_id
-        FROM glamping
-        WHERE region = #{region}
-        and glamp_name like '%${searchWord}%'
-    </select>
-
 </mapper>
