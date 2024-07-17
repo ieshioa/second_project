@@ -29,6 +29,8 @@ public interface ResponseCode {
     String WRONG_PERSONNEL = "WP";  // "인원 정보가 잘못 입력되었습니다."
     String WRONG_DATE = "WD";  // "날짜 정보가 잘못 입력되었습니다."
 
+    String RESERVATION_ID_ERROR = "RIE";  // "이용 완료한 예약정보를 불러오지 못했습니다."
+    String VALIDATION_STAR_POINT = "VSP";  // "별점 입력이 잘못되었습니다."
     String CANT_FIND_USER = "CU";  // "로그인된 유저 정보를 불러오지 못했습니다."
     String FILE_UPLOAD_ERROR = "FE";  // "파일 업로드 과정에서 오류가 생겼습니다."
 

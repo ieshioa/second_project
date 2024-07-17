@@ -24,7 +24,7 @@ public interface ReservationCompleteRepository extends JpaRepository<Reservation
                             ", A. created_at AS createdAt " +
                             ", B. check_in_time AS checkInTime " +
                             ", B. check_out_time AS checkOutTime " +
-                            "FROM reservation_before A " +
+                            "FROM reservation_complete A " +
                             "JOIN room B " +
                             "ON A.room_id = B.room_id " +
                             "JOIN glamping C " +

@@ -36,6 +36,11 @@ public class PostReviewResponseDto extends ResponseDto {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(result);
     }
 
+    public static ResponseEntity<ResponseDto> validateStarPoint() {
+        ResponseDto result = new ResponseDto(ResponseCode.VALIDATION_STAR_POINT, ResponseMessage.VALIDATION_STAR_POINT);
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(result);
+    }
+
     public static ResponseEntity<ResponseDto> noPermission() {
         ResponseDto result = new ResponseDto(ResponseCode.NOT_PERMISSION, ResponseMessage.NOT_PERMISSION);
         return ResponseEntity.status(HttpStatus.FORBIDDEN).body(result);
@@ -43,6 +48,11 @@ public class PostReviewResponseDto extends ResponseDto {
 
     public static ResponseEntity<ResponseDto> validateUserId() {
         ResponseDto result = new ResponseDto(ResponseCode.CANT_FIND_USER, ResponseMessage.CANT_FIND_USER);
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(result);
+    }
+
+    public static ResponseEntity<ResponseDto> reservationIdError() {
+        ResponseDto result = new ResponseDto(ResponseCode.RESERVATION_ID_ERROR, ResponseMessage.RESERVATION_ID_ERROR);
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(result);
     }
 
