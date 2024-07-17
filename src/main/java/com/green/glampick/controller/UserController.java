@@ -76,7 +76,7 @@ public class UserController {
     @ApiResponse(responseCode = "200", description = USER_REVIEW_RESPONSE_ERROR_CODE,
         content = @Content(
                 mediaType = "application/json", schema = @Schema(implementation = PostReviewResponseDto.class)))
-    public ResponseEntity<?super PostReviewResponseDto> postReview(@RequestPart PostReviewRequestDto dto, @RequestPart List<MultipartFile> mf) {
+    public ResponseEntity<?super PostReviewResponseDto> postReview(@RequestPart PostReviewRequestDto dto, @RequestPart(required = false) List<MultipartFile> mf) {
         return service.postReview(dto, mf);
     }
 
