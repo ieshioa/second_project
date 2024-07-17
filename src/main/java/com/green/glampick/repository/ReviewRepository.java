@@ -18,6 +18,7 @@ public interface ReviewRepository extends JpaRepository<ReviewEntity, Long> {
         value =
         "SELECT E.glamp_name AS glampName " +
         ", D.room_name AS roomName " +
+        ", E.glamp_id AS glampId " +
         ", C.user_nickname AS userNickname " +
         ", C.user_profile_image AS userProfileImage " +
         ", B.review_id AS reviewId " +
