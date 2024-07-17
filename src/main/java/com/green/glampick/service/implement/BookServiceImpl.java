@@ -14,6 +14,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
@@ -32,6 +33,7 @@ public class BookServiceImpl implements BookService {
 
     //  글램핑 예약하기  //
     @Override
+    @Transactional
     public ResponseEntity<? super PostBookResponseDto> postBook(postBookRequestDto dto) {
 
         //  로그인 유저가 없다면, 권한이 없다는 응답을 보낸다.  //

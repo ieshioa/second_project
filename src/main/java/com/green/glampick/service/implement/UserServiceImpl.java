@@ -16,6 +16,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.ArrayList;
@@ -42,6 +43,7 @@ public class UserServiceImpl implements UserService {
 
     //  마이페이지 - 예약 내역 불러오기  //
     @Override
+    @Transactional
     public ResponseEntity<? super GetBookResponseDto> getBook(GetBookRequestDto dto) {
 
         try {
@@ -76,6 +78,7 @@ public class UserServiceImpl implements UserService {
 
     //  마이페이지 - 예약 취소하기  //
     @Override
+    @Transactional
     public ResponseEntity<? super CancelBookResponseDto> cancelBook(CancelBookRequestDto dto) {
 
         try {
@@ -129,6 +132,7 @@ public class UserServiceImpl implements UserService {
 
     //  마이페이지 - 리뷰 작성하기  //
     @Override
+    @Transactional
     public ResponseEntity<? super PostReviewResponseDto> postReview(PostReviewRequestDto dto, List<MultipartFile> mf) {
 
         try {
@@ -191,6 +195,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override // 리뷰 삭제
+    @Transactional
     public ResponseEntity<? super DeleteReviewResponseDto> deleteReview(DeleteReviewRequestDto dto) {
 
         try {
@@ -220,6 +225,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override // 리뷰 불러오기
+    @Transactional
     public ResponseEntity<? super GetReviewResponseDto> getReview(GetReviewRequestDto dto) {
 
         try {
@@ -281,6 +287,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override //관심글램핑 불러오기
+    @Transactional
     public ResponseEntity<? super GetFavoriteGlampingResponseDto> getFavoriteGlamping(GetFavoriteGlampingRequestDto dto) {
 
         try {
@@ -309,6 +316,7 @@ public class UserServiceImpl implements UserService {
 
     //  마이페이지 - 내 정보 불러오기  //
     @Override
+    @Transactional
     public ResponseEntity<? super GetUserResponseDto> getUser(GetUserRequestDto dto) {
 
         try {
@@ -339,6 +347,7 @@ public class UserServiceImpl implements UserService {
 
     //  마이페이지 - 내 정보 수정하기  //
     @Override
+    @Transactional
     public ResponseEntity<? super UpdateUserResponseDto> updateUser(UpdateUserRequestDto dto, MultipartFile mf) {
 
         if (dto.getUserId() == 0 || dto.getUserPw() == null || dto.getUserPhone() == null || dto.getUserNickname() == null) {
@@ -393,6 +402,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override// 회원 탈퇴
+    @Transactional
     public ResponseEntity<? super DeleteUserResponseDto> deleteUser(DeleteUserRequestDto dto) {
 
         try {
@@ -422,6 +432,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    @Transactional
     public ResponseEntity<? super PostUserPasswordResponseDto> postUserPassword(PostUserPasswordRequestDto dto) {
 
         try {

@@ -227,6 +227,7 @@ public class OwnerServiceImpl implements OwnerService {
         return PutRoomInfoResponseDto.success();
     }
 
+    @Transactional
     public ResponseEntity<? super GetOwnerBookListResponseDto> getGlampReservation(Long glampId) {
 
         try {
@@ -275,11 +276,13 @@ public class OwnerServiceImpl implements OwnerService {
 
     // 강국 =================================================================================================================
     @Override
+    @Transactional
     public ResponseEntity<? super PostOwnerReviewInfoResponseDto> postReview(ReviewPostRequestDto p) {
         return null;
     }
 
     @Override
+    @Transactional
     public ResponseEntity<? super PatchOwnerReviewInfoResponseDto> patchReview(ReviewPatchRequestDto p) {
         return null;
     }
