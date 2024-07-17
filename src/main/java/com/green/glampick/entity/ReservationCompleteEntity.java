@@ -1,7 +1,5 @@
 package com.green.glampick.entity;
 
-import com.green.glampick.dto.request.book.postBookRequestDto;
-import com.green.glampick.dto.request.user.PostReviewRequestDto;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -49,7 +47,7 @@ public class ReservationCompleteEntity {
 
 
 
-    public ReservationCompleteEntity(Long userId, String bookId, Long glampId, Long roomId, String inputName,
+    public ReservationCompleteEntity(Long userId, String bookId, long glampId, Long roomId, String inputName,
                                      LocalDate checkInDate, LocalDate checkOutDate,
                                      long payAmount, String pg, LocalDateTime createdAt) {
         this.userId = userId;

@@ -148,12 +148,13 @@ public class UserServiceImpl implements UserService {
         reviewEntity = reviewRepository.save(reviewEntity);
         glampingStarRepository.fin(dto.getReservationId());
 
-        long getGlampId = reservationCompleteRepository.findByGlampId(dto.getReservationId());
-        glampingStarRepository.findStarPointAvg(getGlampId);
+        ReservationCompleteEntity reservationCompleteEntity = reservationCompleteRepository.findByGlampId(dto.getReservationId());
+        glampingStarRepository.findStarPointAvg(reservationCompleteEntity.getGlampId());
 
 
         PostReviewPicsRequestDto postReviewPicsRequestDto = PostReviewPicsRequestDto.builder().reviewId(reviewEntity.getReviewId()).build();
         // 파일을 저장할 폴더 경로를 생성
+//        String makefolder = String.format("review/%d/%d/pic/glamping/%d/review%d", dto.getUserId(), reviewEntity.getReviewId(),dto.getUserId(),dto.getUserId());
         String makefolder = String.format("review/%d/%d", dto.getUserId(), reviewEntity.getReviewId());
         // 폴더를 생성
         customFileUtils.makeFolders(makefolder);
