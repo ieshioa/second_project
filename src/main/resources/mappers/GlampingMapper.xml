@@ -99,7 +99,8 @@
     </select>
     <!-- 리뷰페이지 리뷰정보  -->
     <select id="selReviewInfo">
-        SELECT                 A.review_id AS reviewId,
+        SELECT              D.room_name AS roomName,
+                            A.review_id AS reviewId,
                             A.glamp_id AS glampId,
                             B.user_profile_image AS userProfileImage,
                             B.user_nickname AS userNickName,
@@ -110,6 +111,10 @@
         FROM 				review A
         INNER JOIN 		    user B
         ON                  A.user_id = B.user_id
+        INNER JOIN 		    reservation_complete C
+        ON 				    A.reservation_id = C.reservation_id
+        INNER JOIN		    room D
+        ON					C.room_id = D.room_id
         WHERE 			    A.glamp_id = #{glampId}
         ORDER BY		    A.created_at DESC
         LIMIT               #{startIdx}, #{size}
@@ -250,20 +255,6 @@
         <if test="searchWord != null and searchWord != ''">
             AND A.glamp_name like '%${searchWord}%'
         </if>
-    </select>
-
-    <select id="existGlamp" >
-        SELECT glamp_id
-        FROM glamping
-        WHERE region = #{region}
-            and glamp_name = #{searchWord}
-    </select>
-
-    <select id="existGlampLike">
-        SELECT glamp_id
-        FROM glamping
-        WHERE region = #{region}
-        and glamp_name like '%${searchWord}%'
     </select>
 
 </mapper>

@@ -269,14 +269,17 @@ public class UserServiceImpl implements UserService {
 
             for (GetUserReviewResultSet resultSet : resultSetList) {
                 UserReviewListItem reviewListItem = new UserReviewListItem();
-                reviewListItem.setUserProfileImage(resultSet.getUserProfileImage());
-                reviewListItem.setUserNickName(resultSet.getUserNickname());
-                reviewListItem.setStarPoint(resultSet.getReviewStarPoint());
-                reviewListItem.setCreatedAt(resultSet.getCreatedAt().toString());
-                reviewListItem.setUserReviewContent(resultSet.getReviewContent());
-                reviewListItem.setOwnerReviewContent(resultSet.getOwnerReviewComment());
                 reviewListItem.setGlampName(resultSet.getGlampName());
                 reviewListItem.setRoomName(resultSet.getRoomName());
+                reviewListItem.setUserNickName(resultSet.getUserNickname());
+                reviewListItem.setUserProfileImage(resultSet.getUserProfileImage());
+                reviewListItem.setReviewId(resultSet.getReviewId());
+                reviewListItem.setReservationId(resultSet.getReservationId());
+                reviewListItem.setUserReviewContent(resultSet.getReviewContent());
+                reviewListItem.setStarPoint(resultSet.getReviewStarPoint());
+                reviewListItem.setOwnerReviewContent(resultSet.getOwnerReviewComment());
+                reviewListItem.setCreatedAt(resultSet.getCreatedAt().toString());
+                reviewListItem.setBookId(resultSet.getBookId());
 
                 List<String> imageUrls = imageEntities.stream()
                         .filter(entity -> entity.getReviewId() == resultSet.getReviewId())
@@ -287,7 +290,7 @@ public class UserServiceImpl implements UserService {
                 reviewListItems.add(reviewListItem);
             }
 
-            return GetReviewResponseDto.success(reviewListItems);
+            return GetReviewResponseDto.success(reviewRepository.getTotalReviewsCount(dto.getUserId()), reviewListItems);
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -357,6 +360,13 @@ public class UserServiceImpl implements UserService {
     @Override
     public ResponseEntity<? super UpdateUserResponseDto> updateUser(UpdateUserRequestDto dto, MultipartFile mf) {
 
+        if (dto.getUserId() == 0 || dto.getUserPw() == null || dto.getUserPhone() == null || dto.getUserNickname() == null) {
+            return UpdateUserResponseDto.validationFailed();
+        }
+        if (dto.getUserPw().isEmpty() || dto.getUserPhone().isEmpty() || dto.getUserNickname().isEmpty()) {
+            return UpdateUserResponseDto.validationFailed();
+        }
+
         try {
             dto.setUserId(authenticationFacade.getLoginUserId());
             if (dto.getUserId() <= 0) {
@@ -380,11 +390,13 @@ public class UserServiceImpl implements UserService {
             String filePath = String.format("%s/%s", path, saveFileName);
             customFileUtils.transferTo(mf, filePath);
 
+            String dbFileName = String.format("pic/user/%d/%s", userEntity.getUserId(), saveFileName);
+
             String userPw = dto.getUserPw();
             String encodingPw = passwordEncoder.encode(userPw);
             dto.setUserPw(encodingPw);
 
-            userEntity.setUserProfileImage(saveFileName);
+            userEntity.setUserProfileImage(dbFileName);
             userEntity.setUserNickname(dto.getUserNickname());
             userEntity.setUserPw(dto.getUserPw());
             userEntity.setUserPhone(dto.getUserPhone());
