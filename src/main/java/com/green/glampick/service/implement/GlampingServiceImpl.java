@@ -55,19 +55,7 @@ public class GlampingServiceImpl implements GlampingService {
             return GetSearchGlampingListResponseDto.wrongDate();
         }
 
-        // 검색어와 일치하는 글램핑장이 존재하나?
-        // List : 일치하는 글램핑장 pk
-        if (req.getSearchWord() != null) {
-            List<Long> existGlampLike = mapper.existGlampLike(req.getRegion(), req.getSearchWord());
-            if(existGlampLike != null) {  // 지역이 일치하고 검색어가 포함된 것이 하나만 있다면
-                List<Long> existGlamp = mapper.existGlamp(req.getRegion(), req.getSearchWord());
-                if (existGlamp.size() == 1) {       // 그 하나의 검색어와 완벽히 일치하는 글램핑장이 존재한다면
-                    return GetSearchGlampingListResponseDto.existGlamp(existGlamp.get(0));  // 바로 상세보기 페이지로 갈 수 있게 pk를 리턴한다
-                }
-            }
-        }
-//        LocalDateTime a = LocalDateTime.now() ;
-//        a.toEpochSecond()
+
         List<Integer> filter = req.getFilter();
         if(filter != null) {
             req.setFilterSize(filter.size());
