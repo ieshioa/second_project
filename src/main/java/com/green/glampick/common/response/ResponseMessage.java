@@ -26,6 +26,8 @@ public interface ResponseMessage {
     String NOT_EXISTED_GLAMP = "존재하지 않는 글랭핑 입니다.";  // "NG"
     String NOT_EXISTED_PAYMENT = "존재하지 않는 결제정보 입니다.";  // "NP"
 
+    String RESERVATION_ID_ERROR = "이용 완료한 예약정보를 불러오지 못했습니다.";  // "RIE"
+    String VALIDATION_STAR_POINT = "별점 입력이 잘못되었습니다.";  // "VSP"
     String WRONG_PERSONNEL = "인원 정보가 잘못 입력되었습니다.";  // "WP"
     String WRONG_DATE = "날짜 정보가 잘못 입력되었습니다.";  // "WD"
 

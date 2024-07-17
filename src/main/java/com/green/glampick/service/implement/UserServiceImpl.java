@@ -145,6 +145,8 @@ public class UserServiceImpl implements UserService {
             return PostReviewResponseDto.validateUserId();
         }
 
+        if (dto.getReviewStarPoint() > 5) { return PostReviewResponseDto.validateStarPoint(); }
+
 
         ReviewEntity reviewEntity = new ReviewEntity(dto);
         reviewEntity.setReservationId(dto.getReservationId());
@@ -153,9 +155,13 @@ public class UserServiceImpl implements UserService {
         reviewEntity = reviewRepository.save(reviewEntity);
         glampingStarRepository.fin(dto.getReservationId());
 
-        ReservationCompleteEntity reservationCompleteEntity = reservationCompleteRepository.findByReservationId(dto.getReservationId());
-        glampingStarRepository.findStarPointAvg(reservationCompleteEntity.getGlampId());
-
+        try {
+            ReservationCompleteEntity reservationCompleteEntity = reservationCompleteRepository.findByReservationId(dto.getReservationId());
+            glampingStarRepository.findStarPointAvg(reservationCompleteEntity.getGlampId());
+        } catch (Exception e) {
+            e.printStackTrace();
+            return PostReviewResponseDto.reservationIdError();
+        }
 
         if (mf == null){
             return PostReviewResponseDto.success(reviewEntity.getReviewId());
