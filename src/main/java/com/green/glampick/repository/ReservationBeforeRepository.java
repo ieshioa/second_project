@@ -15,10 +15,11 @@ public interface ReservationBeforeRepository extends JpaRepository<ReservationBe
 
     @Query(
             value =
-            "SELECT C.glamp_name AS glampName " +
-            ", C.glamp_image AS glampImage " +
-            ", A.book_id AS bookId " +
-            ", B.room_name AS roomName " +
+            "SELECT C. glamp_name AS glampName " +
+            ", C. glamp_image AS glampImage " +
+            ", A. book_id AS bookId " +
+            ", B. room_name AS roomName " +
+            ", A. reservation_id AS reservationId" +
             ", A. check_in_date AS checkInDate " +
             ", A. check_out_date AS checkOutDate " +
             ", A. created_at AS createdAt " +
