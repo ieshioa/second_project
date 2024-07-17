@@ -154,7 +154,8 @@ public class UserServiceImpl implements UserService {
 
         PostReviewPicsRequestDto postReviewPicsRequestDto = PostReviewPicsRequestDto.builder().reviewId(reviewEntity.getReviewId()).build();
         // 파일을 저장할 폴더 경로를 생성
-        String makefolder = String.format("review/%d/%d/pic/glamping/%d/review%d", dto.getUserId(), reviewEntity.getReviewId(),dto.getUserId(),dto.getUserId());
+//        String makefolder = String.format("review/%d/%d/pic/glamping/%d/review%d", dto.getUserId(), reviewEntity.getReviewId(),dto.getUserId(),dto.getUserId());
+        String makefolder = String.format("review/%d/%d", dto.getUserId(), reviewEntity.getReviewId());
         // 폴더를 생성
         customFileUtils.makeFolders(makefolder);
 
@@ -163,8 +164,8 @@ public class UserServiceImpl implements UserService {
             List<ReviewImageEntity> reviewImageEntityList = new ArrayList<>();
 
             for (MultipartFile image : mf) {
-                String saveFileName = customFileUtils.makeRandomFileName(image);// D:\2024-01\glampick\review\68\66\pic\glamping\68\review68
-                postReviewPicsRequestDto.getReviewPicsName().add(saveFileName);//  D:\2024-01\glampick\review\68\65\pic\glamping\68\review68
+                String saveFileName = customFileUtils.makeRandomFileName(image);
+                postReviewPicsRequestDto.getReviewPicsName().add(saveFileName);
                 String filePath = String.format("%s/%s", makefolder, saveFileName);
                 customFileUtils.transferTo(image, filePath);
 
