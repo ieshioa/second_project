@@ -8,15 +8,17 @@ import java.util.List;
 
 public interface GetUserReviewResultSet {
 
-     long getReviewId();
      String getGlampName();
      String getRoomName();
      String getUserNickname();
      String getUserProfileImage();
+     long getReviewId();
+     long getReservationId();
      String getReviewContent();
      int getReviewStarPoint();
      String getOwnerReviewComment();
      LocalDateTime getCreatedAt();
+     long getBookId();
 
 
 }
