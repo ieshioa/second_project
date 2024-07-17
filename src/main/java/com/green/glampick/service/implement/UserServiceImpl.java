@@ -102,7 +102,8 @@ public class UserServiceImpl implements UserService {
 
             ReservationBeforeEntity beforeEntity = optionalBeforeEntity.get();
             ReservationCancelEntity cancelEntity = new ReservationCancelEntity(
-                    beforeEntity.getUserId()
+                    beforeEntity.getReservationId()
+                    , beforeEntity.getUserId()
                     , beforeEntity.getBookId()
                     , beforeEntity.getGlampId()
                     , beforeEntity.getRoomId()
@@ -148,7 +149,7 @@ public class UserServiceImpl implements UserService {
         reviewEntity = reviewRepository.save(reviewEntity);
         glampingStarRepository.fin(dto.getReservationId());
 
-        ReservationCompleteEntity reservationCompleteEntity = reservationCompleteRepository.findByGlampId(dto.getReservationId());
+        ReservationCompleteEntity reservationCompleteEntity = reservationCompleteRepository.findByReservationId(dto.getReservationId());
         glampingStarRepository.findStarPointAvg(reservationCompleteEntity.getGlampId());
 
 

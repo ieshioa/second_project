@@ -44,10 +44,11 @@ public class ReservationCancelEntity {
     @CreationTimestamp @Column(nullable = false, updatable = false)
     private LocalDateTime createdAt;
 
-    public ReservationCancelEntity(long userId, String bookId, long glampId, long roomId, String inputName,
+    public ReservationCancelEntity(long reservationId, long userId, String bookId, long glampId, long roomId, String inputName,
                                    int personnel, LocalDate checkInDate, LocalDate checkOutDate, String pg,
                                    long payAmount, String comment, LocalDateTime createdAt)
     {
+        this.reservationId = reservationId;
         this.userId = userId;
         this.bookId = bookId;
         this.glampId = glampId;
