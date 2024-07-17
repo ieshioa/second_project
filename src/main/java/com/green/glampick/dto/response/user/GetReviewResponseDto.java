@@ -22,15 +22,17 @@ import java.util.List;
 
 public class GetReviewResponseDto extends ResponseDto {
 
+    long TotalReviewsCount;
     List<UserReviewListItem> reviewListItems;
 
-    private GetReviewResponseDto(List<UserReviewListItem> reviewListItems) {
+    private GetReviewResponseDto(long totalReviewsCount, List<UserReviewListItem> reviewListItems) {
         super(ResponseCode.SUCCESS, ResponseMessage.SUCCESS);
+        this.TotalReviewsCount = totalReviewsCount;
         this.reviewListItems = reviewListItems;
     }
 
-    public static ResponseEntity<GetReviewResponseDto> success(List<UserReviewListItem> reviewListItems) {
-        GetReviewResponseDto result = new GetReviewResponseDto(reviewListItems);
+    public static ResponseEntity<GetReviewResponseDto> success(long totalReviewsCount, List<UserReviewListItem> reviewListItems) {
+        GetReviewResponseDto result = new GetReviewResponseDto(totalReviewsCount, reviewListItems);
         return ResponseEntity.status(HttpStatus.OK).body(result);
     }
 
