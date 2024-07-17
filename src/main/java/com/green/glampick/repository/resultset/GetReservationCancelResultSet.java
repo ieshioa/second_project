@@ -4,7 +4,7 @@ public interface GetReservationCancelResultSet {
 
     String getGlampName();
     String getGlampImage();
-    String bookId();
+    String getBookId();
     String getRoomName();
     long getReservationId();
     String getCheckInDate();
