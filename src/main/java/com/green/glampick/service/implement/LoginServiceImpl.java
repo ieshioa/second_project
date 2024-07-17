@@ -35,6 +35,7 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
@@ -91,6 +92,7 @@ public class LoginServiceImpl implements LoginService {
 
     //  이메일 회원가입 처리  //
     @Override
+    @Transactional
     public ResponseEntity<? super PostSignUpResponseDto> signUpUser(SignUpRequestDto dto) {
 
         try {
@@ -166,6 +168,7 @@ public class LoginServiceImpl implements LoginService {
 
     //  이메일 로그인 처리  //
     @Override
+    @Transactional
     public ResponseEntity<? super PostSignInResponseDto> signInUser(HttpServletResponse res, SignInRequestDto dto) {
 
         String accessToken = null;
@@ -214,6 +217,7 @@ public class LoginServiceImpl implements LoginService {
 
     //  AccessToken 불러오기  //
     @Override
+    @Transactional
     public ResponseEntity<? super GetAccessTokenResponseDto> getAccessToken(HttpServletRequest req) {
 
         try {
@@ -248,6 +252,7 @@ public class LoginServiceImpl implements LoginService {
 
     //  휴대폰 인증 문자 보내기  //
     @Override
+    @Transactional
     public ResponseEntity<? super PostSmsSendResponseDto> sendOne(String userPhone) {
 
         int verificationCode;
@@ -284,6 +289,7 @@ public class LoginServiceImpl implements LoginService {
 
     //  휴대폰 인증코드 체크하기  //
     @Override
+    @Transactional
     public ResponseEntity<? super PostSmsCheckResponseDto> checkPhone(String userPhone, int phoneKey) {
 
         try {
@@ -322,6 +328,7 @@ public class LoginServiceImpl implements LoginService {
 
     //  이메일 인증 보내기  //
     @Override
+    @Transactional
     public ResponseEntity<? super PostMailSendResponseDto> sendAuthCode(String userEmail) {
 
         try {
@@ -370,6 +377,7 @@ public class LoginServiceImpl implements LoginService {
 
     //  이메일 코드 체크하기  //
     @Override
+    @Transactional
     public ResponseEntity<? super PostMailCheckResponseDto> checkCode(String userEmail, int emailKey) {
 
         try {
