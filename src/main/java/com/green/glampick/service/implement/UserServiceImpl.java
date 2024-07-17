@@ -273,7 +273,7 @@ public class UserServiceImpl implements UserService {
                 reviewListItem.setOwnerReviewContent(resultSet.getOwnerReviewComment());
                 reviewListItem.setCreatedAt(resultSet.getCreatedAt().toString());
                 reviewListItem.setBookId(resultSet.getBookId());
-
+                reviewListItem.setGlampId(resultSet.getGlampId());
                 List<String> imageUrls = imageEntities.stream()
                         .filter(entity -> entity.getReviewId() == resultSet.getReviewId())
                         .map(ReviewImageEntity::getReviewImageName) // 경로를 파일명으로 구성

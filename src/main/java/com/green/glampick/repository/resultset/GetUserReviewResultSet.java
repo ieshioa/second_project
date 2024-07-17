@@ -19,6 +19,6 @@ public interface GetUserReviewResultSet {
      String getOwnerReviewComment();
      LocalDateTime getCreatedAt();
      long getBookId();
-
+     long getGlampId();
 
 }
