@@ -101,18 +101,24 @@ public class BookServiceImpl implements BookService {
 
     }
 
+    //  최종 결제 가격정보  //
     @Override
     public ResponseEntity<? super GetBookPayResponseDto> getReservationAmount(GetBookPayRequestDto dto) {
 
+        long roomPrice = 0;
+        long extraChargePrice = 0;
         long payAmount = 0;
+
 
         try {
 
             RoomEntity roomEntity = roomRepository.findByRoomId(dto.getRoomId());
             GlampingEntity glampingEntity = glampingRepository.findByGlampId(dto.getGlampId());
-            long roomPrice = roomEntity.getRoomPrice();
+            roomPrice = roomEntity.getRoomPrice();
             long roomPeople = roomEntity.getRoomNumPeople();
             long extraCharge = glampingEntity.getExtraCharge();
+
+            extraChargePrice = (dto.getPersonnel() - roomPeople) * extraCharge;
 
             payAmount = roomPrice + (dto.getPersonnel() - roomPeople) * extraCharge;
 
@@ -121,7 +127,7 @@ public class BookServiceImpl implements BookService {
             return ResponseDto.databaseError();
         }
 
-        return GetBookPayResponseDto.success(payAmount);
+        return GetBookPayResponseDto.success(roomPrice, extraChargePrice, payAmount);
 
     }
 
