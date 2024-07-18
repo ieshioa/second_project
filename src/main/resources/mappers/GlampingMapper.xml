@@ -95,7 +95,7 @@
     <select id="selCount">
         SELECT COUNT(review_id) AS countReviewUsers
         FROM review
-        WHERE glamp_id = 1;
+        WHERE glamp_id = #{glampId};
     </select>
     <!-- 리뷰페이지 리뷰정보  -->
     <select id="selReviewInfo">
@@ -134,7 +134,7 @@
         FROM 			review_image A
         INNER JOIN 	    review B
         ON 			    A.review_id = B.review_id
-        WHERE 		    glamp_id = #{glampId}
+        WHERE 		    glam                      p_id = #{glampId}
         LIMIT           #{startIdx}, #{size}
     </select>
 
