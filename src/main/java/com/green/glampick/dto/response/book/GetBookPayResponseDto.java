@@ -12,15 +12,19 @@ import org.springframework.http.ResponseEntity;
 @Setter
 public class GetBookPayResponseDto extends ResponseDto {
 
-    private long payAmount;
+    private long roomPrice;  // 객실 가격
+    private long extraChargePrice;  // 추가 인원 결제 금액
+    private long payAmount;  // 최종 결제가
 
-    private GetBookPayResponseDto(long payAmount) {
+    private GetBookPayResponseDto(long roomPrice, long extraChargePrice, long payAmount) {
         super(ResponseCode.SUCCESS, ResponseMessage.SUCCESS);
+        this.roomPrice = roomPrice;
+        this.extraChargePrice = extraChargePrice;
         this.payAmount = payAmount;
     }
 
-    public static ResponseEntity<GetBookPayResponseDto> success(long payAmount) {
-        GetBookPayResponseDto result = new GetBookPayResponseDto(payAmount);
+    public static ResponseEntity<GetBookPayResponseDto> success(long roomPrice, long extraChargePrice, long payAmount) {
+        GetBookPayResponseDto result = new GetBookPayResponseDto(roomPrice, extraChargePrice, payAmount);
         return ResponseEntity.status(HttpStatus.OK).body(result);
     }
 
