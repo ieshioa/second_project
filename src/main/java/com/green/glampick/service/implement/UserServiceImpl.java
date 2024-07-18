@@ -394,7 +394,7 @@ public class UserServiceImpl implements UserService {
                 String filePath = String.format("%s/%s", path, saveFileName);
                 customFileUtils.transferTo(mf, filePath);
 
-                String dbFileName = String.format("pic/user/%d/%s", userEntity.getUserId(), saveFileName);
+                String dbFileName = String.format("/pic/user/%d/%s", userEntity.getUserId(), saveFileName);
                 userEntity.setUserProfileImage(dbFileName);
             }
 
