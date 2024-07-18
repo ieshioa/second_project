@@ -134,7 +134,7 @@
         FROM 			review_image A
         INNER JOIN 	    review B
         ON 			    A.review_id = B.review_id
-        WHERE 		    glam                      p_id = #{glampId}
+        WHERE 		    glamp_id = #{glampId}
         LIMIT           #{startIdx}, #{size}
     </select>
 

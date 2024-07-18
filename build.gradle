@@ -43,6 +43,8 @@ dependencies {
     implementation 'io.jsonwebtoken:jjwt-api:0.12.5'
     runtimeOnly 'io.jsonwebtoken:jjwt-impl:0.12.5'
     runtimeOnly 'io.jsonwebtoken:jjwt-gson:0.12.5'
+    // JSON Parser //
+    implementation group: 'com.googlecode.json-simple', name: 'json-simple', version: '1.1.1'
 
     implementation 'org.mindrot:jbcrypt:0.4'
     implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.5.0'
