@@ -40,7 +40,7 @@ public class GlampingEntity{
 
     private String infoBasic;  //글램핑 기본정보
 
-    private String infoParking;  //글램핑 주차정보
+    private String traffic;  //글램핑 주차정보
 
     private String infoNotice;  //글램핑 이용안내
 

@@ -3,6 +3,7 @@ package com.green.glampick.dto.object.room;
 import lombok.Data;
 
 import java.time.LocalTime;
+import java.util.List;
 
 @Data
 public class RoomInfoDto {
@@ -13,6 +14,8 @@ public class RoomInfoDto {
     private LocalTime checkOut;
     private int numPeople;
     private int maxPeople;
+
+    private List<String> roomImgName;
 }
 /**
  * Room Name: VIP패밀리카라반3
