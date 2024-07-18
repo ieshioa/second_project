@@ -20,7 +20,7 @@ public class PostBookRequestDto {
     LocalDate checkInDate;
     LocalDate checkOutDate;
     private String pg;
-    @JsonIgnore private long payAmount;
+    private long payAmount;
 
 
 }
