@@ -31,7 +31,7 @@ public interface FavoriteGlampingRepository extends JpaRepository<GlampFavoriteE
             "AND B.room_price = ( SELECT MIN(room_price) " +
                                 "FROM room " +
                                 "WHERE glamp_id = A.glamp_id ) " +
-            "ORDER BY recommend_score DESC ",
+            "ORDER BY C.created_at DESC ",
             nativeQuery = true
     )
     List<GetFavoriteGlampingResultSet> getFavoriteGlamping(Long glampId);

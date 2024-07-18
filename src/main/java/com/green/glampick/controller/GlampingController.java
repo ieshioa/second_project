@@ -51,7 +51,7 @@ public class GlampingController {
     @Operation(summary = "글램핑 상세 페이지 불러오기", description = GLAMPING_INFO_DESCRIPTION)
     @ApiResponse(responseCode = "200", description = GLAMPING_INFO_RESPONSE_ERROR_CODE,
             content = @Content(
-                    mediaType = "application/json", schema = @Schema(implementation = GetSearchGlampingListResponseDto.class)))
+                    mediaType = "application/json", schema = @Schema(implementation = GetGlampingInformationResponseDto.class)))
     public ResponseEntity<? super GetGlampingInformationResponseDto> infoGlampingDetail(@ParameterObject @ModelAttribute GetInfoRequestDto p) {
             return service.infoGlampingDetail(p);
     }

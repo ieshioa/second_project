@@ -55,7 +55,7 @@ public class UserController {
     @Operation(summary = "예약내역 불러오기", description = USER_BOOK_DESCRIPTION)
     @ApiResponse(responseCode = "200", description = USER_BOOK_RESPONSE_ERROR_CODE,
         content = @Content(
-                mediaType = "application/json", schema = @Schema(implementation = PostSignUpResponseDto.class)))
+                mediaType = "application/json", schema = @Schema(implementation = GetBookResponseDto.class)))
     public ResponseEntity<?super GetBookResponseDto> getBook(@ParameterObject GetBookRequestDto dto) {
         return service.getBook(dto);
     }
@@ -96,7 +96,7 @@ public class UserController {
     @Operation(summary = "리뷰 불러오기", description = USER_REVIEW_VIEW_DESCRIPTION)
     @ApiResponse(responseCode = "200", description = USER_REVIEW_VIEW_RESPONSE_ERROR_CODE,
             content = @Content(
-                    mediaType = "application/json", schema = @Schema(implementation = PostReviewResponseDto.class)))
+                    mediaType = "application/json", schema = @Schema(implementation = GetReviewResponseDto.class)))
     public ResponseEntity<?super GetReviewResponseDto> getReview(@ParameterObject @ModelAttribute GetReviewRequestDto dto) {
         return service.getReview(dto);
     }
@@ -132,7 +132,7 @@ public class UserController {
     @Operation(summary = "유저 정보 수정하기", description = USER_INFO_UPDATE_DESCRIPTION)
     @ApiResponse(responseCode = "200", description = USER_INFO_UPDATE_RESPONSE_ERROR_CODE,
             content = @Content(
-                    mediaType = "application/json", schema = @Schema(implementation = GetUserResponseDto.class)))
+                    mediaType = "application/json", schema = @Schema(implementation = UpdateUserResponseDto.class)))
     public ResponseEntity<?super UpdateUserResponseDto> updateUser
             (@RequestPart UpdateUserRequestDto dto, @RequestPart(required = false) MultipartFile mf)
     {
