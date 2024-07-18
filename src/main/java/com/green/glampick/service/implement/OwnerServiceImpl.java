@@ -84,7 +84,7 @@ public class OwnerServiceImpl implements OwnerService {
         long glampId = req.getGlampId();
 
         // 이미지 url로 저장하기
-        String picNameUrl = String.format("pic/glamping/%d/glamp/%s",glampId, glmapImgName);
+        String picNameUrl = String.format("/pic/glamping/%d/glamp/%s",glampId, glmapImgName);
         mapper.updateGlampingImageNameToUrl(picNameUrl, glampId);
 
         // 글램핑 대표 이미지 넣기
@@ -136,7 +136,7 @@ public class OwnerServiceImpl implements OwnerService {
             List<String> roomImg = new ArrayList<>();
             for (MultipartFile file : image) {
                 String imgName = customFileUtils.makeRandomFileName(file);
-                String imgUrlName = String.format("pic/%s/%s", roomPath, imgName);
+                String imgUrlName = String.format("/pic/%s/%s", roomPath, imgName);
                 roomImg.add(imgUrlName);
                 String target = String.format("%s/%s", roomPath, imgName);
                 customFileUtils.transferTo(file, target);
