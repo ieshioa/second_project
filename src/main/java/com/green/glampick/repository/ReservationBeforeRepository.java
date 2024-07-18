@@ -32,7 +32,7 @@ public interface ReservationBeforeRepository extends JpaRepository<ReservationBe
             "JOIN glamping C " +
             "ON B.glamp_id = C.glamp_id " +
             "WHERE A.user_id = :userId " +
-            "ORDER BY A.created_at ",
+            "ORDER BY A.check_in_date ",
             nativeQuery = true
     )
     List<GetReservationBeforeResultSet> getBook(Long userId);
