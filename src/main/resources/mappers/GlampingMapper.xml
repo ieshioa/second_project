@@ -24,7 +24,7 @@
                     glamp_location AS glampLocation,
                     glamp_intro AS glampIntro,
                     info_basic AS infoBasic,
-                    info_parking AS traffic,
+                    traffic AS traffic,
                     info_notice AS infoNotice
         FROM 		glamping
         WHERE 		glamp_id = #{glampId}
