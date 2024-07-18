@@ -1,12 +1,18 @@
 package com.green.glampick.service.implement;
 
 import com.green.glampick.dto.ResponseDto;
-import com.green.glampick.dto.request.book.postBookRequestDto;
+import com.green.glampick.dto.request.book.GetBookPayRequestDto;
+import com.green.glampick.dto.request.book.PostBookRequestDto;
+import com.green.glampick.dto.response.book.GetBookPayResponseDto;
 import com.green.glampick.dto.response.book.PostBookResponseDto;
+import com.green.glampick.entity.GlampingEntity;
 import com.green.glampick.entity.ReservationBeforeEntity;
 import com.green.glampick.entity.ReservationCompleteEntity;
+import com.green.glampick.entity.RoomEntity;
+import com.green.glampick.repository.GlampingRepository;
 import com.green.glampick.repository.ReservationBeforeRepository;
 import com.green.glampick.repository.ReservationCompleteRepository;
+import com.green.glampick.repository.RoomRepository;
 import com.green.glampick.security.AuthenticationFacade;
 import com.green.glampick.service.BookService;
 import lombok.RequiredArgsConstructor;
@@ -29,12 +35,14 @@ import java.util.Random;
 public class BookServiceImpl implements BookService {
     private final ReservationBeforeRepository reservationBeforeRepository;
     private final ReservationCompleteRepository reservationCompleteRepository;
+    private final RoomRepository roomRepository;
+    private final GlampingRepository glampingRepository;
     private final AuthenticationFacade authenticationFacade;
 
     //  글램핑 예약하기  //
     @Override
     @Transactional
-    public ResponseEntity<? super PostBookResponseDto> postBook(postBookRequestDto dto) {
+    public ResponseEntity<? super PostBookResponseDto> postBook(PostBookRequestDto dto) {
 
         //  로그인 유저가 없다면, 권한이 없다는 응답을 보낸다.  //
         try {
@@ -68,6 +76,19 @@ public class BookServiceImpl implements BookService {
             //  생성한 랜덤 13자리 수를 예약번호에 넣는다.  //
             reservationBeforeEntity.setBookId(reservationNumber);
 
+            RoomEntity roomEntity = roomRepository.findByRoomId(dto.getRoomId());
+            GlampingEntity glampingEntity = glampingRepository.findByGlampId(dto.getGlampId());
+            long roomPrice = roomEntity.getRoomPrice();
+            long personnel = dto.getPersonnel();
+            long roomPeople = roomEntity.getRoomNumPeople();
+            long extraCharge = glampingEntity.getExtraCharge();
+
+            long payAmount = roomPrice + (personnel - roomPeople) * extraCharge;
+
+            reservationBeforeEntity.setPayAmount(payAmount);
+
+            log.info("PerSonnel : {}", personnel);
+
             //  가공이 완료된 Entity 를 DB에 저장한다.  //
             reservationBeforeRepository.save(reservationBeforeEntity);
 
@@ -77,6 +98,30 @@ public class BookServiceImpl implements BookService {
         }
 
         return PostBookResponseDto.success();
+
+    }
+
+    @Override
+    public ResponseEntity<? super GetBookPayResponseDto> getReservationAmount(GetBookPayRequestDto dto) {
+
+        long payAmount = 0;
+
+        try {
+
+            RoomEntity roomEntity = roomRepository.findByRoomId(dto.getRoomId());
+            GlampingEntity glampingEntity = glampingRepository.findByGlampId(dto.getGlampId());
+            long roomPrice = roomEntity.getRoomPrice();
+            long roomPeople = roomEntity.getRoomNumPeople();
+            long extraCharge = glampingEntity.getExtraCharge();
+
+            payAmount = roomPrice + (dto.getPersonnel() - roomPeople) * extraCharge;
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseDto.databaseError();
+        }
+
+        return GetBookPayResponseDto.success(payAmount);
 
     }
 

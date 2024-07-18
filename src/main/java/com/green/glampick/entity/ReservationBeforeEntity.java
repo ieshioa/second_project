@@ -1,6 +1,6 @@
 package com.green.glampick.entity;
 
-import com.green.glampick.dto.request.book.postBookRequestDto;
+import com.green.glampick.dto.request.book.PostBookRequestDto;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -40,6 +40,7 @@ public class ReservationBeforeEntity {
 
     private String pg;
 
+    @Setter
     private long payAmount;//최종 결제 가격
 
     @CreationTimestamp
@@ -47,7 +48,7 @@ public class ReservationBeforeEntity {
     private LocalDateTime createdAt;
 
 
-    public ReservationBeforeEntity(postBookRequestDto dto) {
+    public ReservationBeforeEntity(PostBookRequestDto dto) {
 
         this.reservationId = dto.getReservationId();
         this.userId = dto.getUserId();
@@ -57,6 +58,7 @@ public class ReservationBeforeEntity {
         this.inputName = dto.getInputName();
         this.checkInDate = dto.getCheckInDate();
         this.checkOutDate = dto.getCheckOutDate();
+        this.personnel = dto.getPersonnel();
         this.pg = dto.getPg();
         this.payAmount = dto.getPayAmount();
     }
