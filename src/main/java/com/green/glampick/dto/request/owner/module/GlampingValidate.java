@@ -41,7 +41,7 @@ public class GlampingValidate {
         isNull(req.getRegion());
         isNull(req.getIntro());
         isNull(req.getBasic());
-        isNull(req.getParking());
+        isNull(req.getTraffic());
         isNull(req.getNotice());
     }
     public static void isNull(String text) {
