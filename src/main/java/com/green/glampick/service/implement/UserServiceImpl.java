@@ -178,7 +178,7 @@ public class UserServiceImpl implements UserService {
 
             for (MultipartFile image : mf) {
                 String saveFileName = customFileUtils.makeRandomFileName(image);
-                String saveDbFileName = String.format("pic/review/%d/%d/%s", dto.getUserId(), reviewEntity.getReviewId(),saveFileName);
+                String saveDbFileName = String.format("/pic/review/%d/%d/%s", dto.getUserId(), reviewEntity.getReviewId(),saveFileName);
                 postReviewPicsRequestDto.getReviewPicsName().add(saveDbFileName);
                 String filePath = String.format("%s/%s", makefolder, saveFileName);
                 customFileUtils.transferTo(image, filePath);
