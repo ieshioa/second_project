@@ -30,7 +30,7 @@ public interface ReservationCancelRepository extends JpaRepository<ReservationCa
                             "JOIN glamping C " +
                             "ON B.glamp_id = C.glamp_id " +
                             "WHERE A.user_id = :userId " +
-                            "ORDER BY A.check_in_date DESC ",
+                            "ORDER BY A. reservation_id DESC ",
             nativeQuery = true
     )
     List<GetReservationCancelResultSet> getBook(Long userId);
