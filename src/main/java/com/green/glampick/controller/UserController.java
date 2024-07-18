@@ -134,7 +134,7 @@ public class UserController {
             content = @Content(
                     mediaType = "application/json", schema = @Schema(implementation = GetUserResponseDto.class)))
     public ResponseEntity<?super UpdateUserResponseDto> updateUser
-            (@RequestPart UpdateUserRequestDto dto, @RequestPart MultipartFile mf)
+            (@RequestPart UpdateUserRequestDto dto, @RequestPart(required = false) MultipartFile mf)
     {
         return service.updateUser(dto, mf);
     }

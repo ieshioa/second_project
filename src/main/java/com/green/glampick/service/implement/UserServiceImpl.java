@@ -274,6 +274,7 @@ public class UserServiceImpl implements UserService {
                 reviewListItem.setCreatedAt(resultSet.getCreatedAt().toString());
                 reviewListItem.setBookId(resultSet.getBookId());
                 reviewListItem.setGlampId(resultSet.getGlampId());
+
                 List<String> imageUrls = imageEntities.stream()
                         .filter(entity -> entity.getReviewId() == resultSet.getReviewId())
                         .map(ReviewImageEntity::getReviewImageName) // 경로를 파일명으로 구성
@@ -356,13 +357,7 @@ public class UserServiceImpl implements UserService {
     @Transactional
     public ResponseEntity<? super UpdateUserResponseDto> updateUser(UpdateUserRequestDto dto, MultipartFile mf) {
 
-        if (dto.getUserId() == 0 || dto.getUserPw() == null || dto.getUserPhone() == null || dto.getUserNickname() == null) {
-            return UpdateUserResponseDto.validationFailed();
-        }
-        if (dto.getUserPw().isEmpty() || dto.getUserPhone().isEmpty() || dto.getUserNickname().isEmpty()) {
-            return UpdateUserResponseDto.validationFailed();
-        }
-
+        // 유저 PK 불러오기
         try {
             dto.setUserId(authenticationFacade.getLoginUserId());
             if (dto.getUserId() <= 0) {
@@ -373,29 +368,49 @@ public class UserServiceImpl implements UserService {
             return UpdateUserResponseDto.validateUserId();
         }
 
+        // 수정사항이 하나도 입력되지 않은 경우에는 에러
+        if (dto.getUserId() == 0 &&
+                (dto.getUserPw() == null || dto.getUserPw().isEmpty()) &&
+                (dto.getUserPhone() == null || dto.getUserPhone().isEmpty()) &&
+                (dto.getUserNickname() == null || dto.getUserNickname().isEmpty()) &&
+                (mf == null || mf.isEmpty()))
+        {
+            return UpdateUserResponseDto.validationFailed();
+        }
+
+
         try {
             UserEntity userEntity = userRepository.findById(dto.getUserId()).get();
             if (dto.getUserId() == 0) {
                 return UpdateUserResponseDto.noExistedUser();
             }
 
-            String path = String.format("user/%d", userEntity.getUserId());
-            customFileUtils.deleteFolder(path);
-            customFileUtils.makeFolders(path);
-            String saveFileName = customFileUtils.makeRandomFileName(mf);
-            String filePath = String.format("%s/%s", path, saveFileName);
-            customFileUtils.transferTo(mf, filePath);
+            if (mf == null || mf.isEmpty()) { dto.setUserProfileImage(null); }
+            else {
+                String path = String.format("user/%d", userEntity.getUserId());
+                customFileUtils.deleteFolder(path);
+                customFileUtils.makeFolders(path);
+                String saveFileName = customFileUtils.makeRandomFileName(mf);
+                String filePath = String.format("%s/%s", path, saveFileName);
+                customFileUtils.transferTo(mf, filePath);
 
-            String dbFileName = String.format("pic/user/%d/%s", userEntity.getUserId(), saveFileName);
+                String dbFileName = String.format("pic/user/%d/%s", userEntity.getUserId(), saveFileName);
+                userEntity.setUserProfileImage(dbFileName);
+            }
 
-            String userPw = dto.getUserPw();
-            String encodingPw = passwordEncoder.encode(userPw);
-            dto.setUserPw(encodingPw);
+            if (dto.getUserPw() != null && !dto.getUserPw().isEmpty()) {
+                String userPw = dto.getUserPw();
+                String encodingPw = passwordEncoder.encode(userPw);
+                dto.setUserPw(encodingPw);
+                userEntity.setUserPw(dto.getUserPw());
+            }
 
-            userEntity.setUserProfileImage(dbFileName);
-            userEntity.setUserNickname(dto.getUserNickname());
-            userEntity.setUserPw(dto.getUserPw());
-            userEntity.setUserPhone(dto.getUserPhone());
+            if (dto.getUserNickname() != null && !dto.getUserNickname().isEmpty()) {
+                userEntity.setUserNickname(dto.getUserNickname());
+            }
+            if (dto.getUserPhone() != null && !dto.getUserPhone().isEmpty()) {
+                userEntity.setUserPhone(dto.getUserPhone());
+            }
 
             userRepository.save(userEntity);
 
