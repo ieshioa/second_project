@@ -159,7 +159,7 @@
         JOIN room C
         ON A.room_id = C.room_id
         WHERE A.glamp_id = #{glampId}
-        ORDER BY A.check_in_date DESC
+        ORDER BY A.reservation_id DESC
     </select>
 
     <select id="getUserIdByGlampId">
