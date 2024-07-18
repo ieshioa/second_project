@@ -211,10 +211,14 @@
                     WHERE glamp_id = A.glamp_id
                             AND (#{people} >= room_num_people  AND room_max_people >= #{people})
             )
-        WHERE A.region = #{region}
-        <if test="searchWord != null and searchWord != ''">
-            AND A.glamp_name like '%${searchWord}%'
-        </if>
+        <where>
+            <if test="region != 'all'">
+                A.region = #{region}
+            </if>
+            <if test="searchWord != null and searchWord != ''">
+                AND A.glamp_name like '%${searchWord}%'
+            </if>
+        </where>
         <include refid="sort"/>
         LIMIT #{startIdx}, #{size}
     </select>
@@ -251,7 +255,9 @@
         WHERE glamp_id = A.glamp_id
         AND (#{people} >= room_num_people  AND room_max_people >= #{people})
         )
-        WHERE A.region = #{region}
+        <if test="region != 'all'">
+            WHERE A.region = #{region}
+        </if>
         <if test="searchWord != null and searchWord != ''">
             AND A.glamp_name like '%${searchWord}%'
         </if>
