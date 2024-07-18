@@ -45,5 +45,6 @@ public class UserReviewListItem {
 
     @Schema(example = "[\"image1.jpg\", \"image2.jpg\"]", description = "리뷰 이미지 목록")
     private List<String> reviewImages;
+
     private long glampId;
 }

@@ -33,6 +33,7 @@ public class ReviewListItem {
 
     @Schema(example = "너가 좋다니 나도좋아!", description = "사장이작성한리뷰내용")
     private String ownerReviewContent;
+
     @Schema(example = "카바란 1호", description = "리뷰한 객실명")
     private String roomName;
 
