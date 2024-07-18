@@ -174,7 +174,7 @@ public class OwnerController {
                                     "<p> result: 수정실패 0 수정성공 1 </p>",
                             content = @Content(
                                     mediaType = "application/json",
-                                    schema = @Schema(implementation = PostOwnerReviewInfoResponseDto.class)
+                                    schema = @Schema(implementation = PatchOwnerReviewInfoResponseDto.class)
                             ))})
     @PatchMapping("book")
     public ResponseEntity<? super PatchOwnerReviewInfoResponseDto> patchReview(@RequestBody ReviewPatchRequestDto p) {

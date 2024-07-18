@@ -38,7 +38,7 @@ public interface ReviewRepository extends JpaRepository<ReviewEntity, Long> {
         "JOIN glamping E " +
         "ON A.glamp_id = E.glamp_id " +
         "WHERE C.user_id = ?1 " +
-        "ORDER BY A.created_at DESC " +
+        "ORDER BY B.review_id DESC " +
         "LIMIT ?2 OFFSET ?3",
             nativeQuery = true
     )
