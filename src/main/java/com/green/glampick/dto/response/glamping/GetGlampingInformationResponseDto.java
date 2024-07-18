@@ -37,7 +37,7 @@ public class GetGlampingInformationResponseDto extends ResponseDto {
         @Schema(example = "입실 : 15:00 | 퇴실 : 11:00 (퇴실시간 이후 30분당 오버타임 요금 부과됩니다 퇴실시간을 꼭 지켜주세요)", description = "기본정보")
         private String infoBasic;
         @Schema(example = "주차 가능 (1대 주차 무료 / 1대 추가시 10,000원)", description = "주차장정보")
-        private String infoParking;
+        private String traffic;
         @Schema(example = "최대 인원 초과시 입실이 불가 합니다 (방문객 불가)", description = "유의사항")
         private String infoNotice;
         @Schema(example = "1329명", description = "리뷰 평가자 숫자")
