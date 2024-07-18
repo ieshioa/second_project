@@ -25,10 +25,10 @@ public class GlampingPostRequestDto {
     private String intro;
     @Schema(example = "글램핑입니다", description = "기본 정보")
     private String basic;
-    @Schema(example = "주차장 있어요", description = "주차 정보")
-    private String parking;
     @Schema(example = "이거 저거 주의해주세요", description = "이용 안내")
     private String notice;
+    @Schema(example = "해수욕장 10분", description = "추가 위치 정보")
+    private String traffic;
 
     // 이미지
     @JsonIgnore

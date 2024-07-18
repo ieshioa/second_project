@@ -13,8 +13,8 @@
             , extra_charge = #{extraCharge}
             , glamp_intro = #{intro}
             , info_basic = #{basic}
-            , info_parking = #{parking}
             , info_notice = #{notice}
+            , traffic = #{traffic}
             , glamp_image = #{glampingImg}
     </insert>
 
