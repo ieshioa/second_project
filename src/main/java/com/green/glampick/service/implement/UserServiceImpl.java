@@ -21,6 +21,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -386,10 +387,14 @@ public class UserServiceImpl implements UserService {
         }
 
 
+
         try {
             UserEntity userEntity = userRepository.findById(dto.getUserId()).get();
             if (dto.getUserId() == 0) {
                 return UpdateUserResponseDto.noExistedUser();
+            }
+            if (Objects.equals(dto.getUserNickname(), userEntity.getUserNickname()))  {
+                return UpdateUserResponseDto.duplicatedNickname();
             }
 
             if (mf == null || mf.isEmpty()) { dto.setUserProfileImage(null); }
