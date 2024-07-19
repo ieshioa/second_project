@@ -13,10 +13,14 @@ import static com.green.glampick.common.GlobalConst.PAGING_SIZE;
 @ToString
 public class GetInfoRequestDto {
     private long glampId;
+
     @Schema(example = "2024-06-10")
     private String inDate;
     @Schema(example = "2024-06-15")
     private String outDate;
     @JsonIgnore
     private long roomId;
+    @JsonIgnore
+    private long userId;
+
 }
