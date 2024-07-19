@@ -45,9 +45,6 @@
         ON 			A.room_id = B.room_id
         GROUP BY 	A.room_id
         HAVING 		A.glamp_id = #{glampId}
-        <if test = "size != 0" >
-            LIMIT 		#{size}
-        </if>
     </select>
     <!-- 체크인 체크아웃 데이트 추출 -->
     <select id="selDate">
