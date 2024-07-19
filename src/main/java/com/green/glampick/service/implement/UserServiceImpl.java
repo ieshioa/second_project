@@ -204,6 +204,7 @@ public class UserServiceImpl implements UserService {
     @Transactional
     public ResponseEntity<? super DeleteReviewResponseDto> deleteReview(DeleteReviewRequestDto dto) {
 
+        log.info("dto : {}", dto);
         try {
             dto.setUserId(authenticationFacade.getLoginUserId());
             if (dto.getUserId() <= 0) {
@@ -220,7 +221,13 @@ public class UserServiceImpl implements UserService {
             if (dto.getReviewId() == 0) {
                 return DeleteReviewResponseDto.noExistedReview();
             }
+            List<ReviewImageEntity> list = reviewImageRepository.findByReviewId(dto.getReviewId());
+
+            for (int i = 0; i < list.size(); i++ ){
+                reviewImageRepository.deleteById(list.get(i).getReviewImageId());
+            }
             reviewRepository.deleteById(dto.getReviewId());
+
 
         } catch (Exception e) {
             e.printStackTrace();
