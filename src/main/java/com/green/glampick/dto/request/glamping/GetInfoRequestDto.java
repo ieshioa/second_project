@@ -17,20 +17,6 @@ public class GetInfoRequestDto {
     private String inDate;
     @Schema(example = "2024-06-15")
     private String outDate;
-    @Schema(example = "0")
-    private int status;
-
-    @JsonIgnore
-    private int size;
     @JsonIgnore
     private long roomId;
-
-    public GetInfoRequestDto(int status) {
-        if (status == 0) {
-            size = PAGING_SIZE;
-        } else if(status == 1) {
-            size = 0;
-        }
-    }
-
 }

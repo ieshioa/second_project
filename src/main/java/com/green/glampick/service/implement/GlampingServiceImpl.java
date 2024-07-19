@@ -147,6 +147,7 @@ public class GlampingServiceImpl implements GlampingService {
             }
 
         }
+        Collections.sort(rooms);
 
         // dto 데이터 세팅
         glampInfoDto.setRoomService(hashServices);
