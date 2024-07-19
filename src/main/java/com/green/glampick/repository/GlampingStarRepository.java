@@ -37,7 +37,7 @@ public interface GlampingStarRepository extends JpaRepository<ReviewEntity, Long
             "UPDATE review B " +
             "JOIN reservation_complete A " +
             "ON A.reservation_id = B.reservation_id " +
-            "SET B.glamp_id = A.glamp_id " +
+            "SET B.glamp_id = A.glamp_id , A.status = 1 " +
             "WHERE B.reservation_id = :reservationId ",
             nativeQuery = true)
     void fin(long reservationId);

@@ -42,6 +42,8 @@ public class ReservationCompleteEntity {
 
     private long payAmount;//최종 결제 가격
 
+    private long status;
+
     @CreationTimestamp @Column(nullable = false, updatable = false)
     private LocalDateTime createdAt;
 
