@@ -4,6 +4,7 @@ import com.green.glampick.common.CustomFileUtils;
 import com.green.glampick.dto.ResponseDto;
 import com.green.glampick.dto.object.UserReviewListItem;
 import com.green.glampick.dto.request.user.*;
+import com.green.glampick.dto.response.login.PostSignUpResponseDto;
 import com.green.glampick.dto.response.owner.post.PostGlampingInfoResponseDto;
 import com.green.glampick.dto.response.user.*;
 import com.green.glampick.entity.*;
@@ -21,6 +22,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -204,6 +206,7 @@ public class UserServiceImpl implements UserService {
     @Transactional
     public ResponseEntity<? super DeleteReviewResponseDto> deleteReview(DeleteReviewRequestDto dto) {
 
+        log.info("dto : {}", dto);
         try {
             dto.setUserId(authenticationFacade.getLoginUserId());
             if (dto.getUserId() <= 0) {
@@ -220,7 +223,13 @@ public class UserServiceImpl implements UserService {
             if (dto.getReviewId() == 0) {
                 return DeleteReviewResponseDto.noExistedReview();
             }
+            List<ReviewImageEntity> list = reviewImageRepository.findByReviewId(dto.getReviewId());
+
+            for (int i = 0; i < list.size(); i++ ){
+                reviewImageRepository.deleteById(list.get(i).getReviewImageId());
+            }
             reviewRepository.deleteById(dto.getReviewId());
+
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -379,11 +388,14 @@ public class UserServiceImpl implements UserService {
         }
 
 
+
         try {
             UserEntity userEntity = userRepository.findById(dto.getUserId()).get();
             if (dto.getUserId() == 0) {
                 return UpdateUserResponseDto.noExistedUser();
             }
+            boolean existedNickname = userRepository.existsByUserNickname(dto.getUserNickname());
+            if (existedNickname) { return PostSignUpResponseDto.duplicatedNickname(); }
 
             if (mf == null || mf.isEmpty()) { dto.setUserProfileImage(null); }
             else {
