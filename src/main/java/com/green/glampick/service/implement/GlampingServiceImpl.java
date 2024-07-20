@@ -113,12 +113,18 @@ public class GlampingServiceImpl implements GlampingService {
         GetGlampingInformationResponseDto glampInfoDto = mapper.selGlampingInfo(p);
         List<GlampingRoomListItem> rooms = mapper.selRoomInfo(p);
         List<GlampingDetailReviewItem> reviews = mapper.selReviewInfoInGlamping(p.getGlampId());
+        System.out.println("들어오긴했니?1" + facade.getLoginUserId());
+
         // 로그인 중 이면 관심 등록 데이터 판단
         if (facade.getLoginUserId() != 0) {
-                int isFavData = getIsFavData(p, facade.getLoginUserId());
-                glampInfoDto.setIsFav(isFavData);
+            System.out.println("들어오긴했니?2");
+            log.info("p: {}", p);
+            log.info("p: {} ", facade.getLoginUserId());
+            int isFavData = getIsFavData(p, facade.getLoginUserId());
+            glampInfoDto.setIsFav(isFavData);
         }
 
+        System.out.println("들어오긴했니?3");
         int userCount = mapper.selCount(p.getGlampId());
         boolean isReservationAvailable = true;
 
