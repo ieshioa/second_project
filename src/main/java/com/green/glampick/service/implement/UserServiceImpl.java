@@ -4,6 +4,7 @@ import com.green.glampick.common.CustomFileUtils;
 import com.green.glampick.dto.ResponseDto;
 import com.green.glampick.dto.object.UserReviewListItem;
 import com.green.glampick.dto.request.user.*;
+import com.green.glampick.dto.response.login.PostSignUpResponseDto;
 import com.green.glampick.dto.response.owner.post.PostGlampingInfoResponseDto;
 import com.green.glampick.dto.response.user.*;
 import com.green.glampick.entity.*;
@@ -393,9 +394,8 @@ public class UserServiceImpl implements UserService {
             if (dto.getUserId() == 0) {
                 return UpdateUserResponseDto.noExistedUser();
             }
-            if (Objects.equals(dto.getUserNickname(), userEntity.getUserNickname()))  {
-                return UpdateUserResponseDto.duplicatedNickname();
-            }
+            boolean existedNickname = userRepository.existsByUserNickname(dto.getUserNickname());
+            if (existedNickname) { return PostSignUpResponseDto.duplicatedNickname(); }
 
             if (mf == null || mf.isEmpty()) { dto.setUserProfileImage(null); }
             else {
