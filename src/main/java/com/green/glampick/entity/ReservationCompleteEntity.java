@@ -49,9 +49,10 @@ public class ReservationCompleteEntity {
 
 
 
-    public ReservationCompleteEntity(Long userId, String bookId, long glampId, Long roomId, String inputName,
+    public ReservationCompleteEntity(Long reservationId, Long userId, String bookId, long glampId, Long roomId, String inputName,
                                      int personnel, LocalDate checkInDate, LocalDate checkOutDate,
                                      long payAmount, String pg, LocalDateTime createdAt) {
+        this.reservationId = reservationId;
         this.userId = userId;
         this.bookId = bookId;
         this.glampId = glampId;
