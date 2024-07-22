@@ -147,12 +147,12 @@ public class BookServiceImpl implements BookService {
         for (ReservationBeforeEntity beforeEntity : expiredReservations) {
             // 예약 데이터를 완료 엔티티로 옮김
             ReservationCompleteEntity completeEntity = new ReservationCompleteEntity(
-                    beforeEntity.getReservationId(),
                     beforeEntity.getUserId(),
                     beforeEntity.getBookId(),
                     beforeEntity.getGlampId(),
                     beforeEntity.getRoomId(),
                     beforeEntity.getInputName(),
+                    beforeEntity.getPersonnel(),
                     beforeEntity.getCheckInDate(),
                     beforeEntity.getCheckOutDate(),
                     beforeEntity.getPayAmount(),

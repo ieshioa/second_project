@@ -154,6 +154,7 @@ public class UserServiceImpl implements UserService {
         reviewEntity.setReservationId(dto.getReservationId());
         reviewEntity.setReviewContent(dto.getReviewContent());
         reviewEntity.setReviewStarPoint(dto.getReviewStarPoint());
+        reviewEntity.setGlampId(dto.getGlampId());
         reviewEntity = reviewRepository.save(reviewEntity);
         glampingStarRepository.fin(dto.getReservationId());
 
